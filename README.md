@@ -8,8 +8,10 @@ Requer Node.js 22 e pnpm 11. Copie `.env.example` para `.env.local`, use credenc
 
 ## Validação
 
-`pnpm check` executa tipos, lint, testes e build. `pnpm test:e2e` executa Playwright após instalar o navegador. Migrations e testes de RLS ficam em `supabase/`.
+`pnpm check` executa formato, tipos, lint, testes, limites de escopo, detecção básica de segredos e build. `pnpm test:e2e` executa Playwright após instalar o navegador. Migrations e testes de RLS ficam em `supabase/`.
 
 ## Ambientes
 
 Desenvolvimento, homologação e produção usam projetos Supabase, variáveis e destinos Vercel separados. Produção deve ser promovida manualmente após aprovação.
+
+Os runbooks estão em `docs/operations`, a estratégia de segurança em `docs/security` e os ADRs em `docs/adr`.

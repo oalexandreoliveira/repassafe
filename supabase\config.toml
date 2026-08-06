@@ -1,0 +1,9 @@
+project_id = "repassafe"
+[api]
+enabled = true
+[auth]
+enabled = true
+site_url = "http://127.0.0.1:3000"
+mfa.max_enrolled_factors = 10
+[storage]
+enabled = true

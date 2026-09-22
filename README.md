@@ -15,3 +15,8 @@ Requer Node.js 22 e pnpm 11. Copie `.env.example` para `.env.local`, use credenc
 Desenvolvimento, homologação e produção usam projetos Supabase, variáveis e destinos Vercel separados. Produção deve ser promovida manualmente após aprovação.
 
 Os runbooks estão em `docs/operations`, a estratégia de segurança em `docs/security` e os ADRs em `docs/adr`.
+
+## Escopo do MVP
+
+O recorte executivo, as histórias bloqueadoras, os itens adiados e os critérios
+de lançamento estão em [`docs/product/mvp-scope-v1.md`](docs/product/mvp-scope-v1.md).

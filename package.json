@@ -18,8 +18,9 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "check:scope": "node scripts/verify-sprint-zero.mjs",
+    "check:scope:mvp": "node scripts/check-mvp-scope.mjs",
     "check:secrets": "node scripts/check-secrets.mjs",
-    "check": "pnpm format:check && pnpm typecheck && pnpm lint && pnpm test && pnpm check:scope && pnpm check:secrets && pnpm build"
+    "check": "pnpm format:check && pnpm typecheck && pnpm lint && pnpm test && pnpm check:scope && pnpm check:scope:mvp && pnpm check:secrets && pnpm build"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",

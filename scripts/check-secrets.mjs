@@ -4,6 +4,9 @@ import { join } from "node:path";
 const ignored = new Set(["node_modules", ".next", ".git"]);
 const patterns = [
   /SUPABASE_SERVICE_ROLE_KEY\s*=\s*(?!server-only-replace-me)\S+/i,
+  /RATE_LIMIT_PEPPER\s*=\s*(?!replace-with-at-least-32-random-characters)\S+/i,
+  /MONITORING_TOKEN\s*=\s*(?!replace-with-at-least-32-random-characters)\S+/i,
+  /SUPABASE_DB_URL\s*=\s*(?:postgres|postgresql):\/\/\S+/i,
   /-----BEGIN (?:RSA |EC )?PRIVATE KEY-----/,
   /gh[pousr]_[A-Za-z0-9_]{20,}/,
 ];

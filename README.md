@@ -22,6 +22,9 @@ O fluxo de configuração, bootstrap e revogação administrativa está em
 O fluxo transacional de publicação, candidatura, seleção, aprovação e acordo está
 em [`docs/operations/core-shift-flow.md`](docs/operations/core-shift-flow.md).
 
+Monitoramento, backup, suporte, incidentes e rollback estão em
+[`docs/operations`](docs/operations).
+
 ## Escopo do MVP
 
 O recorte executivo, as histórias bloqueadoras, os itens adiados e os critérios

@@ -21,7 +21,9 @@
     "check:scope:mvp": "node scripts/check-mvp-scope.mjs",
     "check:secrets": "node scripts/check-secrets.mjs",
     "check:security": "node scripts/security-audit.mjs",
-    "check": "pnpm format:check && pnpm typecheck && pnpm lint && pnpm test && pnpm check:scope && pnpm check:scope:mvp && pnpm check:secrets && pnpm check:security && pnpm build"
+    "check:operations": "node scripts/check-operations-readiness.mjs",
+    "check:readiness": "node scripts/check-readiness.mjs",
+    "check": "pnpm format:check && pnpm typecheck && pnpm lint && pnpm test && pnpm check:scope && pnpm check:scope:mvp && pnpm check:secrets && pnpm check:security && pnpm check:operations && pnpm build"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",

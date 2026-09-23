@@ -72,12 +72,20 @@ body {
   margin-top: 2rem;
 }
 .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 2px solid var(--brand);
   border-radius: 0.8rem;
   min-height: 48px;
   padding: 0.7rem 1.1rem;
   font: 600 1rem var(--font-inter);
   cursor: pointer;
+  text-decoration: none;
+}
+.button:disabled {
+  cursor: wait;
+  opacity: 0.65;
 }
 .button-primary {
   background: var(--brand);
@@ -123,4 +131,148 @@ body {
   background: #fff;
   padding: 1rem;
   box-shadow: 0 8px 28px #0a3b3722;
+}
+.auth-shell {
+  min-height: 100vh;
+  display: grid;
+  align-content: start;
+  gap: clamp(2rem, 7vw, 5rem);
+  padding: 1.25rem clamp(1rem, 5vw, 5rem);
+}
+.auth-card {
+  width: min(100%, 34rem);
+  margin-inline: auto;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  background: white;
+  box-shadow: 0 20px 60px #0a3b3714;
+}
+.auth-card h1,
+.dashboard h1 {
+  font-family: var(--font-poppins);
+  line-height: 1.1;
+}
+.form-stack {
+  display: grid;
+  gap: 1rem;
+}
+.form-row,
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 1rem;
+}
+.form-stack label,
+.form-grid label {
+  display: grid;
+  gap: 0.4rem;
+  font-weight: 650;
+}
+input,
+select,
+textarea {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid var(--border);
+  border-radius: 0.65rem;
+  background: white;
+  color: var(--text);
+  padding: 0.7rem 0.8rem;
+  font: inherit;
+}
+textarea {
+  min-height: 6rem;
+  resize: vertical;
+}
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+.form-message {
+  margin: 0;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+.form-message-error {
+  color: var(--error);
+  background: #fee4e2;
+}
+.form-message-success {
+  color: var(--success);
+  background: #dcfae6;
+}
+.form-help {
+  color: var(--muted);
+}
+.dashboard {
+  max-width: 84rem;
+  margin: auto;
+}
+.dashboard-header,
+.dashboard-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.dashboard-title {
+  margin: clamp(2rem, 7vw, 5rem) 0 2rem;
+}
+.dashboard-title h1,
+.dashboard-header h1 {
+  margin: 0.35rem 0;
+}
+.dashboard-grid,
+.admin-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  gap: 1rem;
+}
+.status {
+  display: inline-flex;
+  width: fit-content;
+  border-radius: 999px;
+  background: #ece8e0;
+  padding: 0.4rem 0.75rem;
+  font-weight: 700;
+}
+.status-approved {
+  color: var(--success);
+  background: #dcfae6;
+}
+.status-pending,
+.status-changes_requested {
+  color: var(--warning);
+  background: #fff3cd;
+}
+.status-rejected,
+.status-suspended {
+  color: var(--error);
+  background: #fee4e2;
+}
+.clean-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.clean-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border);
+  padding: 0.8rem 0;
+}
+.inline-action,
+.admin-section {
+  margin-top: 2rem;
+}
+.compact-form {
+  margin-top: 1rem;
+}
+.form-grid {
+  align-items: end;
 }

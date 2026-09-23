@@ -1,5 +1,10 @@
-type Claims = { aal?: string; user_role?: string };
-export function requireAdminMfa(claims: Claims) {
-  if (claims.user_role !== "admin" || claims.aal !== "aal2")
+type AccessContext = { aal?: string; role?: string; status?: string };
+
+export function requireAdminMfa(context: AccessContext) {
+  if (
+    context.role !== "admin" ||
+    context.status !== "approved" ||
+    context.aal !== "aal2"
+  )
     throw new Error("Acesso administrativo requer MFA");
 }

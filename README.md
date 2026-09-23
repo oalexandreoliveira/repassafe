@@ -16,6 +16,9 @@ Desenvolvimento, homologação e produção usam projetos Supabase, variáveis e
 
 Os runbooks estão em `docs/operations`, a estratégia de segurança em `docs/security` e os ADRs em `docs/adr`.
 
+O fluxo de configuração, bootstrap e revogação administrativa está em
+[`docs/operations/access-administration.md`](docs/operations/access-administration.md).
+
 ## Escopo do MVP
 
 O recorte executivo, as histórias bloqueadoras, os itens adiados e os critérios

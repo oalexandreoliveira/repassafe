@@ -1,31 +1,30 @@
-import { readFileSync, readdirSync, statSync } from "node:fs";
-import { join } from "node:path";
+import { existsSync, readFileSync } from "node:fs";
 
-const roots = ["src", "supabase/migrations"];
-const forbidden = [
-  /shift[_-]?offer/i,
-  /publish[_-]?shift/i,
-  /application[_-]?status/i,
-  /open[_-]?emergency/i,
-];
-const files = [];
-function walk(path) {
-  for (const name of readdirSync(path)) {
-    const item = join(path, name);
-    if (statSync(item).isDirectory()) walk(item);
-    else files.push(item);
-  }
-}
-roots.forEach(walk);
-const violations = files.flatMap((file) =>
-  forbidden
-    .filter((rule) => rule.test(readFileSync(file, "utf8")))
-    .map((rule) => `${file}: ${rule}`),
-);
-if (violations.length) {
+const baseline = "supabase/migrations/20260806130000_sprint_zero.sql";
+const workflow = "supabase/migrations/20260923000759_core_shift_flow.sql";
+
+if (!existsSync(baseline) || !existsSync(workflow)) {
   console.error(
-    "Regras de plantão fora da Sprint 0:\n" + violations.join("\n"),
+    "Migrations obrigatórias da fundação e do fluxo central ausentes.",
   );
   process.exit(1);
 }
-console.log("Escopo da Sprint 0 preservado.");
+
+const migration = readFileSync(workflow, "utf8").toLowerCase();
+const requiredControls = [
+  "enable row level security",
+  "private.process_workflow_command",
+  "for update",
+  "shift_agreements_immutable",
+  "insert into public.audit_events",
+];
+const missing = requiredControls.filter(
+  (control) => !migration.includes(control),
+);
+
+if (missing.length) {
+  console.error(`Controles do fluxo central ausentes: ${missing.join(", ")}`);
+  process.exit(1);
+}
+
+console.log("Fundação e controles do fluxo central preservados.");

@@ -6,6 +6,7 @@ describe("health check", () => {
     const body = await response.json();
     expect(response.status).toBe(200);
     expect(body.status).toBe("ok");
+    expect(body.environment).toBeUndefined();
     expect(JSON.stringify(body)).not.toMatch(/secret|token|password/i);
   });
 });

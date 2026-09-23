@@ -793,6 +793,10 @@ Valores serão armazenados em centavos de real.
 
 ## 21. ESCOPO CONGELADO DA BETA
 
+> O congelamento abaixo registra a baseline funcional ampla. Para execução do
+> primeiro piloto, o recorte bloqueador, os itens adiados e os gates vigentes
+> estão formalizados em [`docs/product/mvp-scope-v1.md`](docs/product/mvp-scope-v1.md).
+
 ### P0 Core
 
 - cadastro;

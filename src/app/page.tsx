@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -15,8 +15,12 @@ export default function Home() {
           faz parte desta entrega.
         </p>
         <div className="actions">
-          <Button>Entrar na plataforma</Button>
-          <Button variant="secondary">Conhecer a beta</Button>
+          <Link className="button button-primary" href="/entrar">
+            Entrar na plataforma
+          </Link>
+          <Link className="button button-secondary" href="/cadastro">
+            Solicitar acesso
+          </Link>
         </div>
       </section>
       <section className="grid" aria-label="Fundamentos da plataforma">

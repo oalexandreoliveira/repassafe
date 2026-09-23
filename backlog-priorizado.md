@@ -1,5 +1,10 @@
 # BACKLOG PRIORIZADO DO REPASSAFE
 
+> **Baseline operacional do MVP:** a seleção de histórias que bloqueiam o
+> lançamento está em [`docs/product/mvp-scope-v1.md`](docs/product/mvp-scope-v1.md).
+> Este arquivo permanece como catálogo completo do produto. Em caso de conflito
+> de prioridade, o recorte executivo do MVP prevalece.
+
 ## MVP — Beta privada e assistida
 
 **Versão:** 1.0  

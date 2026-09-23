@@ -410,6 +410,12 @@ Para evitar conflitos:
 
 O escopo da beta está oficialmente congelado.
 
+Para planejamento e aceite do primeiro piloto, a lista operacional de histórias
+bloqueadoras e adiadas está definida em
+[`docs/product/mvp-scope-v1.md`](docs/product/mvp-scope-v1.md). As regras de
+permissão, estados, concorrência e auditoria deste documento continuam
+obrigatórias.
+
 ## P0 Core
 
 Referências principais:

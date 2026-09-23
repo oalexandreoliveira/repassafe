@@ -18,8 +18,12 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "check:scope": "node scripts/verify-sprint-zero.mjs",
+    "check:scope:mvp": "node scripts/check-mvp-scope.mjs",
     "check:secrets": "node scripts/check-secrets.mjs",
-    "check": "pnpm format:check && pnpm typecheck && pnpm lint && pnpm test && pnpm check:scope && pnpm check:secrets && pnpm build"
+    "check:security": "node scripts/security-audit.mjs",
+    "check:operations": "node scripts/check-operations-readiness.mjs",
+    "check:readiness": "node scripts/check-readiness.mjs",
+    "check": "pnpm format:check && pnpm typecheck && pnpm lint && pnpm test && pnpm check:scope && pnpm check:scope:mvp && pnpm check:secrets && pnpm check:security && pnpm check:operations && pnpm build"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.4",
@@ -27,6 +31,7 @@
     "next": "16.3.3",
     "react": "19.2.8",
     "react-dom": "19.2.8",
+    "server-only": "0.0.1",
     "zod": "^4.4.3"
   },
   "devDependencies": {

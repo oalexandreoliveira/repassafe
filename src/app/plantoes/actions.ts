@@ -10,6 +10,8 @@ import {
   selectionSchema,
   targetCommandSchema,
 } from "@/features/shifts/schemas";
+import { rateLimitPolicies } from "@/features/security/rate-limits";
+import { enforceRateLimit } from "@/lib/security/rate-limit";
 
 async function submitCommand(input: {
   id: string;
@@ -18,6 +20,12 @@ async function submitCommand(input: {
   payload?: Record<string, unknown>;
 }) {
   const identity = await requireApprovedProfessional();
+  await enforceRateLimit({
+    policy: rateLimitPolicies.workflow,
+    identifier: identity.userId,
+    dimension: "user",
+    actorId: identity.userId,
+  });
   const { data: existing } = await identity.supabase
     .from("workflow_commands")
     .select("result_id")

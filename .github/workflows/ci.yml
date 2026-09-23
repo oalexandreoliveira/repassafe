@@ -41,4 +41,6 @@ jobs:
       - uses: supabase/setup-cli@v3
         with: { version: 2.117.0 }
       - run: supabase db start
+      - run: supabase db lint --local --level warning --fail-on error
+      - run: supabase db advisors --local --type security --level warn --fail-on error
       - run: supabase test db

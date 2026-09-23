@@ -9,9 +9,18 @@ import {
   membershipSchema,
   reviewProfileSchema,
 } from "@/features/admin/schemas";
+import { rateLimitPolicies } from "@/features/security/rate-limits";
+import { recordAuditEvent } from "@/lib/security/audit";
+import { enforceRateLimit } from "@/lib/security/rate-limit";
 
 async function adminContext() {
   const identity = await requireAdminIdentity();
+  await enforceRateLimit({
+    policy: rateLimitPolicies.administration,
+    identifier: identity.userId,
+    dimension: "user",
+    actorId: identity.userId,
+  });
   return { identity, admin: createAdminClient() };
 }
 
@@ -23,14 +32,14 @@ async function recordAudit(
   entityId: string,
   metadata: Record<string, unknown> = {},
 ) {
-  const { error } = await admin.from("audit_events").insert({
-    actor_id: actorId,
-    event_type: eventType,
-    entity_type: entityType,
-    entity_id: entityId,
+  void admin;
+  await recordAuditEvent({
+    actorId,
+    eventType,
+    entityType,
+    entityId,
     metadata,
   });
-  if (error) throw new Error("Falha ao registrar auditoria");
 }
 
 export async function reviewProfileAction(formData: FormData) {

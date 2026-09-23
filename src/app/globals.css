@@ -347,3 +347,21 @@ textarea:focus-visible {
   color: var(--warning);
   background: #fff3cd;
 }
+.audit-table {
+  overflow-x: auto;
+}
+.audit-table table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.audit-table th,
+.audit-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 0.75rem;
+  text-align: left;
+  white-space: nowrap;
+}
+.audit-table th {
+  color: var(--muted);
+}

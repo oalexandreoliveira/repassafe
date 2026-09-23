@@ -17,23 +17,32 @@ export default async function AdminPage() {
   }
 
   const admin = createAdminClient();
-  const [{ data: profiles }, { data: institutions }, { data: groups }] =
-    await Promise.all([
-      admin
-        .from("profiles")
-        .select("id,display_name,contact_email,crm_number,crm_state,status")
-        .order("created_at"),
-      admin
-        .from("institutions")
-        .select("id,name")
-        .eq("active", true)
-        .order("name"),
-      admin
-        .from("groups")
-        .select("id,name,institution_id,requires_approval")
-        .eq("active", true)
-        .order("name"),
-    ]);
+  const [
+    { data: profiles },
+    { data: institutions },
+    { data: groups },
+    { data: auditEvents },
+  ] = await Promise.all([
+    admin
+      .from("profiles")
+      .select("id,display_name,contact_email,crm_number,crm_state,status")
+      .order("created_at"),
+    admin
+      .from("institutions")
+      .select("id,name")
+      .eq("active", true)
+      .order("name"),
+    admin
+      .from("groups")
+      .select("id,name,institution_id,requires_approval")
+      .eq("active", true)
+      .order("name"),
+    admin
+      .from("audit_events")
+      .select("id,actor_id,event_type,entity_type,entity_id,occurred_at")
+      .order("occurred_at", { ascending: false })
+      .limit(50),
+  ]);
 
   return (
     <main className="shell dashboard">
@@ -163,6 +172,42 @@ export default async function AdminPage() {
           </label>
           <button className="button button-primary">Ativar vínculo</button>
         </form>
+      </section>
+
+      <section className="card admin-section">
+        <h2>Auditoria recente</h2>
+        <p className="form-help">
+          Eventos imutáveis. A consulta administrativa exige sessão MFA AAL2.
+        </p>
+        <div
+          className="audit-table"
+          role="region"
+          aria-label="Auditoria recente"
+        >
+          <table>
+            <thead>
+              <tr>
+                <th>Data</th>
+                <th>Evento</th>
+                <th>Entidade</th>
+                <th>Ator</th>
+              </tr>
+            </thead>
+            <tbody>
+              {auditEvents?.map((event) => (
+                <tr key={event.id}>
+                  <td>{new Date(event.occurred_at).toLocaleString("pt-BR")}</td>
+                  <td>{event.event_type}</td>
+                  <td>
+                    {event.entity_type}
+                    {event.entity_id ? ` · ${event.entity_id.slice(0, 8)}` : ""}
+                  </td>
+                  <td>{event.actor_id?.slice(0, 8) ?? "sistema"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
     </main>
   );

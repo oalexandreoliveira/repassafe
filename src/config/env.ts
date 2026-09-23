@@ -11,6 +11,7 @@ const serverSchema = publicSchema.extend({
     .enum(["development", "staging", "production", "test"])
     .default("development"),
   SUPABASE_SERVICE_ROLE_KEY: z.string().min(1),
+  RATE_LIMIT_PEPPER: z.string().min(32),
 });
 
 export function getPublicSupabaseEnv() {
@@ -30,5 +31,6 @@ export function getServerEnv() {
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
       process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+    RATE_LIMIT_PEPPER: process.env.RATE_LIMIT_PEPPER,
   });
 }

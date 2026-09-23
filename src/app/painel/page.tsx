@@ -88,6 +88,11 @@ export default async function DashboardPage() {
           Abrir administração
         </Link>
       ) : null}
+      {profile.status === "approved" ? (
+        <Link className="button button-primary inline-action" href="/plantoes">
+          Abrir central de repasses
+        </Link>
+      ) : null}
     </main>
   );
 }

@@ -1,6 +1,6 @@
 # Repassafe
 
-Fundação técnica da beta privada do Repassafe. A Sprint 0 não implementa publicação, candidatura ou confirmação de plantões.
+MVP em construção do Repassafe. A fundação técnica, identidade, administração e o fluxo central de repasse estão implementados.
 
 ## Execução local
 
@@ -18,6 +18,9 @@ Os runbooks estão em `docs/operations`, a estratégia de segurança em `docs/se
 
 O fluxo de configuração, bootstrap e revogação administrativa está em
 [`docs/operations/access-administration.md`](docs/operations/access-administration.md).
+
+O fluxo transacional de publicação, candidatura, seleção, aprovação e acordo está
+em [`docs/operations/core-shift-flow.md`](docs/operations/core-shift-flow.md).
 
 ## Escopo do MVP
 

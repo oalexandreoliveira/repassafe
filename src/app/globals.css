@@ -276,3 +276,74 @@ textarea:focus-visible {
 .form-grid {
   align-items: end;
 }
+.shift-list {
+  display: grid;
+  gap: 1rem;
+}
+.shift-card-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 1rem;
+}
+.shift-card-heading h2 {
+  margin-bottom: 0;
+}
+.facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 1rem;
+  margin: 1.25rem 0;
+}
+.facts div {
+  display: grid;
+  gap: 0.25rem;
+}
+.facts dt {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.facts dd {
+  margin: 0;
+  font-weight: 650;
+}
+.form-card {
+  max-width: 48rem;
+}
+.candidate-list {
+  list-style: none;
+  padding: 0;
+}
+.candidate-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid var(--border);
+  padding: 1rem 0;
+}
+.candidate-list li div {
+  display: grid;
+  gap: 0.25rem;
+}
+.candidate-list span {
+  color: var(--muted);
+}
+.agreement-card {
+  border-left: 5px solid var(--success);
+}
+.status-open_emergency {
+  color: var(--error);
+  background: #fee4e2;
+}
+.status-open_normal,
+.status-closed_confirmed {
+  color: var(--success);
+  background: #dcfae6;
+}
+.status-selection_in_progress {
+  color: var(--warning);
+  background: #fff3cd;
+}

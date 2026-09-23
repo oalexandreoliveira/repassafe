@@ -21,8 +21,10 @@ $env:SUPABASE_DB_URL = "valor-injetado-pelo-cofre"
 ./scripts/create-logical-backup.ps1 -Environment staging -OutputDirectory "D:/secure-backups"
 ```
 
-O destino deve ficar fora do repositório. O script produz schema, dados, papéis e
-manifesto SHA-256. Depois da execução:
+O destino deve ficar fora do repositório. O script produz schema, dados do schema
+`public`, papéis e manifesto SHA-256. Dados de schemas gerenciados pelo Supabase,
+como `auth` e `storage`, não entram no dump de dados da aplicação para evitar
+conflitos durante a restauração em outro projeto gerenciado. Depois da execução:
 
 1. criptografar o diretório com chave do cofre corporativo;
 2. enviar ao armazenamento off-site com acesso restrito;
@@ -36,7 +38,12 @@ Mensalmente e antes do piloto:
 
 1. criar projeto Supabase isolado na mesma região, sem integrações externas;
 2. escolher backup anterior ao ponto do incidente;
-3. restaurar nele — nunca sobre desenvolvimento, homologação ou produção;
+3. restaurar nele — nunca sobre desenvolvimento, homologação ou produção; em um
+   projeto Supabase gerenciado, não reaplicar alterações de papéis reservados do
+   `roles.sql`;
+   execute `scripts/prepare-isolated-restore.sql` apenas depois de validar que a
+   URI pertence ao projeto temporário, pois o script remove os schemas `public`
+   e `private` do destino;
 4. reaplicar migrations posteriores apenas se o objetivo do teste exigir;
 5. comparar contagens de `profiles`, `shift_offers`, `shift_applications`,
    `substitutions`, `shift_agreements` e `audit_events`;

@@ -77,7 +77,12 @@ select is((select count(*) from public.shift_offers), 1::bigint, 'owner reads gr
 select is((select count(*) from public.shift_applications), 1::bigint, 'owner reads applications to own offer');
 select is((select count(*) from public.substitutions), 1::bigint, 'owner reads substitution');
 select is((select count(*) from public.shift_agreements), 1::bigint, 'owner reads agreement');
-select throws_ok('delete from public.audit_events', '42501', 'owner cannot delete audit');
+select throws_ok(
+  'delete from public.audit_events',
+  '42501',
+  null,
+  'owner cannot delete audit'
+);
 
 select set_config('request.jwt.claims', '{"sub":"10000000-0000-0000-0000-000000000002","role":"authenticated"}', true);
 select is((select count(*) from public.shift_offers), 1::bigint, 'candidate reads eligible offer');
@@ -96,8 +101,18 @@ select is((select count(*) from public.substitutions), 0::bigint, 'outsider cann
 select is((select count(*) from public.shift_agreements), 0::bigint, 'outsider cannot read agreement');
 
 set local role anon;
-select throws_ok('select * from public.shift_offers', '42501', 'anonymous cannot read offers');
-select throws_ok('insert into public.rate_limit_checks (namespace, identifier_hash, max_requests, window_seconds) values (''test'', repeat(''a'', 64), 1, 60)', '42501', 'anonymous cannot invoke rate limiter');
+select throws_ok(
+  'select * from public.shift_offers',
+  '42501',
+  null,
+  'anonymous cannot read offers'
+);
+select throws_ok(
+  'insert into public.rate_limit_checks (namespace, identifier_hash, max_requests, window_seconds) values (''test'', repeat(''a'', 64), 1, 60)',
+  '42501',
+  null,
+  'anonymous cannot invoke rate limiter'
+);
 
 select * from finish();
 rollback;

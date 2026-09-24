@@ -71,6 +71,14 @@ export async function loginAction(
     entityType: "authentication",
     entityId: data.user.id,
   });
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role,status")
+    .eq("id", data.user.id)
+    .single();
+  if (profile?.role === "admin" && profile.status === "approved") {
+    redirect("/mfa");
+  }
   redirect("/painel");
 }
 

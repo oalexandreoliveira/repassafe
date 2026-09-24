@@ -14,3 +14,11 @@ test("exibe entrada e cadastro da beta privada", async ({ page }) => {
   await expect(page.getByLabel("CRM")).toBeVisible();
   await expect(page.getByLabel("UF")).toBeVisible();
 });
+
+test("protege a configuração MFA sem sessão", async ({ page }) => {
+  await page.goto("/mfa");
+  await expect(page).toHaveURL(/\/entrar$/);
+  await expect(
+    page.getByRole("heading", { name: "Entrar na plataforma" }),
+  ).toBeVisible();
+});

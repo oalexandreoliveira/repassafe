@@ -84,8 +84,13 @@ export default async function DashboardPage() {
         </section>
       </div>
       {profile.role === "admin" ? (
-        <Link className="button button-primary inline-action" href="/admin">
-          Abrir administração
+        <Link
+          className="button button-primary inline-action"
+          href={identity.claims.aal === "aal2" ? "/admin" : "/mfa"}
+        >
+          {identity.claims.aal === "aal2"
+            ? "Abrir administração"
+            : "Configurar MFA administrativo"}
         </Link>
       ) : null}
       {profile.status === "approved" ? (

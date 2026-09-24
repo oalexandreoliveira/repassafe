@@ -299,7 +299,7 @@ select throws_ok(
 );
 select is(
   (select count(*) from public.audit_events),
-  13::bigint,
+  16::bigint,
   'all successful critical transitions are audited'
 );
 select is(

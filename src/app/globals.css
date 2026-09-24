@@ -188,6 +188,19 @@ legend {
   gap: 0.4rem;
   font-weight: 650;
 }
+.form-stack .checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+input[type="checkbox"] {
+  width: 1.35rem;
+  min-width: 1.35rem;
+  min-height: 1.35rem;
+  height: 1.35rem;
+  margin: 0;
+  accent-color: var(--brand);
+}
 input,
 select,
 textarea {
@@ -412,8 +425,58 @@ textarea:focus-visible {
 .operation-history li {
   overflow-wrap: anywhere;
 }
+.agreement-document {
+  max-width: 900px;
+}
+.agreement-paper h1 {
+  margin-bottom: 0.75rem;
+}
+.agreement-paper h2 {
+  margin-top: 2rem;
+}
+.agreement-evidence-list {
+  display: grid;
+  gap: 1rem;
+  padding-left: 1.5rem;
+}
+.agreement-evidence-list li {
+  display: grid;
+  gap: 0.35rem;
+  overflow-wrap: anywhere;
+}
+.agreement-hash {
+  display: block;
+  padding: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  overflow-wrap: anywhere;
+}
 code {
   overflow-wrap: anywhere;
+}
+@media print {
+  body {
+    background: #fff;
+    color: #111;
+  }
+  .no-print,
+  .dashboard-header {
+    display: none !important;
+  }
+  .agreement-document {
+    width: 100%;
+    max-width: none;
+    padding: 0;
+  }
+  .agreement-paper {
+    border: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+  .agreement-evidence-list li,
+  .facts > div {
+    break-inside: avoid;
+  }
 }
 @media (max-width: 640px) {
   .card {

@@ -42,6 +42,7 @@ export default async function ShiftDetailsPage({
     completion,
     occurrences,
     isApprover,
+    ownerTermsAcknowledged,
   } = workspace;
   const group = Array.isArray(offer.groups) ? offer.groups[0] : offer.groups;
   const isOwner = offer.owner_id === identity.userId;
@@ -50,6 +51,13 @@ export default async function ShiftDetailsPage({
   );
   const substitution = substitutions[0];
   const isOpen = ["open_normal", "open_emergency"].includes(offer.status);
+  const { data: agreementDocument } = agreement
+    ? await identity.supabase
+        .from("agreement_documents")
+        .select("agreement_id")
+        .eq("agreement_id", agreement.id)
+        .maybeSingle()
+    : { data: null };
 
   return (
     <main className="shell dashboard">
@@ -134,6 +142,13 @@ export default async function ShiftDetailsPage({
         {isOwner ? (
           <section className="card">
             <h2>Candidaturas</h2>
+            {!ownerTermsAcknowledged && applications.length > 0 ? (
+              <p className="form-message form-message-error" role="alert">
+                Para selecionar alguém, revise e confirme as condições atuais.
+                Como esta oferta já recebeu candidaturas, cancele-a e publique
+                novamente para registrar essa confirmação.
+              </p>
+            ) : null}
             {applications.length ? (
               <ul className="candidate-list">
                 {applications.map((application) => (
@@ -142,7 +157,9 @@ export default async function ShiftDetailsPage({
                       <strong>{application.candidate_display_name}</strong>
                       <span>{applicationStatusLabels[application.status]}</span>
                     </div>
-                    {isOpen && application.status === "active" ? (
+                    {isOpen &&
+                    ownerTermsAcknowledged &&
+                    application.status === "active" ? (
                       <form action={selectCandidateAction}>
                         <input
                           type="hidden"
@@ -153,11 +170,6 @@ export default async function ShiftDetailsPage({
                           type="hidden"
                           name="targetId"
                           value={application.id}
-                        />
-                        <input
-                          type="hidden"
-                          name="confirmationMinutes"
-                          value="30"
                         />
                         <button className="button button-primary" type="submit">
                           Selecionar
@@ -190,31 +202,56 @@ export default async function ShiftDetailsPage({
             ) : null}
             {substitution.substitute_id === identity.userId &&
             substitution.status === "pending_substitute_confirmation" ? (
-              <div className="actions">
-                {[
-                  { label: "Confirmar", value: "true", primary: true },
-                  { label: "Recusar", value: "false", primary: false },
-                ].map((choice) => (
-                  <form action={confirmSubstitutionAction} key={choice.value}>
-                    <input
-                      type="hidden"
-                      name="commandId"
-                      value={randomUUID()}
-                    />
-                    <input
-                      type="hidden"
-                      name="targetId"
-                      value={substitution.id}
-                    />
-                    <input type="hidden" name="accepted" value={choice.value} />
-                    <button
-                      className={`button ${choice.primary ? "button-primary" : "button-secondary"}`}
-                      type="submit"
-                    >
-                      {choice.label}
-                    </button>
-                  </form>
-                ))}
+              <div className="form-stack compact-form">
+                <p>
+                  Ao confirmar, você aceita os dados e as condições exibidos
+                  acima. A confirmação registra o acordo do repasse.
+                </p>
+                <div className="actions">
+                  {[
+                    {
+                      label: "Confirmar e aceitar as condições",
+                      value: "true",
+                      primary: true,
+                    },
+                    { label: "Recusar", value: "false", primary: false },
+                  ].map((choice) => (
+                    <form action={confirmSubstitutionAction} key={choice.value}>
+                      <input
+                        type="hidden"
+                        name="commandId"
+                        value={randomUUID()}
+                      />
+                      <input
+                        type="hidden"
+                        name="targetId"
+                        value={substitution.id}
+                      />
+                      <input
+                        type="hidden"
+                        name="accepted"
+                        value={choice.value}
+                      />
+                      {choice.value === "true" ? (
+                        <label className="checkbox-label">
+                          <input
+                            type="checkbox"
+                            name="termsAcknowledged"
+                            value="true"
+                            required
+                          />
+                          Li e aceito as condições do plantão
+                        </label>
+                      ) : null}
+                      <button
+                        className={`button ${choice.primary ? "button-primary" : "button-secondary"}`}
+                        type="submit"
+                      >
+                        {choice.label}
+                      </button>
+                    </form>
+                  ))}
+                </div>
               </div>
             ) : null}
             {isApprover &&
@@ -387,7 +424,34 @@ export default async function ShiftDetailsPage({
             <p className="eyebrow">Acordo confirmado</p>
             <h2>Registro imutável do repasse</h2>
             <p>Confirmado em {formatDateTime(agreement.confirmed_at)}.</p>
+            {agreementDocument ? (
+              <p>
+                <Link href={`/acordos/${agreement.id}`}>
+                  Consultar documento e trilha de evidências
+                </Link>
+              </p>
+            ) : null}
             <dl className="facts">
+              <div>
+                <dt>Início</dt>
+                <dd>
+                  {formatDateTime(
+                    String(
+                      (agreement.snapshot as Record<string, unknown>).starts_at,
+                    ),
+                  )}
+                </dd>
+              </div>
+              <div>
+                <dt>Término</dt>
+                <dd>
+                  {formatDateTime(
+                    String(
+                      (agreement.snapshot as Record<string, unknown>).ends_at,
+                    ),
+                  )}
+                </dd>
+              </div>
               <div>
                 <dt>Setor</dt>
                 <dd>
@@ -404,6 +468,15 @@ export default async function ShiftDetailsPage({
                       (agreement.snapshot as Record<string, unknown>)
                         .value_cents,
                     ),
+                  )}
+                </dd>
+              </div>
+              <div>
+                <dt>Condições de pagamento</dt>
+                <dd>
+                  {String(
+                    (agreement.snapshot as Record<string, unknown>)
+                      .payment_terms,
                   )}
                 </dd>
               </div>

@@ -77,6 +77,7 @@ export async function publishOfferAction(formData: FormData) {
       value_cents: parsed.value,
       payment_terms: parsed.paymentTerms,
       notes: parsed.notes,
+      owner_terms_acknowledged: parsed.ownerTermsAcknowledged === "true",
     },
   });
   revalidatePath("/plantoes");
@@ -96,6 +97,7 @@ export async function updateOfferAction(offerId: string, formData: FormData) {
       value_cents: parsed.value,
       payment_terms: parsed.paymentTerms,
       notes: parsed.notes,
+      owner_terms_acknowledged: parsed.ownerTermsAcknowledged === "true",
     },
   });
   revalidatePath(`/plantoes/${offerId}`);
@@ -130,7 +132,6 @@ export async function selectCandidateAction(formData: FormData) {
     id: parsed.commandId,
     command: "select_candidate",
     targetId: parsed.targetId,
-    payload: { confirmation_minutes: parsed.confirmationMinutes },
   });
   revalidatePath("/plantoes");
 }
@@ -141,7 +142,10 @@ export async function confirmSubstitutionAction(formData: FormData) {
     id: parsed.commandId,
     command: "confirm_substitution",
     targetId: parsed.targetId,
-    payload: { accepted: parsed.accepted },
+    payload: {
+      accepted: parsed.accepted,
+      terms_acknowledged: parsed.termsAcknowledged === "true",
+    },
   });
   revalidatePath("/plantoes");
 }

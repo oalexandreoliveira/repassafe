@@ -6,6 +6,8 @@ import {
   createGroupAction,
   createInstitutionAction,
   reviewProfileAction,
+  updateGroupAction,
+  updateMembershipAction,
   upsertMembershipAction,
 } from "@/app/admin/actions";
 import { reviewOccurrenceAction } from "@/app/plantoes/actions";
@@ -24,13 +26,14 @@ export default async function AdminPage() {
     { data: profiles },
     { data: institutions },
     { data: groups },
+    { data: memberships },
     { data: auditEvents },
     { data: openOccurrences },
     { data: crmVerifications },
   ] = await Promise.all([
     admin
       .from("profiles")
-      .select("id,display_name,contact_email,crm_number,crm_state,status")
+      .select("id,display_name,contact_email,crm_number,crm_state,status,role")
       .order("created_at"),
     admin
       .from("institutions")
@@ -42,6 +45,10 @@ export default async function AdminPage() {
       .select("id,name,institution_id,requires_approval")
       .eq("active", true)
       .order("name"),
+    admin
+      .from("group_memberships")
+      .select("id,profile_id,group_id,role,active")
+      .order("created_at", { ascending: false }),
     admin
       .from("audit_events")
       .select("id,actor_id,event_type,entity_type,entity_id,occurred_at")
@@ -269,6 +276,7 @@ export default async function AdminPage() {
             <select name="profileId" required>
               {profiles
                 ?.filter((profile) => profile.status === "approved")
+                ?.filter((profile) => profile.role !== "admin")
                 .map((profile) => (
                   <option key={profile.id} value={profile.id}>
                     {profile.display_name}
@@ -295,6 +303,92 @@ export default async function AdminPage() {
           </label>
           <button className="button button-primary">Ativar vínculo</button>
         </form>
+      </section>
+
+      <section className="admin-section">
+        <h2>Grupos e vínculos ativos</h2>
+        <div className="admin-list">
+          {groups?.map((group) => (
+            <article className="card" key={group.id}>
+              <h3>{group.name}</h3>
+              <form
+                action={updateGroupAction}
+                className="form-stack compact-form"
+              >
+                <input type="hidden" name="groupId" value={group.id} />
+                <label>
+                  Nome do grupo
+                  <input name="name" defaultValue={group.name} required />
+                </label>
+                <label>
+                  Exige aprovação institucional
+                  <select
+                    name="requiresApproval"
+                    defaultValue={String(group.requires_approval)}
+                  >
+                    <option value="true">Sim</option>
+                    <option value="false">Não</option>
+                  </select>
+                </label>
+                <button className="button button-secondary">
+                  Salvar grupo
+                </button>
+              </form>
+              <h4>Profissionais vinculados</h4>
+              {memberships?.filter((item) => item.group_id === group.id)
+                .length ? (
+                <div className="form-stack">
+                  {memberships
+                    ?.filter((item) => item.group_id === group.id)
+                    .map((membership) => {
+                      const person = profiles?.find(
+                        (profile) => profile.id === membership.profile_id,
+                      );
+                      return (
+                        <form
+                          action={updateMembershipAction}
+                          className="form-grid membership-form"
+                          key={membership.id}
+                        >
+                          <input
+                            type="hidden"
+                            name="membershipId"
+                            value={membership.id}
+                          />
+                          <p>
+                            {person?.display_name ?? "Profissional"} ·{" "}
+                            {membership.active ? "Ativo" : "Inativo"}
+                          </p>
+                          <label>
+                            Papel
+                            <select name="role" defaultValue={membership.role}>
+                              <option value="doctor">Médico</option>
+                              <option value="approver">Aprovador</option>
+                            </select>
+                          </label>
+                          <label>
+                            Vínculo
+                            <select
+                              name="active"
+                              defaultValue={String(membership.active)}
+                            >
+                              <option value="true">Ativo</option>
+                              <option value="false">Inativo</option>
+                            </select>
+                          </label>
+                          <button className="button button-secondary">
+                            Atualizar vínculo
+                          </button>
+                        </form>
+                      );
+                    })}
+                </div>
+              ) : (
+                <p>Nenhum vínculo cadastrado para este grupo.</p>
+              )}
+            </article>
+          ))}
+        </div>
       </section>
 
       <section className="card admin-section">

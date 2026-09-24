@@ -10,10 +10,10 @@ test("mantém navegação pública utilizável em viewport móvel", async ({
   await expect(page.locator("html")).toHaveAttribute("lang", "pt-BR");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "Entrar na plataforma" }),
+    page.getByRole("link", { name: "Entrar na plataforma" }).first(),
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "Solicitar acesso" }),
+    page.getByRole("link", { name: "Solicitar acesso" }).first(),
   ).toBeVisible();
 
   const hasHorizontalOverflow = await page.evaluate(

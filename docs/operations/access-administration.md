@@ -31,6 +31,15 @@ papel exigem procedimento operacional separado e registro de auditoria.
 4. Apenas perfis `approved` podem receber vínculo ativo.
 5. O profissional vê somente o próprio perfil e seus vínculos ativos.
 
+## Evidência da consulta manual do CRM
+
+Na fila administrativa, registre o nome encontrado, CRM e UF consultados,
+resultado, fonte e observações da consulta. A evidência fica disponível somente
+à operação administrativa. Aprovação exige resultado verificado; divergências
+devem gerar solicitação de correção ou rejeição com justificativa. Se a fonte
+estiver indisponível, registre essa condição e mantenha o cadastro pendente.
+Não inclua dados de pacientes em observações.
+
 ## Revogação
 
 Ao suspender um usuário, altere o perfil para `suspended`, desative seus vínculos

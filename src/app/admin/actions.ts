@@ -46,11 +46,49 @@ export async function reviewProfileAction(formData: FormData) {
   const parsed = reviewProfileSchema.parse(Object.fromEntries(formData));
   const { identity, admin } = await adminContext();
   const approved = parsed.status === "approved";
+  if (parsed.status !== "suspended") {
+    const { data: target } = await admin
+      .from("profiles")
+      .select("crm_number,crm_state")
+      .eq("id", parsed.profileId)
+      .single();
+    if (
+      !target ||
+      target.crm_number !== parsed.crmNumberChecked ||
+      target.crm_state?.toUpperCase() !== parsed.crmStateChecked
+    ) {
+      throw new Error(
+        "A evidência deve corresponder ao CRM e à UF cadastrados.",
+      );
+    }
+    const { error: evidenceError } = await admin
+      .from("crm_verifications")
+      .insert({
+        profile_id: parsed.profileId,
+        verified_by: identity.userId,
+        crm_name_found: parsed.crmNameFound || null,
+        crm_number_checked: parsed.crmNumberChecked,
+        crm_state_checked: parsed.crmStateChecked,
+        outcome: parsed.crmOutcome,
+        source: parsed.crmSource,
+        notes: parsed.crmNotes || null,
+        checked_at: new Date().toISOString(),
+      });
+    if (evidenceError)
+      throw new Error("Não foi possível salvar a evidência do CRM.");
+    await recordAuditEvent({
+      actorId: identity.userId,
+      eventType: "crm.verification.recorded",
+      entityType: "profile",
+      entityId: parsed.profileId,
+      metadata: { outcome: parsed.crmOutcome },
+    });
+  }
   const { error } = await admin
     .from("profiles")
     .update({
       status: parsed.status,
-      verification_notes: parsed.notes || null,
+      verification_notes: parsed.notes || parsed.crmNotes || null,
       verified_at: approved ? new Date().toISOString() : null,
       verified_by: approved ? identity.userId : null,
       updated_at: new Date().toISOString(),

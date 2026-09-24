@@ -113,6 +113,14 @@ export async function signupAction(
     }
     throw error;
   }
+  try {
+    await recordAuditEvent({
+      eventType: "profile.signup_started",
+      entityType: "signup",
+    });
+  } catch {
+    // Measurement is best-effort and must not prevent account creation.
+  }
   const supabase = await createClient();
   const env = getPublicSupabaseEnv();
   const { data, error } = await supabase.auth.signUp({
@@ -224,4 +232,17 @@ export async function logoutAction() {
   const supabase = await createClient();
   await supabase.auth.signOut();
   redirect("/entrar");
+}
+
+export async function markNotificationsReadAction() {
+  const identity = await getVerifiedIdentity();
+  if (!identity) redirect("/entrar");
+  const { error } = await identity.supabase
+    .from("notifications")
+    .update({ read_at: new Date().toISOString() })
+    .eq("recipient_id", identity.userId)
+    .is("read_at", null);
+  if (error) throw new Error("Não foi possível atualizar as notificações");
+  revalidatePath("/painel");
+  revalidatePath("/notificacoes");
 }

@@ -8,6 +8,8 @@ import {
   reviewProfileAction,
   upsertMembershipAction,
 } from "@/app/admin/actions";
+import { reviewOccurrenceAction } from "@/app/plantoes/actions";
+import { randomUUID } from "node:crypto";
 import { profileStatusLabel } from "@/features/admin/labels";
 
 export default async function AdminPage() {
@@ -23,6 +25,8 @@ export default async function AdminPage() {
     { data: institutions },
     { data: groups },
     { data: auditEvents },
+    { data: openOccurrences },
+    { data: crmVerifications },
   ] = await Promise.all([
     admin
       .from("profiles")
@@ -43,7 +47,27 @@ export default async function AdminPage() {
       .select("id,actor_id,event_type,entity_type,entity_id,occurred_at")
       .order("occurred_at", { ascending: false })
       .limit(50),
+    admin
+      .from("shift_occurrences")
+      .select("id,substitution_id,category,description,created_at")
+      .eq("status", "open")
+      .order("created_at"),
+    admin
+      .from("crm_verifications")
+      .select(
+        "id,profile_id,verified_by,crm_name_found,crm_number_checked,crm_state_checked,outcome,source,checked_at,notes",
+      )
+      .order("checked_at", { ascending: false }),
   ]);
+  const latestVerification = new Map<
+    string,
+    NonNullable<typeof crmVerifications>[number]
+  >();
+  for (const verification of crmVerifications ?? []) {
+    if (!latestVerification.has(verification.profile_id)) {
+      latestVerification.set(verification.profile_id, verification);
+    }
+  }
 
   return (
     <main className="shell dashboard">
@@ -55,47 +79,145 @@ export default async function AdminPage() {
         <Link href="/painel" className="button button-secondary">
           Voltar ao painel
         </Link>
+        <Link href="/admin/operacao" className="button button-primary">
+          Consulta operacional
+        </Link>
       </header>
 
       <section className="admin-section">
         <h2>Verificação profissional</h2>
         <div className="admin-list">
-          {profiles?.map((profile) => (
-            <article className="card" key={profile.id}>
-              <h3>{profile.display_name}</h3>
-              <p>
-                CRM {profile.crm_number}/{profile.crm_state} ·{" "}
-                {profile.contact_email}
-              </p>
-              <p className={`status status-${profile.status}`}>
-                {profileStatusLabel[profile.status] ?? profile.status}
-              </p>
-              <form
-                action={reviewProfileAction}
-                className="form-stack compact-form"
-              >
-                <input type="hidden" name="profileId" value={profile.id} />
-                <label>
-                  Decisão
-                  <select name="status" defaultValue="approved">
-                    <option value="approved">Aprovar</option>
-                    <option value="changes_requested">
-                      Solicitar correção
-                    </option>
-                    <option value="rejected">Rejeitar</option>
-                    <option value="suspended">Suspender</option>
-                  </select>
-                </label>
-                <label>
-                  Observação administrativa
-                  <textarea name="notes" maxLength={500} />
-                </label>
-                <button className="button button-primary">
-                  Registrar decisão
-                </button>
-              </form>
-            </article>
-          ))}
+          {profiles
+            ?.filter((profile) =>
+              ["pending", "changes_requested"].includes(profile.status),
+            )
+            .map((profile) => (
+              <article className="card" key={profile.id}>
+                <h3>{profile.display_name}</h3>
+                <p>
+                  CRM {profile.crm_number}/{profile.crm_state} ·{" "}
+                  {profile.contact_email}
+                </p>
+                <p className={`status status-${profile.status}`}>
+                  {profileStatusLabel[profile.status] ?? profile.status}
+                </p>
+                {latestVerification.get(profile.id) ? (
+                  <div className="form-help">
+                    <strong>Consulta anterior:</strong>{" "}
+                    {latestVerification.get(profile.id)?.crm_name_found} · CRM{" "}
+                    {latestVerification.get(profile.id)?.crm_number_checked}/
+                    {latestVerification.get(profile.id)?.crm_state_checked} ·{" "}
+                    {latestVerification.get(profile.id)?.outcome} ·{" "}
+                    {latestVerification.get(profile.id)?.source} ·{" "}
+                    {new Date(
+                      latestVerification.get(profile.id)!.checked_at,
+                    ).toLocaleString("pt-BR")}
+                  </div>
+                ) : null}
+                <form
+                  action={reviewProfileAction}
+                  className="form-stack compact-form"
+                >
+                  <input type="hidden" name="profileId" value={profile.id} />
+                  <label>
+                    Decisão
+                    <select name="status" defaultValue="approved">
+                      <option value="approved">Aprovar</option>
+                      <option value="changes_requested">
+                        Solicitar correção
+                      </option>
+                      <option value="rejected">Rejeitar</option>
+                      <option value="suspended">Suspender</option>
+                    </select>
+                  </label>
+                  <fieldset className="form-stack">
+                    <legend>Evidência da consulta manual do CRM</legend>
+                    <label>
+                      Nome localizado na fonte oficial
+                      <input
+                        name="crmNameFound"
+                        minLength={2}
+                        maxLength={160}
+                      />
+                    </label>
+                    <div className="form-row">
+                      <label>
+                        CRM consultado
+                        <input
+                          name="crmNumberChecked"
+                          defaultValue={profile.crm_number ?? ""}
+                          inputMode="numeric"
+                        />
+                      </label>
+                      <label>
+                        UF consultada
+                        <input
+                          name="crmStateChecked"
+                          defaultValue={profile.crm_state ?? ""}
+                          maxLength={2}
+                        />
+                      </label>
+                    </div>
+                    <label>
+                      Resultado
+                      <select name="crmOutcome" defaultValue="verified">
+                        <option value="verified">
+                          Verificado sem divergência
+                        </option>
+                        <option value="verified_with_note">
+                          Verificado com observação
+                        </option>
+                        <option value="name_divergence">
+                          Divergência de nome
+                        </option>
+                        <option value="number_divergence">
+                          Divergência de número
+                        </option>
+                        <option value="status_incompatible">
+                          Situação profissional incompatível
+                        </option>
+                        <option value="rqe_not_found">
+                          RQE não localizado
+                        </option>
+                        <option value="insufficient_information">
+                          Informação insuficiente
+                        </option>
+                        <option value="source_unavailable">
+                          Fonte indisponível
+                        </option>
+                      </select>
+                    </label>
+                    <label>
+                      Fonte consultada
+                      <input
+                        name="crmSource"
+                        defaultValue="Portal oficial do CRM"
+                        maxLength={240}
+                      />
+                    </label>
+                    <label>
+                      Observações da consulta
+                      <textarea name="crmNotes" maxLength={1000} />
+                    </label>
+                    <p className="form-help">
+                      Para registrar fonte indisponível, informe esse resultado
+                      e descreva a tentativa. Não inclua dados de pacientes.
+                    </p>
+                  </fieldset>
+                  <label>
+                    Justificativa ou orientação administrativa
+                    <textarea name="notes" maxLength={500} />
+                  </label>
+                  <p className="form-help">
+                    Obrigatória para solicitar correção, rejeitar ou suspender.
+                    Não registre dados de pacientes.
+                  </p>
+                  <button className="button button-primary">
+                    Registrar decisão
+                  </button>
+                </form>
+              </article>
+            ))}
         </div>
       </section>
 
@@ -173,6 +295,45 @@ export default async function AdminPage() {
           </label>
           <button className="button button-primary">Ativar vínculo</button>
         </form>
+      </section>
+
+      <section className="card admin-section">
+        <h2>Ocorrências abertas</h2>
+        {openOccurrences?.length ? (
+          <div className="admin-list">
+            {openOccurrences.map((occurrence) => (
+              <article className="card" key={occurrence.id}>
+                <p>
+                  <strong>{occurrence.category}</strong> ·{" "}
+                  {new Date(occurrence.created_at).toLocaleString("pt-BR")}
+                </p>
+                <p>{occurrence.description}</p>
+                <p>Substituição {occurrence.substitution_id.slice(0, 8)}</p>
+                <form
+                  action={reviewOccurrenceAction}
+                  className="form-stack compact-form"
+                >
+                  <input type="hidden" name="commandId" value={randomUUID()} />
+                  <input type="hidden" name="targetId" value={occurrence.id} />
+                  <label>
+                    Decisão administrativa
+                    <textarea
+                      name="decision"
+                      minLength={10}
+                      maxLength={2000}
+                      required
+                    />
+                  </label>
+                  <button className="button button-primary">
+                    Encerrar ocorrência
+                  </button>
+                </form>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p>Nenhuma ocorrência aberta.</p>
+        )}
       </section>
 
       <section className="card admin-section">

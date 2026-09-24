@@ -1,18 +1,18 @@
 @import "tailwindcss";
 :root {
-  --font-inter: Inter, Arial, sans-serif;
-  --font-poppins: Poppins, Arial, sans-serif;
-  --brand: #0f5c56;
-  --brand-dark: #0a3b37;
-  --accent: #f2994a;
-  --surface: #f7f5f0;
-  --text: #2b2a28;
-  --muted: #65615b;
-  --border: #d8d2c8;
-  --success: #237a57;
-  --warning: #946200;
-  --error: #b42318;
-  --focus: #1769aa;
+  --font-inter: Urbanist, "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-poppins: Urbanist, "Plus Jakarta Sans", system-ui, sans-serif;
+  --brand: #14403f;
+  --brand-dark: #0e2e2d;
+  --accent: #e9a23b;
+  --surface: #f7f6f1;
+  --text: #14201f;
+  --muted: #586b69;
+  --border: #e4e2d6;
+  --success: #3e8f6b;
+  --warning: #9a671f;
+  --error: #d9484d;
+  --focus: #2a5f5c;
   color-scheme: light;
 }
 * {
@@ -75,10 +75,10 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid var(--brand);
-  border-radius: 0.8rem;
-  min-height: 48px;
-  padding: 0.7rem 1.1rem;
+  border: 1px solid var(--brand);
+  border-radius: 999px;
+  min-height: 56px;
+  padding: 0.7rem 1.75rem;
   font: 600 1rem var(--font-inter);
   cursor: pointer;
   text-decoration: none;
@@ -107,8 +107,9 @@ body {
 .card {
   background: #fff;
   border: 1px solid var(--border);
-  border-radius: 1rem;
-  padding: 1.25rem;
+  border-radius: 1.75rem;
+  padding: 2rem;
+  box-shadow: 0 1px 2px #14201f0a, 0 8px 24px #14201f0f;
 }
 .card h2 {
   font: 600 1.1rem var(--font-poppins);
@@ -144,7 +145,7 @@ body {
   margin-inline: auto;
   padding: clamp(1.5rem, 5vw, 3rem);
   border: 1px solid var(--border);
-  border-radius: 1.25rem;
+  border-radius: 2.5rem;
   background: white;
   box-shadow: 0 20px 60px #0a3b3714;
 }
@@ -173,9 +174,9 @@ input,
 select,
 textarea {
   width: 100%;
-  min-height: 46px;
+  min-height: 56px;
   border: 1px solid var(--border);
-  border-radius: 0.65rem;
+  border-radius: 999px;
   background: white;
   color: var(--text);
   padding: 0.7rem 0.8rem;
@@ -184,6 +185,7 @@ textarea {
 textarea {
   min-height: 6rem;
   resize: vertical;
+  border-radius: 1.5rem;
 }
 input:focus-visible,
 select:focus-visible,

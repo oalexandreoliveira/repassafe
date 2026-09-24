@@ -8,6 +8,7 @@ import {
   reviewProfileAction,
   upsertMembershipAction,
 } from "@/app/admin/actions";
+import { profileStatusLabel } from "@/features/admin/labels";
 
 export default async function AdminPage() {
   try {
@@ -67,7 +68,7 @@ export default async function AdminPage() {
                 {profile.contact_email}
               </p>
               <p className={`status status-${profile.status}`}>
-                {profile.status}
+                {profileStatusLabel[profile.status] ?? profile.status}
               </p>
               <form
                 action={reviewProfileAction}

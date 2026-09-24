@@ -7,12 +7,11 @@ export default function Home() {
         <span aria-hidden="true">R</span> Repassafe
       </header>
       <section className="hero">
-        <p className="eyebrow">Beta privada · Fundação técnica</p>
-        <h1>Passagem segura, desde a base.</h1>
+        <p className="eyebrow">Beta privada · Repasse assistido</p>
+        <h1>Passagem segura, do anúncio ao acordo.</h1>
         <p className="lede">
-          A estrutura inicial do Repassafe está pronta para autenticação,
-          permissões e evolução controlada. A publicação de plantões ainda não
-          faz parte desta entrega.
+          Publique plantões, receba candidaturas e formalize a substituição com
+          confirmação, aprovação institucional configurável e rastreabilidade.
         </p>
         <div className="actions">
           <Link className="button button-primary" href="/entrar">
@@ -29,7 +28,7 @@ export default function Home() {
             "Acesso protegido",
             "Rede fechada, autenticação e menor privilégio.",
           ],
-          ["Rastreabilidade", "Auditoria-base para ações administrativas."],
+          ["Rastreabilidade", "Auditoria das transições críticas do repasse."],
           ["Uso responsável", "Nenhum campo destinado a dados de pacientes."],
         ].map(([title, text]) => (
           <article className="card" key={title}>

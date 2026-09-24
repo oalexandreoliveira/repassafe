@@ -71,7 +71,7 @@ export default async function ShiftDetailsPage({
       </header>
       <section className="dashboard-title">
         <div>
-          <p className="eyebrow">{group?.name ?? "Grupo"}</p>
+          <p className="eyebrow">{group?.name ?? "Oferta livre"}</p>
           <h1>{offer.sector}</h1>
         </div>
       </section>

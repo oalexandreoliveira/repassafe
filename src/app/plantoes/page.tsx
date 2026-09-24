@@ -63,7 +63,7 @@ export default async function ShiftsPage({
               <article className="card shift-card" key={offer.id}>
                 <div className="shift-card-heading">
                   <div>
-                    <p className="eyebrow">{group?.name ?? "Grupo"}</p>
+                    <p className="eyebrow">{group?.name ?? "Oferta livre"}</p>
                     <h2>{offer.sector}</h2>
                   </div>
                   <span className={`status status-${offer.status}`}>

@@ -333,7 +333,7 @@ export default async function AdminOperationsPage({
                 <article className="card" key={offer.id}>
                   <h3>{offer.sector}</h3>
                   <p>
-                    {group?.name ?? "Grupo"} ·{" "}
+                    {group?.name ?? "Oferta livre"} ·{" "}
                     {offerStatusLabels[offer.status] ?? offer.status}
                   </p>
                   <p>

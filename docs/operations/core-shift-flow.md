@@ -11,7 +11,9 @@ com prazo, aprovação institucional configurável e acordo final imutável.
 - O horário de negócio é `America/Fortaleza`; campos `datetime-local` são
   interpretados explicitamente nesse fuso e datas persistidas em `timestamptz`.
 - Uma oferta iniciando em até 48 horas é classificada como urgente.
-- Somente perfis aprovados com vínculo ativo no grupo podem publicar ou candidatar-se.
+- Perfis aprovados podem publicar ofertas livres sem grupo e candidatar-se a elas.
+- Ofertas vinculadas a grupo continuam restritas: responsável e candidato precisam
+  de vínculo ativo naquele grupo.
 - O responsável nunca pode candidatar-se à própria oferta.
 - A candidatura é única por profissional e oferta.
 - Na publicação e em cada edição ainda permitida, o titular confirma
@@ -25,8 +27,9 @@ com prazo, aprovação institucional configurável e acordo final imutável.
   mostrados na oferta (horário, setor, valor e pagamento).
 - Perfis administrativos não podem publicar, candidatar-se, selecionar ou
   confirmar substituições como médicos.
-- Se o grupo exigir aprovação, apenas um membro ativo com papel `approver` pode
-  decidir. O administrador da plataforma não decide em nome da instituição.
+- Ofertas livres não passam por aprovação institucional. Se uma oferta de grupo
+  exigir aprovação, apenas um membro ativo com papel `approver` pode decidir. O
+  administrador da plataforma não decide em nome da instituição.
 - Depois da confirmação final, o acordo é um snapshot imutável acompanhado de
   documento canônico SHA-256 e cadeia de eventos verificável. A página pode ser
   impressa/salva como PDF no navegador; o PDF ainda não é gerado/preservado pelo

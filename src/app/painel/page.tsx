@@ -87,7 +87,8 @@ export default async function DashboardPage() {
             </ul>
           ) : (
             <p>
-              Nenhum vínculo ativo. A equipe administrativa fará a liberação.
+              Nenhum vínculo ativo. Você ainda pode publicar ofertas livres e
+              candidatar-se a elas após a aprovação do cadastro.
             </p>
           )}
         </section>

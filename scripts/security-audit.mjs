@@ -29,12 +29,18 @@ for (const table of new Set(publicTables)) {
 if (/security definer[\s\S]{0,200}set search_path(?!\s*=\s*'')/.test(sql)) {
   failures.push("função SECURITY DEFINER com search_path mutável");
 }
-if (
-  /create (or replace )?function public\.[\s\S]{0,300}security definer/.test(
-    sql,
-  )
-) {
-  failures.push("função SECURITY DEFINER criada no schema público");
+for (const match of sql.matchAll(
+  /create (?:or replace )?function public\.([a-z0-9_]+)\s*\([^)]*\)[\s\S]{0,300}security definer/g,
+)) {
+  const functionName = match[1];
+  const laterSql = sql.slice(match.index + match[0].length);
+  const removedLater = new RegExp(
+    `drop function(?: if exists)? public\\.${functionName}\\s*\\(`,
+  ).test(laterSql);
+  if (!removedLater) {
+    failures.push("função SECURITY DEFINER criada no schema público");
+    break;
+  }
 }
 if (/auth\.role\(\)/.test(sql))
   failures.push("uso do auth.role() descontinuado");

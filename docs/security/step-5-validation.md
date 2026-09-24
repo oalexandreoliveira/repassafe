@@ -13,14 +13,14 @@ Esta entrega cobre US-1201, US-1202 e US-1203 no recorte atual do MVP:
 
 ## Matriz RLS
 
-| Recurso             | Responsável                     | Candidato/substituto | Aprovador do grupo  | Não membro | Anônimo |
-| ------------------- | ------------------------------- | -------------------- | ------------------- | ---------- | ------- |
-| Oferta do grupo     | leitura                         | leitura              | leitura             | negado     | negado  |
-| Candidatura         | todas da própria oferta         | somente própria      | negado              | negado     | negado  |
-| Substituição        | própria                         | própria              | grupo sob aprovação | negado     | negado  |
-| Acordo              | próprio                         | próprio              | grupo sob aprovação | negado     | negado  |
-| Auditoria completa  | somente admin via servidor+AAL2 | negado               | negado              | negado     | negado  |
-| Comandos de domínio | gatilho validado                | gatilho validado     | decisão validada    | negado     | negado  |
+| Recurso                          | Partes                    | Membro/aprovador do grupo | Não membro aprovado | Não aprovado/anônimo |
+| -------------------------------- | ------------------------- | ------------------------ | ------------------- | -------------------- |
+| Oferta de grupo                  | leitura                   | leitura                  | negado              | negado               |
+| Oferta livre                     | leitura                   | leitura                  | leitura              | negado               |
+| Candidatura                      | conforme participação     | negado                   | conforme oferta      | negado               |
+| Substituição/acordo              | própria                   | grupo sob aprovação      | negado              | negado               |
+| Auditoria completa               | somente admin via servidor+AAL2 | negado            | negado              | negado               |
+| Comandos de domínio              | gatilho validado          | decisão validada         | conforme oferta      | negado               |
 
 O arquivo `supabase/tests/security_rls_matrix.sql` materializa essa matriz com cinco
 identidades distintas. Grants impedem operações não previstas antes mesmo da

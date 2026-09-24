@@ -60,6 +60,11 @@ insert into public.substitutions (
   '10000000-0000-0000-0000-000000000001',
   '10000000-0000-0000-0000-000000000002', 'confirmed', now(), now()
 );
+select set_config(
+  'request.jwt.claims',
+  '{"sub":"10000000-0000-0000-0000-000000000001","role":"authenticated"}',
+  true
+);
 insert into public.shift_agreements (
   id, substitution_id, offer_id, group_id, owner_id, substitute_id, snapshot
 ) values (
@@ -70,6 +75,7 @@ insert into public.shift_agreements (
   '10000000-0000-0000-0000-000000000001',
   '10000000-0000-0000-0000-000000000002', '{}'
 );
+select set_config('request.jwt.claims', '{}', true);
 
 set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"10000000-0000-0000-0000-000000000001","role":"authenticated"}', true);

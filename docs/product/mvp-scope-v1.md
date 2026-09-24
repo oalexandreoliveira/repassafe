@@ -7,14 +7,14 @@
 
 ## 1. Objetivo do MVP
 
-Validar, em operação privada e assistida, que médicos previamente verificados de um grupo institucional conseguem concluir uma substituição de plantão com autorização, rastreabilidade e segregação de acesso.
+Validar, em operação assistida, que profissionais previamente verificados conseguem concluir uma substituição com autorização, rastreabilidade e segregação de acesso, tanto em grupos institucionais privados quanto por ofertas livres entre perfis aprovados.
 
 O MVP será considerado validado quando ao menos uma substituição percorrer o fluxo completo em ambiente de piloto, sem acesso indevido, ambiguidade de responsabilidade ou perda da trilha de auditoria.
 
 ## 2. Recorte operacional
 
 - uma instituição piloto;
-- de um a três grupos privados;
+- de um a três grupos privados, com ofertas vinculadas ou livres;
 - acesso somente por convite ou liberação administrativa;
 - verificação de CRM manual;
 - três perfis: médico, aprovador institucional e administrador Repassafe;
@@ -29,8 +29,9 @@ O MVP será considerado validado quando ao menos uma substituição percorrer o 
 1. Administrador cria o grupo e vincula seus responsáveis.
 2. Médico cria a conta e confirma o e-mail.
 3. Administrador verifica o CRM e libera o vínculo.
-4. Médico aprovado publica uma oferta para seu grupo.
-5. Outro médico elegível visualiza a oferta e se candidata.
+4. Médico aprovado publica uma oferta para seu grupo ou uma oferta livre.
+5. Outro médico elegível no grupo, ou qualquer perfil aprovado no caso livre,
+   visualiza a oferta e se candidata.
 6. Titular seleciona um candidato.
 7. Candidato confirma as condições.
 8. Aprovador decide, quando o grupo exigir aprovação.
@@ -59,13 +60,13 @@ O MVP será considerado validado quando ao menos uma substituição percorrer o 
 | US-0301  | Criação administrativa de grupo privado        |
 | US-0302  | Aprovação institucional configurável por grupo |
 | US-0303  | Vínculo administrativo de médico ao grupo      |
-| US-0305  | Visibilidade restrita a vínculos ativos        |
+| US-0305  | Oferta de grupo visível a vínculos ativos; oferta livre visível a perfis aprovados |
 
 ### 4.3 Oferta, candidatura e escolha
 
 | História | Decisão para o MVP                                                          |
 | -------- | --------------------------------------------------------------------------- |
-| US-0402  | Publicação de oferta com dados obrigatórios                                 |
+| US-0402  | Publicação livre ou vinculada a grupo, com dados obrigatórios                |
 | US-0403  | Classificação normal ou emergencial                                         |
 | US-0405  | Expiração automática                                                        |
 | US-0406  | Lista de ofertas elegíveis                                                  |
@@ -157,7 +158,7 @@ Cada onda deve terminar com demonstração ponta a ponta, testes automatizados e
 
 ## 8. Critérios de aceite do MVP
 
-- Dois cenários E2E aprovados: grupo com e sem aprovação institucional.
+- Três cenários E2E aprovados: oferta de grupo com e sem aprovação institucional e oferta livre.
 - Cenários de cancelamento antes e depois da confirmação aprovados.
 - Usuário sem vínculo ativo não consegue ler nem alterar dados do grupo.
 - Concorrência não permite dois substitutos confirmados para a mesma oferta.

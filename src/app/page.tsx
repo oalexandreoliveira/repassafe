@@ -19,7 +19,7 @@ const steps = [
   {
     icon: CalendarPlus,
     title: "Publicar plantão",
-    text: "Informe as condições do plantão para que profissionais elegíveis possam se candidatar.",
+    text: "Publique para um grupo institucional ou de forma livre para todos os profissionais aprovados.",
   },
   {
     icon: Users,
@@ -46,7 +46,7 @@ const safeguards = [
   [BadgeCheck, "Somente médicos previamente verificados"],
   [
     Users,
-    "Ofertas visíveis apenas para profissionais com vínculo ativo no grupo",
+    "Ofertas de grupo restritas a membros; ofertas livres visíveis a perfis aprovados",
   ],
   [Lock, "Acordo imutável e auditável"],
   [ShieldOff, "Sem dados de pacientes na plataforma"],

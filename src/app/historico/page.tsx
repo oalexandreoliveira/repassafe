@@ -109,18 +109,24 @@ export default async function PersonalHistoryPage() {
         <h2>Ofertas publicadas</h2>
         {myOffers?.length ? (
           <ul className="clean-list">
-            {myOffers.map((offer) => (
-              <li key={offer.id}>
-                <Link href={`/plantoes/${offer.id}`}>
-                  <strong>{offer.sector}</strong>
-                  <span>
-                    {formatDateTime(offer.starts_at)} ·{" "}
-                    {formatCurrency(offer.value_cents)} ·{" "}
-                    {offerStatusLabels[offer.status] ?? offer.status}
-                  </span>
-                </Link>
-              </li>
-            ))}
+            {myOffers.map((offer) => {
+              const group = Array.isArray(offer.groups)
+                ? offer.groups[0]
+                : offer.groups;
+              return (
+                <li key={offer.id}>
+                  <Link href={`/plantoes/${offer.id}`}>
+                    <strong>{offer.sector}</strong>
+                    <span>
+                      {group?.name ?? "Oferta livre"} ·{" "}
+                      {formatDateTime(offer.starts_at)} ·{" "}
+                      {formatCurrency(offer.value_cents)} ·{" "}
+                      {offerStatusLabels[offer.status] ?? offer.status}
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
           </ul>
         ) : (
           <p>Nenhuma oferta publicada.</p>
@@ -132,11 +138,17 @@ export default async function PersonalHistoryPage() {
           <ul className="clean-list">
             {myApplications.map((application) => {
               const offer = offerById.get(application.offer_id);
+              const group = offer
+                ? Array.isArray(offer.groups)
+                  ? offer.groups[0]
+                  : offer.groups
+                : null;
               return (
                 <li key={application.id}>
                   <Link href={`/plantoes/${application.offer_id}`}>
                     <strong>{offer?.sector ?? "Plantão"}</strong>
                     <span>
+                      {group?.name ?? "Oferta livre"} ·{" "}
                       {offer
                         ? `${formatDateTime(offer.starts_at)} · ${formatCurrency(offer.value_cents)} · `
                         : ""}

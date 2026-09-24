@@ -16,7 +16,7 @@ type AgreementContent = {
     owner: { profile_id: string; display_name: string };
     substitute: { profile_id: string; display_name: string };
   };
-  group: { id: string; name: string; institution_name: string };
+  group: { id: string; name: string; institution_name: string } | null;
   agreement_confirmed_at: string;
   owner_offer_terms: {
     actor_id: string;
@@ -165,11 +165,11 @@ export default async function AgreementDocumentPage({
           </div>
           <div>
             <dt>Instituição</dt>
-            <dd>{content.group.institution_name}</dd>
+            <dd>{content.group?.institution_name ?? "Não se aplica"}</dd>
           </div>
           <div>
             <dt>Grupo</dt>
-            <dd>{content.group.name}</dd>
+            <dd>{content.group?.name ?? "Oferta livre"}</dd>
           </div>
         </dl>
 

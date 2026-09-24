@@ -16,8 +16,9 @@ substitui análise jurídica sobre validade, exigibilidade ou responsabilidade.
 - Quando o grupo exige aprovação, a decisão favorável do aprovador ativo é
   registrada como evento distinto; ela não substitui o aceite das partes.
 - O documento canônico inclui identificadores e nomes das partes, grupo e
-  instituição, horário, setor, valor, pagamento, instante de confirmação e
-  referência de aprovação, quando aplicável.
+  instituição quando houver (ou identifica a oferta como livre), horário, setor,
+  valor, pagamento, instante de confirmação e referência de aprovação, quando
+  aplicável.
 - O documento e os eventos são append-only no banco e acessíveis às partes e
   aprovadores ativos do grupo. Administração acessa pela aplicação com MFA.
 

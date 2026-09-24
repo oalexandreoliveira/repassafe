@@ -32,7 +32,9 @@ const moneyToCents = z
 
 const offerFieldsSchema = z.object({
   commandId: z.uuid(),
-  groupId: z.uuid(),
+  groupId: z.union([z.uuid(), z.literal("")]).transform((value) =>
+    value === "" ? null : value,
+  ),
   startsAt: localDateTime,
   endsAt: localDateTime,
   sector: z.string().trim().min(2).max(120),

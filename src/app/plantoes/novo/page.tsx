@@ -25,13 +25,17 @@ export default async function NewShiftPage() {
         </div>
       </section>
       <section className="card form-card">
-        <p className="form-help">Datas e horários no fuso de Fortaleza.</p>
+        <p className="form-help">
+          Você pode publicar para um dos seus grupos ou de forma livre para
+          todos os profissionais aprovados. Datas e horários no fuso de
+          Fortaleza.
+        </p>
         <form action={publishOfferAction} className="form-stack">
           <input type="hidden" name="commandId" value={randomUUID()} />
           <label>
-            Grupo
-            <select name="groupId" required>
-              <option value="">Selecione</option>
+            Grupo (opcional)
+            <select name="groupId" defaultValue="">
+              <option value="">Oferta livre — sem grupo</option>
               {memberships?.map((membership) => {
                 const group = Array.isArray(membership.groups)
                   ? membership.groups[0]

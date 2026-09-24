@@ -49,7 +49,8 @@ insert into public.workflow_commands (id, command, payload) values (
     'starts_at', now() + interval '5 days',
     'ends_at', now() + interval '5 days 12 hours',
     'sector', 'UTI', 'value_cents', 120000,
-    'payment_terms', '30 dias', 'notes', 'Fluxo sem aprovação'
+    'payment_terms', '30 dias', 'notes', 'Fluxo sem aprovação',
+    'owner_terms_acknowledged', true
   )
 );
 reset role;
@@ -127,7 +128,7 @@ select set_config('request.jwt.claims', '{"sub":"11000000-0000-0000-0000-0000000
 insert into public.workflow_commands (id, command, target_id, payload) values (
   '41000000-0000-0000-0000-000000000006', 'confirm_substitution',
   (select id from acceptance_ids where name = 'substitution_without_approval'),
-  '{"accepted":true}'
+  '{"accepted":true,"terms_acknowledged":true}'
 );
 reset role;
 select is(
@@ -170,7 +171,8 @@ insert into public.workflow_commands (id, command, payload) values (
     'starts_at', now() + interval '6 days',
     'ends_at', now() + interval '6 days 12 hours',
     'sector', 'Emergência', 'value_cents', 150000,
-    'payment_terms', '30 dias', 'notes', 'Fluxo com aprovação'
+    'payment_terms', '30 dias', 'notes', 'Fluxo com aprovação',
+    'owner_terms_acknowledged', true
   )
 );
 reset role;
@@ -202,7 +204,7 @@ select set_config('request.jwt.claims', '{"sub":"11000000-0000-0000-0000-0000000
 insert into public.workflow_commands (id, command, target_id, payload) values (
   '42000000-0000-0000-0000-000000000004', 'confirm_substitution',
   (select id from acceptance_ids where name = 'substitution_with_approval'),
-  '{"accepted":true}'
+  '{"accepted":true,"terms_acknowledged":true}'
 );
 reset role;
 select is(
@@ -249,7 +251,8 @@ insert into public.workflow_commands (id, command, payload) values (
     'starts_at', now() + interval '7 days',
     'ends_at', now() + interval '7 days 12 hours',
     'sector', 'Clínica', 'value_cents', 90000,
-    'payment_terms', '15 dias', 'notes', 'Cancelamento'
+    'payment_terms', '15 dias', 'notes', 'Cancelamento',
+    'owner_terms_acknowledged', true
   )
 );
 reset role;

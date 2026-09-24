@@ -3,14 +3,20 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   applyToOfferAction,
+  cancelConfirmedSubstitutionAction,
   cancelOfferAction,
+  confirmCompletionAction,
   confirmSubstitutionAction,
   decideSubstitutionAction,
+  disputeCompletionAction,
+  reportCompletionAction,
   selectCandidateAction,
+  substituteWithdrawalAction,
   withdrawApplicationAction,
 } from "@/app/plantoes/actions";
 import {
   applicationStatusLabels,
+  completionStatusLabels,
   formatCurrency,
   formatDateTime,
   offerStatusLabels,
@@ -33,6 +39,8 @@ export default async function ShiftDetailsPage({
     applications,
     substitutions,
     agreement,
+    completion,
+    occurrences,
     isApprover,
   } = workspace;
   const group = Array.isArray(offer.groups) ? offer.groups[0] : offer.groups;
@@ -171,6 +179,12 @@ export default async function ShiftDetailsPage({
             <p className="status">
               {substitutionStatusLabels[substitution.status]}
             </p>
+            {substitution.cancellation_reason ? (
+              <p>
+                Justificativa do cancelamento:{" "}
+                {substitution.cancellation_reason}
+              </p>
+            ) : null}
             {substitution.status === "pending_substitute_confirmation" ? (
               <p>Prazo: {formatDateTime(substitution.confirmation_deadline)}</p>
             ) : null}
@@ -232,6 +246,139 @@ export default async function ShiftDetailsPage({
                 ))}
               </div>
             ) : null}
+            {substitution.status === "confirmed" &&
+            offer.ends_at <= new Date().toISOString() &&
+            substitution.substitute_id === identity.userId &&
+            !completion ? (
+              <form action={reportCompletionAction} className="compact-form">
+                <input type="hidden" name="commandId" value={randomUUID()} />
+                <input type="hidden" name="targetId" value={substitution.id} />
+                <p>
+                  Informe que o plantão foi realizado para solicitar
+                  confirmação.
+                </p>
+                <button className="button button-primary" type="submit">
+                  Registrar realização
+                </button>
+              </form>
+            ) : null}
+            {completion ? (
+              <div className="compact-form">
+                <p className="status">
+                  {completionStatusLabels[completion.status] ??
+                    completion.status}
+                </p>
+                {completion.status === "pending_confirmation" &&
+                (isOwner || isApprover) ? (
+                  <div className="actions">
+                    <form action={confirmCompletionAction}>
+                      <input
+                        type="hidden"
+                        name="commandId"
+                        value={randomUUID()}
+                      />
+                      <input
+                        type="hidden"
+                        name="targetId"
+                        value={substitution.id}
+                      />
+                      <button className="button button-primary" type="submit">
+                        Confirmar realização
+                      </button>
+                    </form>
+                    <form action={disputeCompletionAction}>
+                      <input
+                        type="hidden"
+                        name="commandId"
+                        value={randomUUID()}
+                      />
+                      <input
+                        type="hidden"
+                        name="targetId"
+                        value={substitution.id}
+                      />
+                      <p className="form-help">
+                        Não informe dados de pacientes.
+                      </p>
+                      <label>
+                        Motivo da divergência
+                        <textarea
+                          name="reason"
+                          minLength={10}
+                          maxLength={2000}
+                          required
+                        />
+                      </label>
+                      <button className="button button-secondary" type="submit">
+                        Abrir ocorrência
+                      </button>
+                    </form>
+                  </div>
+                ) : null}
+              </div>
+            ) : null}
+            {substitution.status === "confirmed" &&
+            !completion &&
+            (isOwner || substitution.substitute_id === identity.userId) ? (
+              <details className="compact-form">
+                <summary>Cancelar repasse confirmado</summary>
+                <form
+                  action={
+                    isOwner
+                      ? cancelConfirmedSubstitutionAction
+                      : substituteWithdrawalAction
+                  }
+                >
+                  <input type="hidden" name="commandId" value={randomUUID()} />
+                  <input
+                    type="hidden"
+                    name="targetId"
+                    value={substitution.id}
+                  />
+                  <p className="form-help">Não informe dados de pacientes.</p>
+                  <label>
+                    Justificativa
+                    <textarea
+                      name="reason"
+                      minLength={10}
+                      maxLength={2000}
+                      required
+                    />
+                  </label>
+                  <button className="button button-secondary" type="submit">
+                    Registrar cancelamento
+                  </button>
+                </form>
+              </details>
+            ) : null}
+          </section>
+        ) : null}
+
+        {occurrences.length ? (
+          <section className="card">
+            <h2>Ocorrências</h2>
+            <ul className="clean-list">
+              {occurrences.map((occurrence) => (
+                <li key={occurrence.id}>
+                  <strong>
+                    {occurrence.category === "late_cancellation"
+                      ? "Cancelamento tardio"
+                      : occurrence.category === "substitute_withdrawal"
+                        ? "Desistência do substituto"
+                        : occurrence.category === "completion_dispute"
+                          ? "Divergência de conclusão"
+                          : "Ocorrência"}
+                  </strong>
+                  <span>
+                    {occurrence.status === "open" ? "Em análise" : "Encerrada"}
+                  </span>
+                  <p>{occurrence.description}</p>
+                  {occurrence.decision ? (
+                    <p>Decisão: {occurrence.decision}</p>
+                  ) : null}
+                </li>
+              ))}
+            </ul>
           </section>
         ) : null}
 

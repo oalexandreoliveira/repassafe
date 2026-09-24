@@ -7,8 +7,19 @@ import {
   offerStatusLabels,
   substitutionStatusLabels,
 } from "@/features/shifts/schemas";
+import {
+  isWorkflowFeedbackCode,
+  workflowFeedback,
+} from "@/features/shifts/feedback";
 
-export default async function ShiftsPage() {
+export default async function ShiftsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ feedback?: string | string[] }>;
+}) {
+  const params = await searchParams;
+  const feedbackCode =
+    typeof params.feedback === "string" ? params.feedback : undefined;
   const { identity, offers, applications, substitutions } =
     await listShiftWorkspace();
   const applicationByOffer = new Map(
@@ -35,6 +46,11 @@ export default async function ShiftsPage() {
           <p className="form-help">Horários exibidos no fuso de Fortaleza.</p>
         </div>
       </section>
+      {isWorkflowFeedbackCode(feedbackCode) ? (
+        <p className="form-message form-message-error" role="alert">
+          {workflowFeedback[feedbackCode]}
+        </p>
+      ) : null}
       <div className="shift-list">
         {offers.length ? (
           offers.map((offer) => {

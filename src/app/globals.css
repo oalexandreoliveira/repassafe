@@ -95,7 +95,9 @@ body {
   background: transparent;
   color: var(--brand-dark);
 }
-.button:focus-visible {
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 3px;
 }
@@ -160,11 +162,25 @@ body {
   display: grid;
   gap: 1rem;
 }
+fieldset {
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+legend {
+  padding-inline: 0.35rem;
+  font-weight: 700;
+}
 .form-row,
 .form-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
   gap: 1rem;
+}
+.form-row > *,
+.form-grid > * {
+  min-width: 0;
 }
 .form-stack label,
 .form-grid label {
@@ -381,4 +397,30 @@ textarea:focus-visible {
 }
 .audit-table th {
   color: var(--muted);
+}
+.operation-history {
+  margin-top: 1rem;
+}
+.operation-history summary {
+  width: fit-content;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 700;
+}
+.operation-history li {
+  overflow-wrap: anywhere;
+}
+code {
+  overflow-wrap: anywhere;
+}
+@media (max-width: 640px) {
+  .card {
+    padding: 1.25rem;
+    border-radius: 1.25rem;
+  }
+  .audit-table {
+    max-width: 100%;
+  }
 }

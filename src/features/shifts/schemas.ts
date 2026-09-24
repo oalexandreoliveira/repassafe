@@ -51,6 +51,20 @@ export const decisionSchema = targetCommandSchema.extend({
   approved: z.enum(["true", "false"]).transform((value) => value === "true"),
 });
 
+export const reasonCommandSchema = targetCommandSchema.extend({
+  reason: z.string().trim().min(10).max(2000),
+});
+
+export const occurrenceDecisionSchema = targetCommandSchema.extend({
+  decision: z.string().trim().min(10).max(2000),
+});
+
+export const completionStatusLabels: Record<string, string> = {
+  pending_confirmation: "Aguardando confirmação da realização",
+  completed: "Plantão concluído",
+  disputed: "Realização em análise",
+};
+
 export const offerStatusLabels: Record<string, string> = {
   open_normal: "Aberto",
   open_emergency: "Urgente",

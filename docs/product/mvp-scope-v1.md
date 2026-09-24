@@ -41,94 +41,94 @@ O MVP será considerado validado quando ao menos uma substituição percorrer o 
 
 ### 4.1 Acesso e verificação
 
-| História | Decisão para o MVP |
-| --- | --- |
-| US-0101 | Cadastro mínimo do médico |
-| US-0102 | Confirmação de e-mail; confirmação de telefone fica adiada |
-| US-0103 | Login, logout e recuperação de acesso |
-| US-0104 | Situação do cadastro visível ao usuário |
-| US-0105 | Atualização apenas de dados cadastrais não críticos |
-| US-0201 | Fila administrativa de cadastros pendentes |
-| US-0202 | Verificação manual do CRM com evidência mínima |
-| US-0203 | Aprovação, rejeição ou solicitação de correção |
+| História | Decisão para o MVP                                         |
+| -------- | ---------------------------------------------------------- |
+| US-0101  | Cadastro mínimo do médico                                  |
+| US-0102  | Confirmação de e-mail; confirmação de telefone fica adiada |
+| US-0103  | Login, logout e recuperação de acesso                      |
+| US-0104  | Situação do cadastro visível ao usuário                    |
+| US-0105  | Atualização apenas de dados cadastrais não críticos        |
+| US-0201  | Fila administrativa de cadastros pendentes                 |
+| US-0202  | Verificação manual do CRM com evidência mínima             |
+| US-0203  | Aprovação, rejeição ou solicitação de correção             |
 
 ### 4.2 Grupos e autorização
 
-| História | Decisão para o MVP |
-| --- | --- |
-| US-0301 | Criação administrativa de grupo privado |
-| US-0302 | Aprovação institucional configurável por grupo |
-| US-0303 | Vínculo administrativo de médico ao grupo |
-| US-0305 | Visibilidade restrita a vínculos ativos |
+| História | Decisão para o MVP                             |
+| -------- | ---------------------------------------------- |
+| US-0301  | Criação administrativa de grupo privado        |
+| US-0302  | Aprovação institucional configurável por grupo |
+| US-0303  | Vínculo administrativo de médico ao grupo      |
+| US-0305  | Visibilidade restrita a vínculos ativos        |
 
 ### 4.3 Oferta, candidatura e escolha
 
-| História | Decisão para o MVP |
-| --- | --- |
-| US-0402 | Publicação de oferta com dados obrigatórios |
-| US-0403 | Classificação normal ou emergencial |
-| US-0405 | Expiração automática |
-| US-0406 | Lista de ofertas elegíveis |
-| US-0408 | Edição somente antes da primeira candidatura; depois, cancelar e republicar |
-| US-0501 | Manifestação de interesse idempotente |
-| US-0502 | Retirada antes da seleção |
-| US-0503 | Lista de candidatos para o titular |
-| US-0504 | Seleção única e transacional |
-| US-0505 | Prazo de confirmação e liberação após expiração |
+| História | Decisão para o MVP                                                          |
+| -------- | --------------------------------------------------------------------------- |
+| US-0402  | Publicação de oferta com dados obrigatórios                                 |
+| US-0403  | Classificação normal ou emergencial                                         |
+| US-0405  | Expiração automática                                                        |
+| US-0406  | Lista de ofertas elegíveis                                                  |
+| US-0408  | Edição somente antes da primeira candidatura; depois, cancelar e republicar |
+| US-0501  | Manifestação de interesse idempotente                                       |
+| US-0502  | Retirada antes da seleção                                                   |
+| US-0503  | Lista de candidatos para o titular                                          |
+| US-0504  | Seleção única e transacional                                                |
+| US-0505  | Prazo de confirmação e liberação após expiração                             |
 
 ### 4.4 Confirmação, aprovação e acordo
 
-| História | Decisão para o MVP |
-| --- | --- |
-| US-0601 | Confirmação explícita pelo substituto |
-| US-0602 | Confirmação direta em grupo sem aprovador obrigatório |
-| US-0603 | Encaminhamento ao aprovador quando configurado |
-| US-0604 | Aprovação ou rejeição institucional |
-| US-0701 | Registro imutável do acordo confirmado |
-| US-0703 | Histórico pessoal |
-| US-0704 | Detalhes do acordo e sua trilha |
+| História | Decisão para o MVP                                    |
+| -------- | ----------------------------------------------------- |
+| US-0601  | Confirmação explícita pelo substituto                 |
+| US-0602  | Confirmação direta em grupo sem aprovador obrigatório |
+| US-0603  | Encaminhamento ao aprovador quando configurado        |
+| US-0604  | Aprovação ou rejeição institucional                   |
+| US-0701  | Registro imutável do acordo confirmado                |
+| US-0703  | Histórico pessoal                                     |
+| US-0704  | Detalhes do acordo e sua trilha                       |
 
 ### 4.5 Encerramento e exceções mínimas
 
-| História | Decisão para o MVP |
-| --- | --- |
-| US-0801 | Registro de realização do plantão |
-| US-0901 | Retirada de oferta sem acordo confirmado |
-| US-0902 | Cancelamento confirmado com 48 horas ou mais |
-| US-0903 | Cancelamento confirmado com menos de 48 horas e marcação operacional |
-| US-0904 | Desistência do substituto e abertura de ocorrência |
-| US-0906 | Tratamento administrativo básico da ocorrência |
+| História | Decisão para o MVP                                                   |
+| -------- | -------------------------------------------------------------------- |
+| US-0801  | Registro de realização do plantão                                    |
+| US-0901  | Retirada de oferta sem acordo confirmado                             |
+| US-0902  | Cancelamento confirmado com 48 horas ou mais                         |
+| US-0903  | Cancelamento confirmado com menos de 48 horas e marcação operacional |
+| US-0904  | Desistência do substituto e abertura de ocorrência                   |
+| US-0906  | Tratamento administrativo básico da ocorrência                       |
 
 ### 4.6 Operação, segurança e medição
 
-| História | Decisão para o MVP |
-| --- | --- |
-| US-1001 | Central mínima de notificações críticas |
-| US-1003 | E-mails transacionais críticos, sem campanhas |
-| US-1101 | Painel administrativo mínimo com pendências |
-| US-1102 | Aprovar, suspender e consultar usuários |
-| US-1103 | Criar e manter grupos e vínculos |
-| US-1104 | Consulta do fluxo e da auditoria |
-| US-1201 a US-1207 | Todas bloqueiam o lançamento |
-| US-1301 | Eventos mínimos do funil, sem dados clínicos |
+| História          | Decisão para o MVP                            |
+| ----------------- | --------------------------------------------- |
+| US-1001           | Central mínima de notificações críticas       |
+| US-1003           | E-mails transacionais críticos, sem campanhas |
+| US-1101           | Painel administrativo mínimo com pendências   |
+| US-1102           | Aprovar, suspender e consultar usuários       |
+| US-1103           | Criar e manter grupos e vínculos              |
+| US-1104           | Consulta do fluxo e da auditoria              |
+| US-1201 a US-1207 | Todas bloqueiam o lançamento                  |
+| US-1301           | Eventos mínimos do funil, sem dados clínicos  |
 
 ## 5. Itens explicitamente adiados
 
-| Itens | Destino | Justificativa |
-| --- | --- | --- |
-| Confirmação de telefone | Pós-piloto | E-mail é suficiente para autenticação inicial assistida |
-| US-0204 e US-0205 — selos e revalidação | Pós-MVP | Não impedem a primeira jornada controlada |
-| US-0304 — confirmação autônoma de vínculo | Pós-MVP | Vínculo será administrativo |
-| US-0401, US-0404 e US-0407 — rascunho, conversão e filtros | Pós-MVP | Reduz estados e complexidade da primeira entrega |
-| US-0605 — solicitação de ajuste | Pós-MVP | Rejeitar e republicar cobre o piloto |
-| US-0702 — alterações materiais versionadas | Pós-MVP | Acordo confirmado será imutável; alterações exigem cancelamento |
-| US-0802 a US-0805 — avaliação e reputação | Pós-piloto | Requer volume e política de contestação |
-| US-0905 e US-0907 — não comparecimento e reativação automatizados | Pós-piloto | Tratamento administrativo manual no início |
-| US-1002 — Web Push | Pós-MVP | E-mail e central interna cobrem eventos críticos |
-| US-1004 — WhatsApp | Fora do MVP | Integração externa não é necessária à hipótese central |
-| US-1105 — registro próprio de suporte | Pós-piloto | Operação usará processo assistido externo |
-| US-1302 e US-1303 — dashboard e exportação | Pós-piloto | Eventos brutos bastam para avaliação inicial |
-| Pagamentos, chat, SMS, GPS, biometria, IA e integrações externas | Fora do MVP | Não validam a hipótese central e ampliam risco |
+| Itens                                                             | Destino     | Justificativa                                                   |
+| ----------------------------------------------------------------- | ----------- | --------------------------------------------------------------- |
+| Confirmação de telefone                                           | Pós-piloto  | E-mail é suficiente para autenticação inicial assistida         |
+| US-0204 e US-0205 — selos e revalidação                           | Pós-MVP     | Não impedem a primeira jornada controlada                       |
+| US-0304 — confirmação autônoma de vínculo                         | Pós-MVP     | Vínculo será administrativo                                     |
+| US-0401, US-0404 e US-0407 — rascunho, conversão e filtros        | Pós-MVP     | Reduz estados e complexidade da primeira entrega                |
+| US-0605 — solicitação de ajuste                                   | Pós-MVP     | Rejeitar e republicar cobre o piloto                            |
+| US-0702 — alterações materiais versionadas                        | Pós-MVP     | Acordo confirmado será imutável; alterações exigem cancelamento |
+| US-0802 a US-0805 — avaliação e reputação                         | Pós-piloto  | Requer volume e política de contestação                         |
+| US-0905 e US-0907 — não comparecimento e reativação automatizados | Pós-piloto  | Tratamento administrativo manual no início                      |
+| US-1002 — Web Push                                                | Pós-MVP     | E-mail e central interna cobrem eventos críticos                |
+| US-1004 — WhatsApp                                                | Fora do MVP | Integração externa não é necessária à hipótese central          |
+| US-1105 — registro próprio de suporte                             | Pós-piloto  | Operação usará processo assistido externo                       |
+| US-1302 e US-1303 — dashboard e exportação                        | Pós-piloto  | Eventos brutos bastam para avaliação inicial                    |
+| Pagamentos, chat, SMS, GPS, biometria, IA e integrações externas  | Fora do MVP | Não validam a hipótese central e ampliam risco                  |
 
 ## 6. Regras simplificadoras
 
@@ -142,14 +142,16 @@ O MVP será considerado validado quando ao menos uma substituição percorrer o 
 
 ## 7. Sequência de entrega
 
-| Onda | Resultado verificável | Dependência |
-| --- | --- | --- |
-| 0 — Fundação | CI verde, ambientes, RLS-base e auditoria-base | concluída |
-| 1 — Entrada | Médico entra, é verificado e recebe vínculo ativo | Onda 0 |
-| 2 — Oferta | Médico elegível publica e outro médico visualiza | Onda 1 |
-| 3 — Escolha | Candidatura, retirada, seleção e expiração funcionam | Onda 2 |
-| 4 — Acordo | Confirmação, aprovação configurável e acordo imutável | Onda 3 |
-| 5 — Piloto | Conclusão, cancelamento, notificações e operação assistida | Onda 4 |
+| Onda                       | Resultado verificável                                                                                                   | Dependência |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ----------- |
+| 0 — Fundação               | CI verde, ambientes, RLS-base e auditoria-base                                                                          | concluída   |
+| 1 — Entrada                | Médico entra, é verificado e recebe vínculo ativo                                                                       | Onda 0      |
+| 2 — Oferta                 | Médico elegível publica e outro médico visualiza                                                                        | Onda 1      |
+| 3 — Escolha                | Candidatura, retirada, seleção e expiração funcionam                                                                    | Onda 2      |
+| 4 — Acordo                 | Confirmação, aprovação configurável e acordo imutável                                                                   | Onda 3      |
+| 5 — Piloto                 | Conclusão, cancelamento, notificações e operação assistida                                                              | Onda 4      |
+| 6 — Comunicação e operação | Central de notificações, histórico pessoal, justificativas e fila de verificação CRM                                    | Onda 5      |
+| 7 — Medição e polimento    | Eventos mínimos do funil, consulta operacional administrativa, mensagens de erro seguras e acessibilidade móvel/teclado | Ondas 5 e 6 |
 
 Cada onda deve terminar com demonstração ponta a ponta, testes automatizados e aceite do Product Owner. Desenvolvimento paralelo é permitido somente quando não antecipa regras dependentes de uma onda posterior.
 

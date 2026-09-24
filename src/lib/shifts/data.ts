@@ -72,7 +72,7 @@ export async function getShiftDetails(offerId: string) {
     identity.supabase
       .from("substitutions")
       .select(
-        "id,status,owner_id,substitute_id,confirmation_deadline,substitute_confirmed_at,institutional_decided_at",
+        "id,status,owner_id,substitute_id,confirmation_deadline,substitute_confirmed_at,institutional_decided_at,cancellation_reason",
       )
       .eq("offer_id", offerId)
       .order("created_at", { ascending: false }),
@@ -82,6 +82,21 @@ export async function getShiftDetails(offerId: string) {
       .eq("offer_id", offerId)
       .maybeSingle(),
   ]);
+  const selectedSubstitution = substitutions?.[0];
+  const [{ data: completion }, { data: occurrences }] = selectedSubstitution
+    ? await Promise.all([
+        identity.supabase
+          .from("shift_completions")
+          .select("id,status,reported_by,reported_at,confirmed_by,confirmed_at")
+          .eq("substitution_id", selectedSubstitution.id)
+          .maybeSingle(),
+        identity.supabase
+          .from("shift_occurrences")
+          .select("id,category,description,status,decision,created_at")
+          .eq("substitution_id", selectedSubstitution.id)
+          .order("created_at", { ascending: false }),
+      ])
+    : [{ data: null }, { data: [] }];
 
   const { data: approverMembership } = await identity.supabase
     .from("group_memberships")
@@ -98,6 +113,8 @@ export async function getShiftDetails(offerId: string) {
     applications: applications ?? [],
     substitutions: substitutions ?? [],
     agreement: agreements,
+    completion,
+    occurrences: occurrences ?? [],
     isApprover: Boolean(approverMembership),
   };
 }

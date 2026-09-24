@@ -2,10 +2,22 @@ import { z } from "zod";
 
 const localDateTime = z
   .string()
-  .min(1)
+  .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/, "Data e hora inválidas")
   .transform((value, context) => {
-    const date = new Date(value);
-    if (Number.isNaN(date.valueOf())) {
+    // datetime-local has no zone; product dates are always Fortaleza (UTC-03:00).
+    const date = new Date(`${value}:00-03:00`);
+    const [day, time] = value.split("T");
+    const [year, month, dayOfMonth] = day.split("-").map(Number);
+    const [hour, minute] = time.split(":").map(Number);
+    const calendarDate = new Date(Date.UTC(year, month - 1, dayOfMonth));
+    if (
+      Number.isNaN(date.valueOf()) ||
+      calendarDate.getUTCFullYear() !== year ||
+      calendarDate.getUTCMonth() !== month - 1 ||
+      calendarDate.getUTCDate() !== dayOfMonth ||
+      hour > 23 ||
+      minute > 59
+    ) {
       context.addIssue({ code: "custom", message: "Data e hora inválidas" });
       return z.NEVER;
     }
@@ -18,17 +30,19 @@ const moneyToCents = z
   .regex(/^\d{1,7}([,.]\d{1,2})?$/, "Valor inválido")
   .transform((value) => Math.round(Number(value.replace(",", ".")) * 100));
 
-export const offerFormSchema = z
-  .object({
-    commandId: z.uuid(),
-    groupId: z.uuid(),
-    startsAt: localDateTime,
-    endsAt: localDateTime,
-    sector: z.string().trim().min(2).max(120),
-    value: moneyToCents,
-    paymentTerms: z.string().trim().min(2).max(300),
-    notes: z.string().trim().max(1000).default(""),
-  })
+const offerFieldsSchema = z.object({
+  commandId: z.uuid(),
+  groupId: z.uuid(),
+  startsAt: localDateTime,
+  endsAt: localDateTime,
+  sector: z.string().trim().min(2).max(120),
+  value: moneyToCents,
+  paymentTerms: z.string().trim().min(2).max(300),
+  notes: z.string().trim().max(1000).default(""),
+});
+
+export const offerFormSchema = offerFieldsSchema
+  .extend({ ownerTermsAcknowledged: z.enum(["true"]) })
   .refine((data) => new Date(data.endsAt) > new Date(data.startsAt), {
     message: "O término deve ocorrer depois do início",
     path: ["endsAt"],
@@ -39,13 +53,16 @@ export const targetCommandSchema = z.object({
   targetId: z.uuid(),
 });
 
-export const selectionSchema = targetCommandSchema.extend({
-  confirmationMinutes: z.coerce.number().int().min(5).max(1440).default(30),
-});
+export const selectionSchema = targetCommandSchema;
 
-export const confirmationSchema = targetCommandSchema.extend({
-  accepted: z.enum(["true", "false"]).transform((value) => value === "true"),
-});
+export const confirmationSchema = targetCommandSchema
+  .extend({
+    accepted: z.enum(["true", "false"]).transform((value) => value === "true"),
+    termsAcknowledged: z.enum(["true"]).optional(),
+  })
+  .refine((data) => !data.accepted || data.termsAcknowledged === "true", {
+    message: "Confirme que leu e aceita as condições do plantão",
+  });
 
 export const decisionSchema = targetCommandSchema.extend({
   approved: z.enum(["true", "false"]).transform((value) => value === "true"),

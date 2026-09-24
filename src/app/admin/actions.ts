@@ -8,6 +8,8 @@ import {
   institutionSchema,
   membershipSchema,
   reviewProfileSchema,
+  updateGroupSchema,
+  updateMembershipSchema,
 } from "@/features/admin/schemas";
 import { rateLimitPolicies } from "@/features/security/rate-limits";
 import { recordAuditEvent } from "@/lib/security/audit";
@@ -143,15 +145,41 @@ export async function createGroupAction(formData: FormData) {
   revalidatePath("/admin");
 }
 
+export async function updateGroupAction(formData: FormData) {
+  const parsed = updateGroupSchema.parse(Object.fromEntries(formData));
+  const { identity, admin } = await adminContext();
+  const { error } = await admin
+    .from("groups")
+    .update({
+      name: parsed.name,
+      requires_approval: parsed.requiresApproval,
+    })
+    .eq("id", parsed.groupId);
+  if (error) throw new Error("Falha ao atualizar o grupo");
+  await recordAudit(
+    admin,
+    identity.userId,
+    "group.updated",
+    "group",
+    parsed.groupId,
+    { fields: ["name", "requires_approval"] },
+  );
+  revalidatePath("/admin");
+}
+
 export async function upsertMembershipAction(formData: FormData) {
   const parsed = membershipSchema.parse(Object.fromEntries(formData));
   const { identity, admin } = await adminContext();
   const { data: targetProfile, error: profileError } = await admin
     .from("profiles")
-    .select("status")
+    .select("status,role")
     .eq("id", parsed.profileId)
     .single();
-  if (profileError || targetProfile?.status !== "approved")
+  if (
+    profileError ||
+    targetProfile?.status !== "approved" ||
+    targetProfile.role === "admin"
+  )
     throw new Error("Somente profissionais aprovados podem receber vínculo");
 
   const { data, error } = await admin
@@ -175,6 +203,44 @@ export async function upsertMembershipAction(formData: FormData) {
     "group_membership",
     data.id,
     { role: parsed.role },
+  );
+  revalidatePath("/admin");
+}
+
+export async function updateMembershipAction(formData: FormData) {
+  const parsed = updateMembershipSchema.parse(Object.fromEntries(formData));
+  const { identity, admin } = await adminContext();
+  const { data: membership, error: membershipError } = await admin
+    .from("group_memberships")
+    .select("profile_id,group_id,active,role")
+    .eq("id", parsed.membershipId)
+    .single();
+  if (membershipError || !membership) throw new Error("Vínculo não encontrado");
+
+  if (parsed.active) {
+    const { data: profile } = await admin
+      .from("profiles")
+      .select("status,role")
+      .eq("id", membership.profile_id)
+      .single();
+    if (profile?.status !== "approved" || profile.role === "admin")
+      throw new Error(
+        "Somente profissionais aprovados podem ter vínculo ativo",
+      );
+  }
+
+  const { error } = await admin
+    .from("group_memberships")
+    .update({ role: parsed.role, active: parsed.active })
+    .eq("id", parsed.membershipId);
+  if (error) throw new Error("Falha ao atualizar o vínculo");
+  await recordAudit(
+    admin,
+    identity.userId,
+    parsed.active ? "membership.updated" : "membership.deactivated",
+    "group_membership",
+    parsed.membershipId,
+    { role: parsed.role, active: parsed.active },
   );
   revalidatePath("/admin");
 }

@@ -106,8 +106,22 @@ export const groupSchema = z.object({
     .transform((value) => value === "true"),
 });
 
+export const updateGroupSchema = z.object({
+  groupId: z.uuid(),
+  name: z.string().trim().min(3).max(160),
+  requiresApproval: z
+    .enum(["true", "false"])
+    .transform((value) => value === "true"),
+});
+
 export const membershipSchema = z.object({
   profileId: z.uuid(),
   groupId: z.uuid(),
   role: z.enum(["doctor", "approver"]),
+});
+
+export const updateMembershipSchema = z.object({
+  membershipId: z.uuid(),
+  role: z.enum(["doctor", "approver"]),
+  active: z.enum(["true", "false"]).transform((value) => value === "true"),
 });

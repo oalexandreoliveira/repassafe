@@ -8,17 +8,29 @@ com prazo, aprovação institucional configurável e acordo final imutável.
 
 ## Regras operacionais
 
-- O horário de negócio é `America/Fortaleza`; datas são persistidas em `timestamptz`.
+- O horário de negócio é `America/Fortaleza`; campos `datetime-local` são
+  interpretados explicitamente nesse fuso e datas persistidas em `timestamptz`.
 - Uma oferta iniciando em até 48 horas é classificada como urgente.
 - Somente perfis aprovados com vínculo ativo no grupo podem publicar ou candidatar-se.
 - O responsável nunca pode candidatar-se à própria oferta.
 - A candidatura é única por profissional e oferta.
+- Na publicação e em cada edição ainda permitida, o titular confirma
+  expressamente que é responsável pela oferta e que os dados e condições estão
+  corretos; essa confirmação fica na auditoria.
 - A oferta só pode ser editada antes da primeira candidatura; depois disso, deve ser
   cancelada e republicada.
-- A seleção bloqueia a oferta e cria um prazo de confirmação de 30 minutos.
+- A seleção bloqueia a oferta e cria um prazo fixo de confirmação de 30 minutos;
+  o cliente não pode escolher nem ampliar esse prazo.
+- O substituto só confirma após reconhecer que leu e aceita os dados e condições
+  mostrados na oferta (horário, setor, valor e pagamento).
+- Perfis administrativos não podem publicar, candidatar-se, selecionar ou
+  confirmar substituições como médicos.
 - Se o grupo exigir aprovação, apenas um membro ativo com papel `approver` pode
   decidir. O administrador da plataforma não decide em nome da instituição.
-- Depois da confirmação final, o acordo é um snapshot imutável.
+- Depois da confirmação final, o acordo é um snapshot imutável acompanhado de
+  documento canônico SHA-256 e cadeia de eventos verificável. A página pode ser
+  impressa/salva como PDF no navegador; o PDF ainda não é gerado/preservado pelo
+  servidor e hashes não equivalem a assinatura qualificada ou garantia jurídica.
 
 ## Segurança e concorrência
 
@@ -34,7 +46,8 @@ permissão de execução para `public`, `anon` ou `authenticated`.
 
 ## Expiração
 
-Antes de qualquer novo comando, o processador libera seleções cujo prazo venceu e
-expira ofertas já iniciadas. As consultas de disponibilidade também ignoram ofertas
-com início no passado. Uma rotina agendada poderá antecipar a atualização visual
-sem depender do próximo comando, sem alterar as regras de consistência.
+Uma rotina agendada processa a cada minuto confirmações vencidas e ofertas cujo
+início passou, liberando a oferta quando o plantão ainda não começou. A expiração
+gera auditoria e notificações ao titular e ao candidato selecionado. O banco também
+valida o prazo dentro da transação de confirmação; consultas de disponibilidade
+ignoram ofertas com início no passado.

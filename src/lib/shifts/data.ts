@@ -2,6 +2,7 @@ import "server-only";
 
 import { redirect } from "next/navigation";
 import { getVerifiedIdentity } from "@/lib/auth/session";
+import { createAdminClient } from "@/lib/supabase/admin";
 
 export async function requireApprovedProfessional() {
   const identity = await getVerifiedIdentity();
@@ -9,10 +10,11 @@ export async function requireApprovedProfessional() {
 
   const { data: profile } = await identity.supabase
     .from("profiles")
-    .select("display_name,status")
+    .select("display_name,status,role")
     .eq("id", identity.userId)
     .single();
-  if (!profile || profile.status !== "approved") redirect("/painel");
+  if (!profile || profile.status !== "approved" || profile.role === "admin")
+    redirect("/painel");
 
   return { ...identity, profile };
 }
@@ -107,6 +109,19 @@ export async function getShiftDetails(offerId: string) {
     .eq("active", true)
     .maybeSingle();
 
+  let ownerTermsAcknowledged = false;
+  if (offer.owner_id === identity.userId) {
+    const { data: acknowledgments } = await createAdminClient()
+      .from("audit_events")
+      .select("id")
+      .eq("entity_type", "shift_offer")
+      .eq("entity_id", offerId)
+      .eq("event_type", "shift_offer.terms_acknowledged")
+      .eq("actor_id", identity.userId)
+      .limit(1);
+    ownerTermsAcknowledged = Boolean(acknowledgments?.length);
+  }
+
   return {
     identity,
     offer,
@@ -116,5 +131,6 @@ export async function getShiftDetails(offerId: string) {
     completion,
     occurrences: occurrences ?? [],
     isApprover: Boolean(approverMembership),
+    ownerTermsAcknowledged,
   };
 }

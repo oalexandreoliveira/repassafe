@@ -5,9 +5,18 @@ import { updateOfferAction } from "@/app/plantoes/actions";
 import { getShiftDetails } from "@/lib/shifts/data";
 
 function localInputValue(value: string) {
-  const date = new Date(value);
-  const local = new Date(date.valueOf() - 3 * 60 * 60 * 1000);
-  return local.toISOString().slice(0, 16);
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Fortaleza",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(new Date(value));
+  const part = (type: string) =>
+    parts.find((item) => item.type === type)?.value;
+  return `${part("year")}-${part("month")}-${part("day")}T${part("hour")}:${part("minute")}`;
 }
 
 export default async function EditShiftPage({
@@ -42,6 +51,7 @@ export default async function EditShiftPage({
         </div>
       </section>
       <section className="card form-card">
+        <p className="form-help">Datas e horários no fuso de Fortaleza.</p>
         <form action={action} className="form-stack">
           <input type="hidden" name="commandId" value={randomUUID()} />
           <input type="hidden" name="groupId" value={offer.group_id} />
@@ -93,6 +103,15 @@ export default async function EditShiftPage({
           <label>
             Observações operacionais
             <textarea name="notes" defaultValue={offer.notes ?? ""} />
+          </label>
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              name="ownerTermsAcknowledged"
+              value="true"
+              required
+            />
+            Confirmo que revisei e aceito as condições atualizadas desta oferta.
           </label>
           <button className="button button-primary" type="submit">
             Salvar alterações

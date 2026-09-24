@@ -25,6 +25,7 @@ export default async function NewShiftPage() {
         </div>
       </section>
       <section className="card form-card">
+        <p className="form-help">Datas e horários no fuso de Fortaleza.</p>
         <form action={publishOfferAction} className="form-stack">
           <input type="hidden" name="commandId" value={randomUUID()} />
           <label>
@@ -75,6 +76,17 @@ export default async function NewShiftPage() {
           <label>
             Observações operacionais (sem dados de pacientes)
             <textarea name="notes" maxLength={1000} />
+          </label>
+          <label className="checkbox-label">
+            <input
+              type="checkbox"
+              name="ownerTermsAcknowledged"
+              value="true"
+              required
+            />
+            Confirmo que sou o responsável pela oferta e que os dados e as
+            condições informados estão corretos. Se um substituto as aceitar,
+            esta proposta será a base do registro do repasse.
           </label>
           <button className="button button-primary" type="submit">
             Publicar plantão

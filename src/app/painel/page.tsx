@@ -3,14 +3,7 @@ import Link from "next/link";
 import { getVerifiedIdentity } from "@/lib/auth/session";
 import { logoutAction } from "@/app/auth/actions";
 import { ProfileForm } from "@/components/profile-form";
-
-const statusLabel: Record<string, string> = {
-  pending: "Aguardando verificação",
-  approved: "Cadastro aprovado",
-  changes_requested: "Correção solicitada",
-  rejected: "Cadastro não aprovado",
-  suspended: "Acesso suspenso",
-};
+import { groupRoleLabel, profileStatusLabel } from "@/features/admin/labels";
 
 export default async function DashboardPage() {
   const identity = await getVerifiedIdentity();
@@ -46,7 +39,7 @@ export default async function DashboardPage() {
           <h1>Olá, {profile.display_name}</h1>
         </div>
         <span className={`status status-${profile.status}`}>
-          {statusLabel[profile.status] ?? profile.status}
+          {profileStatusLabel[profile.status] ?? profile.status}
         </span>
       </section>
       <div className="dashboard-grid">
@@ -71,7 +64,9 @@ export default async function DashboardPage() {
                 return (
                   <li key={index}>
                     <strong>{group?.name ?? "Grupo"}</strong>
-                    <span>{membership.role}</span>
+                    <span>
+                      {groupRoleLabel[membership.role] ?? membership.role}
+                    </span>
                   </li>
                 );
               })}

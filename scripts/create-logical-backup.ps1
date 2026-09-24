@@ -26,11 +26,17 @@ $schemaFile = Join-Path $target "schema.sql"
 $dataFile = Join-Path $target "data.sql"
 $rolesFile = Join-Path $target "roles.sql"
 
-& pnpm dlx supabase@2.117.0 db dump --db-url $env:SUPABASE_DB_URL --file $schemaFile
+$pnpmCommand = if ($env:OS -eq "Windows_NT") {
+  (Get-Command pnpm.cmd -ErrorAction Stop).Source
+} else {
+  (Get-Command pnpm -ErrorAction Stop).Source
+}
+
+& $pnpmCommand dlx supabase@2.117.0 db dump --db-url $env:SUPABASE_DB_URL --file $schemaFile
 if ($LASTEXITCODE -ne 0) { throw "Schema backup failed." }
-& pnpm dlx supabase@2.117.0 db dump --db-url $env:SUPABASE_DB_URL --data-only --use-copy --file $dataFile
+& $pnpmCommand dlx supabase@2.117.0 db dump --db-url $env:SUPABASE_DB_URL --data-only --schema public --use-copy --file $dataFile
 if ($LASTEXITCODE -ne 0) { throw "Data backup failed." }
-& pnpm dlx supabase@2.117.0 db dump --db-url $env:SUPABASE_DB_URL --role-only --file $rolesFile
+& $pnpmCommand dlx supabase@2.117.0 db dump --db-url $env:SUPABASE_DB_URL --role-only --file $rolesFile
 if ($LASTEXITCODE -ne 0) { throw "Roles backup failed." }
 
 $files = @($schemaFile, $dataFile, $rolesFile) | ForEach-Object {
@@ -48,9 +54,15 @@ $manifest = @{
   version = 1
   environment = $Environment
   createdAt = (Get-Date).ToUniversalTime().ToString("o")
-  gitCommit = (git rev-parse HEAD).Trim()
+  gitCommit = (& git -c "safe.directory=$repositoryRoot" rev-parse HEAD).Trim()
   files = $files
 }
-$manifest | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath (Join-Path $target "manifest.json") -Encoding utf8NoBOM
+$manifestPath = Join-Path $target "manifest.json"
+$manifestJson = $manifest | ConvertTo-Json -Depth 5
+[System.IO.File]::WriteAllText(
+  $manifestPath,
+  $manifestJson,
+  (New-Object System.Text.UTF8Encoding($false))
+)
 
 Write-Output "Logical backup created at $target. Encrypt and move it to approved off-site storage."

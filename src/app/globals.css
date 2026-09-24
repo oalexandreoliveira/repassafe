@@ -207,6 +207,19 @@ textarea:focus-visible {
 .form-help {
   color: var(--muted);
 }
+.mfa-enrollment {
+  display: grid;
+  justify-items: center;
+  gap: 0.75rem;
+}
+.mfa-enrollment img {
+  width: min(16rem, 100%);
+  height: auto;
+  border-radius: 0.75rem;
+}
+.mfa-enrollment code {
+  overflow-wrap: anywhere;
+}
 .dashboard {
   max-width: 84rem;
   margin: auto;

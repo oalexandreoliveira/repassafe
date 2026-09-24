@@ -13,7 +13,7 @@ export default async function AdminPage() {
   try {
     await requireAdminIdentity();
   } catch {
-    redirect("/painel");
+    redirect("/mfa");
   }
 
   const admin = createAdminClient();

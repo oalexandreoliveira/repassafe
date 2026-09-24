@@ -16,9 +16,9 @@ SMTP próprio antes do piloto para garantir entrega e identidade das mensagens.
 1. Crie e confirme a conta pela interface normal.
 2. Verifique o CRM pelos canais operacionais definidos.
 3. Em uma sessão administrativa no SQL Editor, altere o perfil para `role =
-   'admin'` e `status = 'approved'`.
-4. Exija o cadastro de MFA no Supabase Auth.
-5. Confirme que o token da sessão possui `aal2` antes de acessar `/admin`.
+'admin'` e `status = 'approved'`.
+4. Abra `/mfa`, escaneie o QR code TOTP e confirme o código do autenticador.
+5. Confirme que a sessão foi promovida para `aal2` antes de acessar `/admin`.
 
 Não promova administradores por metadados editáveis do usuário. Mudanças de
 papel exigem procedimento operacional separado e registro de auditoria.

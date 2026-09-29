@@ -60,6 +60,20 @@ O backup anterior não contém esses registros ainda inexistentes; rate-limit
 privado preexistente é estado transitório não recuperado naquele dump.
 Auth e arquivos do Storage exigem cobertura operacional separada.
 
-Banco deve receber a migração full_registration antes da publicação do código.
+A migração full_registration foi aplicada em repassafe-staging e alinhada à
+versão 20260929204920 do repositório. Os 20 cenários específicos de cadastro
+passaram também no banco remoto, em transação com rollback; as três contas
+existentes foram preservadas e nenhuma identidade sintética ficou no destino.
+PR #20 mergeado como ddd2652a117ff8fda5fff32f19eaebc9a481641d; validate,
+e2e e database do CI passaram. A promoção manual na Vercel publicou esse
+commit no domínio repassafe-staging.vercel.app em 29/09/2026.
+
+O smoke test público confirmou health, cadastro, suporte, termos e privacidade.
+Encontrou erro 500 nas filas administrativas para visitantes sem sessão;
+a correção redireciona à mesma autenticação/MFA da administração principal,
+com teste de navegador das duas filas. Endpoint ready sem token retorna 401;
+não foi exercitada a consulta HTTP autenticada de prontidão, embora banco,
+bucket privado e permissões tenham sido conferidos diretamente no destino.
+
 Rollback da aplicação deve preservar o schema novo e corrigir à frente;
 atualizações diretas de identidade do fluxo antigo passam a ser negadas.

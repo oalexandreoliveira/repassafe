@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { requireAdminIdentity } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { RegistrationDecisionForm } from "@/components/registration-decision-form";
@@ -21,7 +22,11 @@ export default async function RegistrationQueuePage({
 }: {
   searchParams: Promise<{ state?: string }>;
 }) {
-  await requireAdminIdentity();
+  try {
+    await requireAdminIdentity();
+  } catch {
+    redirect("/mfa");
+  }
   const { state = "submitted" } = await searchParams;
   const { data, error } = await createAdminClient().rpc("registration_queue");
   if (error) throw new Error("Não foi possível carregar a fila de cadastro.");

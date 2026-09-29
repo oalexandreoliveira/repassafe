@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { requireAdminIdentity } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { answerSupportAction } from "@/app/suporte/actions";
@@ -11,7 +12,11 @@ type Request = {
   state: string;
 };
 export default async function AdminSupportPage() {
-  await requireAdminIdentity();
+  try {
+    await requireAdminIdentity();
+  } catch {
+    redirect("/mfa");
+  }
   const { data, error } = await createAdminClient().rpc("support_list", {
     target_user: null,
   });

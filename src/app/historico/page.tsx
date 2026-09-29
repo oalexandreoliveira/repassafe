@@ -74,7 +74,7 @@ export default async function PersonalHistoryPage({
         "id,offer_id,status,owner_id,substitute_id,created_at,cancellation_reason",
       )
       .or(`owner_id.eq.${identity.userId},substitute_id.eq.${identity.userId}`)
-        .order("created_at", { ascending: false }),
+      .order("created_at", { ascending: false }),
   ]);
   const { data: passedSubstitutions } = await identity.supabase
     .from("substitutions")
@@ -84,29 +84,32 @@ export default async function PersonalHistoryPage({
   const passedOfferIds = (passedSubstitutions ?? []).map(
     (substitution) => substitution.offer_id,
   );
-  const [{ data: passedOffers }, { data: substituteProfiles }] = passedOfferIds.length
-    ? await Promise.all([
-        identity.supabase
-          .from("shift_offers")
-          .select("id,starts_at,ends_at,sector")
-          .in("id", passedOfferIds)
-          .gte("starts_at", range.start)
-          .lt("starts_at", range.end)
-          .order("starts_at"),
-        identity.supabase
-          .from("profiles")
-          .select("id,display_name")
-          .in(
-            "id",
-            [...new Set((passedSubstitutions ?? []).map((row) => row.substitute_id))],
-          ),
-      ])
-    : [{ data: [] }, { data: [] }];
-  const passedOfferById = new Map((passedOffers ?? []).map((offer) => [offer.id, offer]));
+  const { data: passedOffers } = passedOfferIds.length
+    ? await identity.supabase
+        .from("shift_offers")
+        .select("id,starts_at,ends_at,sector")
+        .in("id", passedOfferIds)
+        .gte("starts_at", range.start)
+        .lt("starts_at", range.end)
+        .order("starts_at")
+    : { data: [] };
+  const passedOfferById = new Map(
+    (passedOffers ?? []).map((offer) => [offer.id, offer]),
+  );
+  const passedInMonth = (passedSubstitutions ?? []).filter((row) =>
+    passedOfferById.has(row.offer_id),
+  );
+  const substituteIds = [...new Set(passedInMonth.map((row) => row.substitute_id))];
+  const { data: substituteProfiles } = substituteIds.length
+    ? await identity.supabase
+        .from("profiles")
+        .select("id,display_name")
+        .in("id", substituteIds)
+    : { data: [] };
   const substituteProfileById = new Map(
     (substituteProfiles ?? []).map((profile) => [profile.id, profile]),
   );
-  const passedShifts = (passedSubstitutions ?? [])
+  const passedShifts = passedInMonth
     .flatMap((substitution) => {
       const offer = passedOfferById.get(substitution.offer_id);
       return offer ? [{ ...substitution, offer }] : [];

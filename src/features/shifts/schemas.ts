@@ -78,6 +78,14 @@ export const occurrenceDecisionSchema = targetCommandSchema.extend({
   decision: z.string().trim().min(10).max(2000),
 });
 
+export const evaluationSchema = targetCommandSchema.extend({
+  attendance: z.coerce.number().int().min(1).max(5),
+  punctuality: z.coerce.number().int().min(1).max(5),
+  communication: z.coerce.number().int().min(1).max(5),
+  scheduleCompliance: z.coerce.number().int().min(1).max(5),
+  operationalRequirements: z.coerce.number().int().min(1).max(5),
+});
+
 export const completionStatusLabels: Record<string, string> = {
   pending_confirmation: "Aguardando confirmação da realização",
   completed: "Plantão concluído",
@@ -127,3 +135,4 @@ export function formatDateTime(value: string) {
     timeZone: "America/Fortaleza",
   }).format(new Date(value));
 }
+

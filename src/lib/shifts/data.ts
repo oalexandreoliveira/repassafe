@@ -89,7 +89,9 @@ export async function getShiftDetails(offerId: string) {
     ? await Promise.all([
         identity.supabase
           .from("shift_completions")
-          .select("id,status,reported_by,reported_at,confirmed_by,confirmed_at")
+          .select(
+            "id,status,reported_by,reported_at,reported_by_owner,confirmed_by,confirmed_at",
+          )
           .eq("substitution_id", selectedSubstitution.id)
           .maybeSingle(),
         identity.supabase
@@ -99,6 +101,12 @@ export async function getShiftDetails(offerId: string) {
           .order("created_at", { ascending: false }),
       ])
     : [{ data: null }, { data: [] }];
+  const { data: evaluations } = selectedSubstitution
+    ? await identity.supabase
+        .from("shift_evaluations")
+        .select("id,evaluator_id,evaluator_role,created_at")
+        .eq("substitution_id", selectedSubstitution.id)
+    : { data: [] };
 
   const { data: approverMembership } = await identity.supabase
     .from("group_memberships")
@@ -129,8 +137,10 @@ export async function getShiftDetails(offerId: string) {
     substitutions: substitutions ?? [],
     agreement: agreements,
     completion,
+    evaluations: evaluations ?? [],
     occurrences: occurrences ?? [],
     isApprover: Boolean(approverMembership),
     ownerTermsAcknowledged,
   };
 }
+

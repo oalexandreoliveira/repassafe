@@ -7,6 +7,7 @@ import { requireAdminIdentity } from "@/lib/auth/session";
 import {
   confirmationSchema,
   decisionSchema,
+  evaluationSchema,
   offerFormSchema,
   occurrenceDecisionSchema,
   reasonCommandSchema,
@@ -208,6 +209,42 @@ export async function reportCompletionAction(formData: FormData) {
   return submitClosureCommand("report_completion", formData);
 }
 
+export async function submitEvaluationAction(formData: FormData) {
+  const parsed = evaluationSchema.parse(Object.fromEntries(formData));
+  const identity = await requireApprovedProfessional();
+  await enforceRateLimit({
+    policy: rateLimitPolicies.workflow,
+    identifier: identity.userId,
+    dimension: "user",
+    actorId: identity.userId,
+  });
+  const { data: existing } = await identity.supabase
+    .from("closure_commands")
+    .select("result_id")
+    .eq("id", parsed.commandId)
+    .maybeSingle();
+  if (existing?.result_id) return;
+  const { error } = await identity.supabase.from("closure_commands").insert({
+    id: parsed.commandId,
+    actor_id: identity.userId,
+    command: "submit_evaluation",
+    target_id: parsed.targetId,
+    payload: {
+      scores: {
+        attendance: parsed.attendance,
+        punctuality: parsed.punctuality,
+        communication: parsed.communication,
+        schedule_compliance: parsed.scheduleCompliance,
+        operational_requirements: parsed.operationalRequirements,
+      },
+    },
+  });
+  if (error) returnWorkflowFeedback(safeWorkflowFailure(error.message));
+  revalidatePath("/plantoes");
+  revalidatePath(`/plantoes/${parsed.targetId}`);
+  revalidatePath("/painel");
+}
+
 export async function confirmCompletionAction(formData: FormData) {
   return submitClosureCommand("confirm_completion", formData);
 }
@@ -243,3 +280,4 @@ export async function reviewOccurrenceAction(formData: FormData) {
   if (error) returnWorkflowFeedback(safeWorkflowFailure(error.message));
   revalidatePath("/admin");
 }
+

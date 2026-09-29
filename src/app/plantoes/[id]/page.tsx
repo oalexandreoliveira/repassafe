@@ -10,6 +10,7 @@ import {
   decideSubstitutionAction,
   disputeCompletionAction,
   reportCompletionAction,
+  submitEvaluationAction,
   selectCandidateAction,
   substituteWithdrawalAction,
   withdrawApplicationAction,
@@ -40,6 +41,7 @@ export default async function ShiftDetailsPage({
     substitutions,
     agreement,
     completion,
+    evaluations,
     occurrences,
     isApprover,
     ownerTermsAcknowledged,
@@ -285,14 +287,14 @@ export default async function ShiftDetailsPage({
             ) : null}
             {substitution.status === "confirmed" &&
             offer.ends_at <= new Date().toISOString() &&
-            substitution.substitute_id === identity.userId &&
+            (substitution.substitute_id === identity.userId || isOwner) &&
             !completion ? (
               <form action={reportCompletionAction} className="compact-form">
                 <input type="hidden" name="commandId" value={randomUUID()} />
                 <input type="hidden" name="targetId" value={substitution.id} />
                 <p>
-                  Informe que o plantão foi realizado para solicitar
-                  confirmação.
+                  Informe que o plantão foi realizado para solicitar confirmação
+                  da outra parte.
                 </p>
                 <button className="button button-primary" type="submit">
                   Registrar realização
@@ -306,7 +308,10 @@ export default async function ShiftDetailsPage({
                     completion.status}
                 </p>
                 {completion.status === "pending_confirmation" &&
-                (isOwner || isApprover) ? (
+                ((completion.reported_by_owner &&
+                  substitution.substitute_id === identity.userId) ||
+                  (!completion.reported_by_owner && isOwner) ||
+                  isApprover) ? (
                   <div className="actions">
                     <form action={confirmCompletionAction}>
                       <input
@@ -353,6 +358,68 @@ export default async function ShiftDetailsPage({
                   </div>
                 ) : null}
               </div>
+            ) : null}
+            {completion?.status === "completed" &&
+            [identity.userId].some(
+              (id) =>
+                id === substitution.owner_id ||
+                id === substitution.substitute_id,
+            ) &&
+            !evaluations.some(
+              (evaluation) => evaluation.evaluator_id === identity.userId,
+            ) ? (
+              <form
+                action={submitEvaluationAction}
+                className="form-stack compact-form"
+              >
+                <h3>{isOwner ? "Avalie o substituto" : "Avalie o plantão"}</h3>
+                <p>
+                  {isOwner
+                    ? "Avalie clareza, precisão, comunicação, cumprimento do valor e pagamento no prazo."
+                    : "Avalie comparecimento, pontualidade, comunicação, cumprimento do horário e exigências administrativas."}
+                </p>
+                <input type="hidden" name="commandId" value={randomUUID()} />
+                <input type="hidden" name="targetId" value={substitution.id} />
+                {(isOwner
+                  ? [
+                      ["attendance", "Clareza"],
+                      ["punctuality", "Precisão"],
+                      ["communication", "Comunicação"],
+                      ["scheduleCompliance", "Cumprimento do valor"],
+                      ["operationalRequirements", "Pagamento no prazo"],
+                    ]
+                  : [
+                      ["attendance", "Comparecimento"],
+                      ["punctuality", "Pontualidade"],
+                      ["communication", "Comunicação"],
+                      ["scheduleCompliance", "Cumprimento do horário"],
+                      ["operationalRequirements", "Exigências administrativas"],
+                    ]
+                ).map(([name, label]) => (
+                  <label key={name}>
+                    {label} (1 a 5)
+                    <select name={name} required defaultValue="5">
+                      {[1, 2, 3, 4, 5].map((score) => (
+                        <option key={score} value={score}>
+                          {score}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                ))}
+                <p className="form-help">
+                  Avaliação estruturada sem comentário público.
+                </p>
+                <button className="button button-primary" type="submit">
+                  Enviar avaliação
+                </button>
+              </form>
+            ) : null}
+            {completion?.status === "completed" &&
+            evaluations.some(
+              (evaluation) => evaluation.evaluator_id === identity.userId,
+            ) ? (
+              <p className="status">Sua avaliação já foi registrada.</p>
             ) : null}
             {substitution.status === "confirmed" &&
             !completion &&
@@ -487,3 +554,4 @@ export default async function ShiftDetailsPage({
     </main>
   );
 }
+

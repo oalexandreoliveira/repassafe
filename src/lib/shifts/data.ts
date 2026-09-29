@@ -10,10 +10,17 @@ export async function requireApprovedProfessional() {
 
   const { data: profile } = await identity.supabase
     .from("profiles")
-    .select("display_name,status,role")
+    .select("display_name,status,role,verification_valid_until")
     .eq("id", identity.userId)
     .single();
-  if (!profile || profile.status !== "approved" || profile.role === "admin")
+  if (
+    !profile ||
+    profile.status !== "approved" ||
+    profile.role === "admin" ||
+    (profile.role === "doctor" &&
+      (!profile.verification_valid_until ||
+        new Date(profile.verification_valid_until) <= new Date()))
+  )
     redirect("/painel");
 
   return { ...identity, profile };

@@ -34,7 +34,7 @@ $pnpmCommand = if ($env:OS -eq "Windows_NT") {
 
 & $pnpmCommand dlx supabase@2.117.0 db dump --db-url $env:SUPABASE_DB_URL --file $schemaFile
 if ($LASTEXITCODE -ne 0) { throw "Schema backup failed." }
-& $pnpmCommand dlx supabase@2.117.0 db dump --db-url $env:SUPABASE_DB_URL --data-only --schema public --use-copy --file $dataFile
+& $pnpmCommand dlx supabase@2.117.0 db dump --db-url $env:SUPABASE_DB_URL --data-only --schema public,private --use-copy --file $dataFile
 if ($LASTEXITCODE -ne 0) { throw "Data backup failed." }
 & $pnpmCommand dlx supabase@2.117.0 db dump --db-url $env:SUPABASE_DB_URL --role-only --file $rolesFile
 if ($LASTEXITCODE -ne 0) { throw "Roles backup failed." }

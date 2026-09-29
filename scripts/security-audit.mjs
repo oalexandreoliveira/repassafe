@@ -37,8 +37,35 @@ for (const match of sql.matchAll(
   const removedLater = new RegExp(
     `drop function(?: if exists)? public\\.${functionName}\\s*\\(`,
   ).test(laterSql);
-  if (!removedLater) {
-    failures.push("função SECURITY DEFINER criada no schema público");
+  const grantStatements = [
+    ...laterSql.matchAll(/(revoke|grant)[^;]+;/g),
+  ].filter(([statement]) => statement.includes(`public.${functionName}(`));
+  const lastRevocation = grantStatements.findLastIndex(
+    ([statement]) =>
+      /^revoke all on function /.test(statement) &&
+      /from public,\s*anon,\s*authenticated;/.test(statement),
+  );
+  const clientGrantAfterRevocation = grantStatements
+    .slice(lastRevocation + 1)
+    .some(
+      ([statement]) =>
+        /^grant /.test(statement) &&
+        /to (?:public|anon|authenticated)\b/.test(statement),
+    );
+  const serviceOnly =
+    lastRevocation >= 0 &&
+    !clientGrantAfterRevocation &&
+    grantStatements
+      .slice(lastRevocation + 1)
+      .some(
+        ([statement]) =>
+          /^grant execute on function /.test(statement) &&
+          /to service_role;/.test(statement),
+      );
+  if (!removedLater && !serviceOnly) {
+    failures.push(
+      `função SECURITY DEFINER pública acessível ao cliente: ${functionName}`,
+    );
     break;
   }
 }

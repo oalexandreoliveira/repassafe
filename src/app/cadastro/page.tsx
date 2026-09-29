@@ -8,10 +8,11 @@ export default function SignupPage() {
         <span aria-hidden="true">R</span> Repassafe
       </Link>
       <section className="auth-card">
-        <p className="eyebrow">Beta privada</p>
-        <h1>Solicitar cadastro</h1>
+        <h1>Crie sua conta</h1>
         <p>
-          O acesso depende da confirmação do e-mail e da verificação do CRM.
+          Primeiro, confirme seu e-mail. Depois, complete a identificação e
+          envie seu cadastro para verificação. Criar a conta ainda não habilita
+          repasses.
         </p>
         <AuthForm mode="signup" />
       </section>

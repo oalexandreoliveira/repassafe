@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
         entityType: "authentication",
         entityId: data.user.id,
       });
-      return NextResponse.redirect(new URL("/painel", request.url));
+      return NextResponse.redirect(new URL("/cadastro/completar", request.url));
     }
   }
   return NextResponse.redirect(

@@ -38,11 +38,11 @@ test("permite percorrer entrada e cadastro por teclado", async ({ page }) => {
 
   await page.getByRole("link", { name: "Solicitar cadastro" }).click();
   await expect(
-    page.getByRole("heading", { name: "Solicitar cadastro" }),
+    page.getByRole("heading", { name: "Crie sua conta" }),
   ).toBeVisible();
-  await expect(page.getByLabel("Nome profissional")).toBeVisible();
-  await expect(page.getByLabel("CRM")).toBeVisible();
-  await expect(page.getByLabel("UF")).toBeVisible();
+  await expect(
+    page.getByRole("checkbox", { name: /Termos de uso/ }),
+  ).toBeVisible();
   await expect(page.getByLabel("E-mail")).toBeVisible();
   await expect(page.getByLabel("Senha")).toBeVisible();
 

@@ -90,6 +90,12 @@ export default async function AdminPage() {
         <Link href="/admin/operacao" className="button button-primary">
           Consulta operacional
         </Link>
+        <Link href="/admin/cadastros" className="button button-secondary">
+          Fila de cadastros
+        </Link>
+        <Link href="/admin/suporte" className="button button-secondary">
+          Suporte e privacidade
+        </Link>
         <form action={logoutAction}>
           <button className="button button-secondary">Sair</button>
         </form>

@@ -5,7 +5,6 @@ import {
   getVerifiedIdentity,
 } from "@/lib/auth/session";
 import { logoutAction, markNotificationsReadAction } from "@/app/auth/actions";
-import { ProfileForm } from "@/components/profile-form";
 import { groupRoleLabel, profileStatusLabel } from "@/features/admin/labels";
 
 export default async function DashboardPage() {
@@ -36,7 +35,7 @@ export default async function DashboardPage() {
   if (!profile || profile.role === "admin") {
     if (administrativeAccess)
       redirect(identity.claims.aal === "aal2" ? "/admin" : "/mfa");
-    redirect("/entrar");
+    redirect("/cadastro/completar");
   }
 
   return (
@@ -67,13 +66,13 @@ export default async function DashboardPage() {
       <div className="dashboard-grid">
         <section className="card">
           <h2>Dados profissionais</h2>
-          <ProfileForm
-            profile={{
-              display_name: profile.display_name,
-              crm_number: profile.crm_number ?? "",
-              crm_state: profile.crm_state ?? "",
-            }}
-          />
+          <p>
+            {profile.display_name} — CRM {profile.crm_number ?? "Não informado"}
+            /{profile.crm_state ?? "—"}
+          </p>
+          <Link className="button button-secondary" href="/cadastro/completar">
+            Completar cadastro ou solicitar alteração
+          </Link>
         </section>
         <section className="card">
           <h2>Grupos ativos</h2>

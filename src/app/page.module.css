@@ -8,7 +8,7 @@
   --border: #e4e2d6;
   --text: #14201f;
   --secondary: #586b69;
-  --muted: #8a9896;
+  --muted: #586b69;
   min-height: 100vh;
   background: #fff;
   color: var(--text);

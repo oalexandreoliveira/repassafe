@@ -22,7 +22,7 @@ $env:SUPABASE_DB_URL = "valor-injetado-pelo-cofre"
 ```
 
 O destino deve ficar fora do repositório. O script produz schema, dados do schema
-`public`, papéis e manifesto SHA-256. Dados de schemas gerenciados pelo Supabase,
+`public` e `private`, papéis e manifesto SHA-256. Dados de schemas gerenciados pelo Supabase,
 como `auth` e `storage`, não entram no dump de dados da aplicação para evitar
 conflitos durante a restauração em outro projeto gerenciado. Depois da execução:
 

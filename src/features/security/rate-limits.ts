@@ -5,6 +5,21 @@ export type RateLimitPolicy = {
 };
 
 export const rateLimitPolicies = {
+  profile: {
+    namespace: "profile.update.user",
+    maxRequests: 20,
+    windowSeconds: 3600,
+  },
+  phoneSend: {
+    namespace: "auth.phone.send",
+    maxRequests: 3,
+    windowSeconds: 900,
+  },
+  phoneVerify: {
+    namespace: "auth.phone.verify",
+    maxRequests: 5,
+    windowSeconds: 900,
+  },
   loginIp: { namespace: "auth.login.ip", maxRequests: 10, windowSeconds: 900 },
   loginEmail: {
     namespace: "auth.login.email",
@@ -21,15 +36,30 @@ export const rateLimitPolicies = {
     maxRequests: 3,
     windowSeconds: 86400,
   },
+  recoveryIp: {
+    namespace: "auth.recovery.ip",
+    maxRequests: 5,
+    windowSeconds: 3600,
+  },
+  recoveryEmail: {
+    namespace: "auth.recovery.email",
+    maxRequests: 3,
+    windowSeconds: 86400,
+  },
+  confirmationResendIp: {
+    namespace: "auth.confirmation.resend.ip",
+    maxRequests: 5,
+    windowSeconds: 3600,
+  },
+  confirmationResendEmail: {
+    namespace: "auth.confirmation.resend.email",
+    maxRequests: 3,
+    windowSeconds: 86400,
+  },
   confirmationIp: {
     namespace: "auth.confirmation.ip",
     maxRequests: 20,
     windowSeconds: 900,
-  },
-  profile: {
-    namespace: "profile.update.user",
-    maxRequests: 20,
-    windowSeconds: 3600,
   },
   workflow: {
     namespace: "workflow.command.user",

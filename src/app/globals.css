@@ -9,11 +9,111 @@
   --text: #14201f;
   --muted: #586b69;
   --border: #e4e2d6;
-  --success: #3e8f6b;
+  --success: #246746;
   --warning: #9a671f;
-  --error: #d9484d;
+  --error: #b52732;
   --focus: #2a5f5c;
   color-scheme: light;
+}
+.auth-card h1,
+.registration-shell h1,
+.legal-document h1 {
+  font-size: clamp(1.8rem, 4vw, 2.7rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 1.5rem 0 0.75rem;
+  text-wrap: balance;
+}
+.registration-shell,
+.legal-document {
+  max-width: 850px;
+  margin-inline: auto;
+  line-height: 1.6;
+}
+.legal-document section,
+.registration-section {
+  padding-block: 2rem;
+  border-bottom: 1px solid var(--border);
+}
+.registration-section h2,
+.legal-document h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+}
+.registration-progress {
+  padding-left: 1.25rem;
+  margin-block: 1.5rem;
+}
+.registration-section fieldset {
+  border: 0;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  min-width: 0;
+  display: grid;
+  gap: 1rem;
+}
+.registration-section legend {
+  font-weight: 700;
+  font-size: 1.15rem;
+  margin-bottom: 0.75rem;
+}
+.checkbox-label {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  min-height: 44px;
+}
+.checkbox-label input {
+  width: 1.25rem;
+  min-height: 1.25rem;
+  accent-color: var(--brand);
+}
+.field-error {
+  color: var(--error);
+  font-size: 0.9rem;
+}
+.form-field {
+  display: grid;
+  gap: 0.4rem;
+  min-width: 0;
+}
+input[aria-invalid="true"],
+select[aria-invalid="true"] {
+  border-color: var(--error);
+}
+.profile-photo {
+  width: 128px;
+  height: 128px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+.registration-section dt {
+  font-weight: 600;
+}
+.registration-section dd {
+  margin: 0 0 0.75rem;
+  overflow-wrap: anywhere;
+}
+.registration-section h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+::selection {
+  background: var(--brand);
+  color: white;
+}
+@media (max-width: 600px) {
+  .registration-shell .form-row {
+    grid-template-columns: 1fr;
+  }
+  .registration-shell .dashboard-header {
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
 }
 * {
   box-sizing: border-box;

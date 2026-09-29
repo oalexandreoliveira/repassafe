@@ -1,0 +1,22 @@
+[
+  {
+    "antipattern": "side-tab",
+    "name": "Side-tab accent border",
+    "description": "Thick colored border on one side of a card — the most recognizable tell of AI-generated UIs. Use a subtler accent or remove it entirely.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "C:\\Users\\Alexandre Oliveira\\Documents\\Codex\\2026-09-22\\v\\repassafe-local\\src\\app\\globals.css",
+    "line": 134,
+    "snippet": "border-left: 4px solid var(--accent)"
+  },
+  {
+    "antipattern": "side-tab",
+    "name": "Side-tab accent border",
+    "description": "Thick colored border on one side of a card — the most recognizable tell of AI-generated UIs. Use a subtler accent or remove it entirely.",
+    "severity": "warning",
+    "category": "slop",
+    "file": "C:\\Users\\Alexandre Oliveira\\Documents\\Codex\\2026-09-22\\v\\repassafe-local\\src\\app\\globals.css",
+    "line": 381,
+    "snippet": "border-left: 5px solid var(--success)"
+  }
+]

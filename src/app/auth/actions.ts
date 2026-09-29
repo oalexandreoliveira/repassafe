@@ -1,6 +1,9 @@
 "use server";
 
 import { redirect } from "next/navigation";
+import { createHash } from "node:crypto";
+import { legalDocuments } from "@/features/registration/legal";
+import { legalVersion } from "@/features/registration/schemas";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
@@ -8,7 +11,9 @@ import { getPublicSupabaseEnv } from "@/config/env";
 import {
   loginSchema,
   profileSchema,
-  signupSchema,
+  accountSignupSchema,
+  emailSchema,
+  passwordResetSchema,
   type ActionState,
 } from "@/features/auth/schemas";
 import {
@@ -54,7 +59,10 @@ export async function loginAction(
   }
 
   const supabase = await createClient();
-  const { data, error } = await supabase.auth.signInWithPassword(parsed.data);
+  const credentials = parsed.data.email.startsWith("+")
+    ? { phone: parsed.data.email, password: parsed.data.password }
+    : { email: parsed.data.email, password: parsed.data.password };
+  const { data, error } = await supabase.auth.signInWithPassword(credentials);
   if (error || !data.user) {
     await recordAuditEvent({
       eventType: "auth.login.failed",
@@ -85,12 +93,18 @@ export async function signupAction(
   _previous: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  const parsed = signupSchema.safeParse(Object.fromEntries(formData));
+  const parsed = accountSignupSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", message: parsed.error.issues[0].message };
+    return {
+      status: "error",
+      message: "Revise os campos indicados.",
+      fieldErrors: Object.fromEntries(
+        parsed.error.issues.map((issue) => [issue.path[0], issue.message]),
+      ),
+    };
   }
 
-  const { email, password, displayName, crmNumber, crmState } = parsed.data;
+  const { email, password } = parsed.data;
   try {
     const ip = await getRequestIp();
     await enforceRateLimit({
@@ -139,14 +153,13 @@ export async function signupAction(
 
   if (data.user && (data.user.identities?.length ?? 0) > 0) {
     const admin = createAdminClient();
-    const { error: profileError } = await admin.from("profiles").insert({
-      id: data.user.id,
-      contact_email: email,
-      display_name: displayName,
-      crm_number: crmNumber,
-      crm_state: crmState,
-      role: "doctor",
-      status: "pending",
+    const hash = (document: unknown) =>
+      createHash("sha256").update(JSON.stringify(document)).digest("hex");
+    const { error: profileError } = await admin.rpc("registration_accept", {
+      target_user: data.user.id,
+      document_version: legalVersion,
+      terms_hash: hash(legalDocuments.terms),
+      privacy_hash: hash(legalDocuments.privacy),
     });
     if (profileError) {
       await admin.auth.admin.deleteUser(data.user.id);
@@ -157,12 +170,14 @@ export async function signupAction(
     }
     await recordAuditEvent({
       actorId: data.user.id,
-      eventType: "profile.registered",
-      entityType: "profile",
+      eventType: "account.registered",
+      entityType: "authentication",
       entityId: data.user.id,
       metadata: { status: "pending" },
     });
   }
+
+  if (data.session) redirect("/cadastro/completar");
 
   return {
     status: "success",
@@ -216,6 +231,135 @@ export async function updateProfileAction(
 
   revalidatePath("/painel");
   return { status: "success", message: "Perfil atualizado." };
+}
+
+export async function resendConfirmationAction(
+  _previous: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const parsed = emailSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return invalidCredentials;
+  const genericMessage =
+    "Se a conta precisar de confirmação, enviaremos as instruções por e-mail.";
+  try {
+    const ip = await getRequestIp();
+    await enforceRateLimit({
+      policy: rateLimitPolicies.confirmationResendIp,
+      identifier: ip,
+      dimension: "ip",
+    });
+    await enforceRateLimit({
+      policy: rateLimitPolicies.confirmationResendEmail,
+      identifier: parsed.data.email,
+      dimension: "email",
+    });
+  } catch (error) {
+    if (error instanceof RateLimitExceededError)
+      return { status: "success", message: genericMessage };
+    throw error;
+  }
+  const env = getPublicSupabaseEnv();
+  const supabase = await createClient();
+  await supabase.auth.resend({
+    type: "signup",
+    email: parsed.data.email,
+    options: { emailRedirectTo: `${env.NEXT_PUBLIC_APP_URL}/auth/confirm` },
+  });
+  return { status: "success", message: genericMessage };
+}
+
+export async function requestPasswordResetAction(
+  _previous: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const parsed = emailSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return invalidCredentials;
+  try {
+    const ip = await getRequestIp();
+    await enforceRateLimit({
+      policy: rateLimitPolicies.recoveryIp,
+      identifier: ip,
+      dimension: "ip",
+    });
+    await enforceRateLimit({
+      policy: rateLimitPolicies.recoveryEmail,
+      identifier: parsed.data.email,
+      dimension: "email",
+    });
+  } catch (error) {
+    if (error instanceof RateLimitExceededError) {
+      return {
+        status: "success",
+        message:
+          "Se o endereço puder receber recuperação, enviaremos as instruções por e-mail.",
+      };
+    }
+    throw error;
+  }
+
+  const env = getPublicSupabaseEnv();
+  const supabase = await createClient();
+  const { error } = await supabase.auth.resetPasswordForEmail(
+    parsed.data.email,
+    { redirectTo: `${env.NEXT_PUBLIC_APP_URL}/auth/recovery` },
+  );
+  if (error) {
+    try {
+      await recordAuditEvent({
+        eventType: "auth.password_recovery.failed",
+        entityType: "authentication",
+        metadata: {
+          email_fingerprint: securityFingerprint(
+            "email",
+            parsed.data.email,
+          ).slice(0, 12),
+        },
+      });
+    } catch {
+      // Keep responses generic even when audit storage is unavailable.
+    }
+  }
+  return {
+    status: "success",
+    message:
+      "Se o endereço puder receber recuperação, enviaremos as instruções por e-mail.",
+  };
+}
+
+export async function updatePasswordAction(
+  _previous: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const identity = await getVerifiedIdentity();
+  if (!identity) {
+    return {
+      status: "error",
+      message: "O link expirou ou não é válido. Solicite uma nova recuperação.",
+    };
+  }
+  const parsed = passwordResetSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) {
+    return { status: "error", message: parsed.error.issues[0].message };
+  }
+  const { error } = await identity.supabase.auth.updateUser({
+    password: parsed.data.password,
+  });
+  if (error) {
+    return {
+      status: "error",
+      message: "Não foi possível atualizar a senha. Solicite um novo link.",
+    };
+  }
+  await recordAuditEvent({
+    actorId: identity.userId,
+    eventType: "auth.password_recovered",
+    entityType: "authentication",
+    entityId: identity.userId,
+  });
+  return {
+    status: "success",
+    message: "Senha atualizada. Você já pode entrar.",
+  };
 }
 
 export async function logoutAction() {

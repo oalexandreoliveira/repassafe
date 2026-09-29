@@ -11,7 +11,7 @@ export default async function ProfilePage() {
     identity.supabase
       .from("profiles")
       .select(
-        "display_name,crm_number,crm_state,status,role,verification_notes",
+        "display_name,crm_number,crm_state,status,role,verification_notes,verification_valid_until,rqe_verified",
       )
       .eq("id", identity.userId)
       .maybeSingle(),
@@ -22,7 +22,7 @@ export default async function ProfilePage() {
       .eq("active", true),
   ]);
 
-  if (!profile) redirect("/entrar");
+  if (!profile) redirect("/cadastro/completar");
 
   return (
     <main className="shell dashboard">
@@ -31,7 +31,21 @@ export default async function ProfilePage() {
           <span aria-hidden="true">R</span> Repassafe
         </Link>
         <nav className="actions" aria-label="Navegação do perfil">
-          <Link className="button button-secondary" href="/painel">
+          <p>
+            Verificação profissional:{" "}
+            {profile.verification_valid_until
+              ? `válida até ${new Date(profile.verification_valid_until).toLocaleDateString("pt-BR")}`
+              : "sem habilitação vigente"}
+            . RQE: {profile.rqe_verified ? "conferido" : "não conferido"}.
+          </p>
+          {profile.verification_valid_until &&
+          new Date(profile.verification_valid_until) <= new Date() ? (
+            <p role="status">
+              Sua verificação venceu. Reenvie o cadastro para iniciar novos
+              repasses. Seu histórico continua disponível.
+            </p>
+          ) : null}
+          <Link className="button button-secondary" href="/cadastro/completar">
             Painel
           </Link>
           <Link className="button button-secondary" href="/historico">

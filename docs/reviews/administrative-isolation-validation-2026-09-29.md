@@ -1,7 +1,15 @@
 # Validação do isolamento administrativo — 29/09/2026
 
-Implementação local na branch `codex/free-shift-offers`. Nenhuma migração foi
-aplicada ao remoto e nenhuma alteração deste trabalho foi commitada.
+Atualização da publicação: PR #19 mergeado em main como
+`9e2e97edf2962d61755d2edf5b5b595ce9d2f0d2`; migração de isolamento aplicada
+em desenvolvimento e homologação. Checks validate, e2e e database passaram.
+Vercel publicou repassafe-staging, com /api/health retornando HTTP 200.
+O backup de homologação foi restaurado e os 20 cenários de isolamento passaram
+novamente no destino isolado; ver o relatório operacional de backup de 29/09.
+Não foi exercitado login administrativo real no navegador remoto.
+
+O restante deste documento preserva a evidência da primeira validação local,
+realizada na branch `codex/free-shift-offers` antes da publicação.
 
 ## Evidência
 

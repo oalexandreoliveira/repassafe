@@ -1,5 +1,6 @@
 begin;
 select plan(20);
+create temporary table acceptance_existing_audit as select id from public.audit_events;
 
 create temporary table acceptance_ids (
   name text primary key,
@@ -21,6 +22,8 @@ insert into public.profiles (id, display_name, status, role) values
   ('11000000-0000-0000-0000-000000000002', 'Candidate Acceptance', 'approved', 'doctor'),
   ('11000000-0000-0000-0000-000000000003', 'Approver Acceptance', 'approved', 'approver'),
   ('11000000-0000-0000-0000-000000000004', 'Competitor Acceptance', 'approved', 'doctor');
+
+update public.profiles set verification_valid_until = now() + interval '90 days' where id::text like '11000000-%' and role = 'doctor';
 
 insert into public.institutions (id, name) values
   ('21000000-0000-0000-0000-000000000001', 'Hospital Acceptance');
@@ -298,12 +301,12 @@ select throws_ok(
   'confirmed agreements are immutable'
 );
 select is(
-  (select count(*) from public.audit_events),
+  (select count(*) from public.audit_events where id not in (select id from acceptance_existing_audit)),
   16::bigint,
   'all successful critical transitions are audited'
 );
 select is(
-  (select count(*) from public.audit_events where actor_id is null),
+  (select count(*) from public.audit_events where actor_id is null and id not in (select id from acceptance_existing_audit)),
   0::bigint,
   'every audit event records its actor'
 );

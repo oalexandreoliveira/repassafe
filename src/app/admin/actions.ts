@@ -47,6 +47,16 @@ async function recordAudit(
 export async function reviewProfileAction(formData: FormData) {
   const parsed = reviewProfileSchema.parse(Object.fromEntries(formData));
   const { identity, admin } = await adminContext();
+  const { data: registration, error: registrationError } = await admin.rpc(
+    "registration_read",
+    { target_user: parsed.profileId },
+  );
+  if (registrationError)
+    throw new Error("Não foi possível conferir a versão cadastral.");
+  if (registration?.draft)
+    throw new Error(
+      "Revise este cadastro na fila versionada em /admin/cadastros.",
+    );
   const approved = parsed.status === "approved";
   if (parsed.status !== "suspended") {
     const { data: target } = await admin
@@ -93,6 +103,13 @@ export async function reviewProfileAction(formData: FormData) {
       verification_notes: parsed.notes || parsed.crmNotes || null,
       verified_at: approved ? new Date().toISOString() : null,
       verified_by: approved ? identity.userId : null,
+      verification_valid_until: approved
+        ? new Date(
+            Date.now() +
+              Number(process.env.PROFESSIONAL_VERIFICATION_DAYS ?? 90) *
+                86400000,
+          ).toISOString()
+        : null,
       updated_at: new Date().toISOString(),
     })
     .eq("id", parsed.profileId);

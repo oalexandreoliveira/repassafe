@@ -217,9 +217,9 @@ export default function Home() {
               repasse.
             </p>
           </div>
-          <button className={styles.recordButton} type="button">
-            Consultar registro do acordo <ArrowRight size={17} />
-          </button>
+          <Link className={styles.recordButton} href="/historico">
+            Consultar meus acordos <ArrowRight size={17} />
+          </Link>
         </article>
       </section>
 
@@ -292,8 +292,9 @@ export default function Home() {
         <div className={styles.footerBottom}>
           <span>© 2026 Repassafe</span>
           <div>
-            <a href="#">Política de Privacidade</a>
-            <a href="#">Termos de Uso</a>
+            <Link href="/privacidade">Política de Privacidade</Link>
+            <Link href="/termos">Termos de Uso</Link>
+            <Link href="/suporte">Suporte</Link>
           </div>
         </div>
       </footer>

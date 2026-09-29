@@ -14,8 +14,8 @@ select ok(
   'authenticated users may request profiles through RLS'
 );
 select ok(
-  has_column_privilege('authenticated', 'public.profiles', 'display_name', 'update'),
-  'users may update their display name'
+  not has_column_privilege('authenticated', 'public.profiles', 'display_name', 'update'),
+  'identity changes require versioned submission'
 );
 select ok(
   not has_column_privilege('authenticated', 'public.profiles', 'status', 'update'),

@@ -9,10 +9,14 @@ test("exibe entrada e cadastro da beta privada", async ({ page }) => {
 
   await page.getByRole("link", { name: "Solicitar cadastro" }).click();
   await expect(
-    page.getByRole("heading", { name: "Solicitar cadastro" }),
+    page.getByRole("heading", { name: "Crie sua conta" }),
   ).toBeVisible();
-  await expect(page.getByLabel("CRM")).toBeVisible();
-  await expect(page.getByLabel("UF")).toBeVisible();
+  await expect(
+    page.getByRole("checkbox", { name: /Termos de uso/ }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("checkbox", { name: /Política de privacidade/ }),
+  ).toBeVisible();
 });
 
 test("protege a configuração MFA sem sessão", async ({ page }) => {

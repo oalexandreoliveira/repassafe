@@ -143,4 +143,3 @@ export async function getShiftDetails(offerId: string) {
     ownerTermsAcknowledged,
   };
 }
-

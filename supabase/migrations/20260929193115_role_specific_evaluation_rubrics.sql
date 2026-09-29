@@ -17,7 +17,14 @@ alter table public.shift_evaluations
           and (scores - array['owner_information_clarity', 'owner_information_accuracy', 'owner_communication', 'owner_amount_compliance', 'owner_payment_timeliness']) = '{}'::jsonb)
       ))
     )
-    and jsonb_object_length(scores) = 5
+    and scores ?& case
+      when rubric_version = 1 then
+        array['attendance', 'punctuality', 'communication', 'schedule_compliance', 'operational_requirements']
+      when evaluator_role = 'owner' then
+        array['substitute_attendance', 'substitute_punctuality', 'substitute_communication', 'substitute_schedule_compliance', 'substitute_administrative_requirements']
+      else
+        array['owner_information_clarity', 'owner_information_accuracy', 'owner_communication', 'owner_amount_compliance', 'owner_payment_timeliness']
+    end
     and case
       when rubric_version = 1 then
         (scores->>'attendance') in ('1', '2', '3', '4', '5')

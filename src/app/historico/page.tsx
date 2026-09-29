@@ -99,7 +99,9 @@ export default async function PersonalHistoryPage({
   const passedInMonth = (passedSubstitutions ?? []).filter((row) =>
     passedOfferById.has(row.offer_id),
   );
-  const applicationIds = [...new Set(passedInMonth.map((row) => row.application_id))];
+  const applicationIds = [
+    ...new Set(passedInMonth.map((row) => row.application_id)),
+  ];
   const { data: substituteApplications } = applicationIds.length
     ? await identity.supabase
         .from("shift_applications")
@@ -117,7 +119,9 @@ export default async function PersonalHistoryPage({
       const offer = passedOfferById.get(substitution.offer_id);
       return offer ? [{ ...substitution, offer }] : [];
     })
-    .sort((left, right) => left.offer.starts_at.localeCompare(right.offer.starts_at));
+    .sort((left, right) =>
+      left.offer.starts_at.localeCompare(right.offer.starts_at),
+    );
   const normalizedSearch = substituteName
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
@@ -199,7 +203,10 @@ export default async function PersonalHistoryPage({
           </p>
         </div>
       </section>
-      <section className="card admin-section" aria-labelledby="passed-shifts-heading">
+      <section
+        className="card admin-section"
+        aria-labelledby="passed-shifts-heading"
+      >
         <h2 id="passed-shifts-heading">Plantões que repassei</h2>
         <p className="form-help">
           Pesquise por mês e pelo nome de quem assumiu meus plantões.
@@ -225,39 +232,40 @@ export default async function PersonalHistoryPage({
         </form>
         {passedShiftsFiltered.length ? (
           <ul className="clean-list">
-            {[...new Set(passedShiftsFiltered.map((row) => row.substitute_id))].map(
-              (substituteId) => {
-                const doctorShifts = passedShiftsFiltered.filter(
-                  (row) => row.substitute_id === substituteId,
-                );
-                const displayName = doctorShifts[0]
-                  ? substituteNameByApplicationId.get(
-                      doctorShifts[0].application_id,
-                    )
-                  : undefined;
-                return (
-                  <li key={substituteId}>
-                    <strong>{displayName ?? "Médico substituto"}</strong>
-                    {doctorShifts.map((substitution) => (
-                      <Link
-                        key={substitution.id}
-                        href={`/plantoes/${substitution.offer_id}`}
-                      >
-                        <span>
-                          Dia{" "}
-                          {new Intl.DateTimeFormat("pt-BR", {
-                            day: "numeric",
-                            timeZone: "America/Fortaleza",
-                          }).format(new Date(substitution.offer.starts_at))}
-                          {" · "}
-                          {formatDateTime(substitution.offer.starts_at)} · {substitution.offer.sector}
-                        </span>
-                      </Link>
-                    ))}
-                  </li>
-                );
-              },
-            )}
+            {[
+              ...new Set(passedShiftsFiltered.map((row) => row.substitute_id)),
+            ].map((substituteId) => {
+              const doctorShifts = passedShiftsFiltered.filter(
+                (row) => row.substitute_id === substituteId,
+              );
+              const displayName = doctorShifts[0]
+                ? substituteNameByApplicationId.get(
+                    doctorShifts[0].application_id,
+                  )
+                : undefined;
+              return (
+                <li key={substituteId}>
+                  <strong>{displayName ?? "Médico substituto"}</strong>
+                  {doctorShifts.map((substitution) => (
+                    <Link
+                      key={substitution.id}
+                      href={`/plantoes/${substitution.offer_id}`}
+                    >
+                      <span>
+                        Dia{" "}
+                        {new Intl.DateTimeFormat("pt-BR", {
+                          day: "numeric",
+                          timeZone: "America/Fortaleza",
+                        }).format(new Date(substitution.offer.starts_at))}
+                        {" · "}
+                        {formatDateTime(substitution.offer.starts_at)} ·{" "}
+                        {substitution.offer.sector}
+                      </span>
+                    </Link>
+                  ))}
+                </li>
+              );
+            })}
           </ul>
         ) : (
           <p>
@@ -388,4 +396,3 @@ export default async function PersonalHistoryPage({
     </main>
   );
 }
-

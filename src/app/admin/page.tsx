@@ -11,6 +11,7 @@ import {
   upsertMembershipAction,
 } from "@/app/admin/actions";
 import { reviewOccurrenceAction } from "@/app/plantoes/actions";
+import { logoutAction } from "@/app/auth/actions";
 import { randomUUID } from "node:crypto";
 import { profileStatusLabel } from "@/features/admin/labels";
 
@@ -80,15 +81,18 @@ export default async function AdminPage() {
     <main className="shell dashboard">
       <header className="dashboard-header">
         <div>
-          <p className="eyebrow">Administração protegida por MFA</p>
-          <h1>Operação do piloto</h1>
+          <h1>Administração Repassafe</h1>
+          <p>Acesso gerencial protegido por verificação em duas etapas.</p>
         </div>
-        <Link href="/painel" className="button button-secondary">
-          Voltar ao painel
+        <Link href="/" className="button button-secondary">
+          Site do Repassafe
         </Link>
         <Link href="/admin/operacao" className="button button-primary">
           Consulta operacional
         </Link>
+        <form action={logoutAction}>
+          <button className="button button-secondary">Sair</button>
+        </form>
       </header>
 
       <section className="admin-section">

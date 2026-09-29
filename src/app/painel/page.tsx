@@ -1,6 +1,9 @@
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import { getVerifiedIdentity } from "@/lib/auth/session";
+import {
+  getAdministrativeAccess,
+  getVerifiedIdentity,
+} from "@/lib/auth/session";
 import { logoutAction, markNotificationsReadAction } from "@/app/auth/actions";
 import { ProfileForm } from "@/components/profile-form";
 import { groupRoleLabel, profileStatusLabel } from "@/features/admin/labels";
@@ -8,6 +11,7 @@ import { groupRoleLabel, profileStatusLabel } from "@/features/admin/labels";
 export default async function DashboardPage() {
   const identity = await getVerifiedIdentity();
   if (!identity) redirect("/entrar");
+  const administrativeAccess = await getAdministrativeAccess(identity);
 
   const [{ data: profile }, { data: memberships }, { data: notifications }] =
     await Promise.all([
@@ -29,7 +33,11 @@ export default async function DashboardPage() {
         .order("created_at", { ascending: false })
         .limit(20),
     ]);
-  if (!profile) redirect("/entrar");
+  if (!profile || profile.role === "admin") {
+    if (administrativeAccess)
+      redirect(identity.claims.aal === "aal2" ? "/admin" : "/mfa");
+    redirect("/entrar");
+  }
 
   return (
     <main className="shell dashboard">
@@ -136,7 +144,7 @@ export default async function DashboardPage() {
           </ul>
         </section>
       ) : null}
-      {profile.role === "admin" ? (
+      {administrativeAccess ? (
         <Link
           className="button button-primary inline-action"
           href={identity.claims.aal === "aal2" ? "/admin" : "/mfa"}

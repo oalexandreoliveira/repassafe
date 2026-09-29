@@ -11,7 +11,10 @@ import {
   signupSchema,
   type ActionState,
 } from "@/features/auth/schemas";
-import { getVerifiedIdentity } from "@/lib/auth/session";
+import {
+  getAdministrativeAccess,
+  getVerifiedIdentity,
+} from "@/lib/auth/session";
 import { rateLimitPolicies } from "@/features/security/rate-limits";
 import { recordAuditEvent } from "@/lib/security/audit";
 import {
@@ -71,12 +74,8 @@ export async function loginAction(
     entityType: "authentication",
     entityId: data.user.id,
   });
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role,status")
-    .eq("id", data.user.id)
-    .single();
-  if (profile?.role === "admin" && profile.status === "approved") {
+  const identity = await getVerifiedIdentity();
+  if (identity && (await getAdministrativeAccess(identity))) {
     redirect("/mfa");
   }
   redirect("/painel");

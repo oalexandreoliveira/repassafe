@@ -1,10 +1,6 @@
-type AccessContext = { aal?: string; role?: string; status?: string };
+type AccessContext = { aal?: string; active?: boolean };
 
 export function requireAdminMfa(context: AccessContext) {
-  if (
-    context.role !== "admin" ||
-    context.status !== "approved" ||
-    context.aal !== "aal2"
-  )
+  if (context.active !== true || context.aal !== "aal2")
     throw new Error("Acesso administrativo requer MFA");
 }

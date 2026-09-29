@@ -126,6 +126,9 @@ export default async function DashboardPage() {
         </section>
       </div>
       <nav className="actions" aria-label="Área do profissional">
+        <Link className="button button-secondary" href="/perfil">
+          Meu perfil
+        </Link>
         <Link className="button button-secondary" href="/historico">
           Meu histórico
         </Link>

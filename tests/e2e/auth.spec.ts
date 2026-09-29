@@ -26,3 +26,15 @@ test("protege a configuração MFA sem sessão", async ({ page }) => {
     page.getByRole("heading", { name: "Entrar na plataforma" }),
   ).toBeVisible();
 });
+
+test("filas administrativas encaminham visitantes para autenticação", async ({
+  page,
+}) => {
+  for (const route of ["/admin/cadastros", "/admin/suporte"]) {
+    await page.goto(route);
+    await expect(page).toHaveURL(/\/entrar$/);
+    await expect(
+      page.getByRole("button", { name: "Entrar", exact: true }),
+    ).toBeVisible();
+  }
+});

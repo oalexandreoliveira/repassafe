@@ -12,23 +12,28 @@ export async function getVerifiedIdentity() {
   return { supabase, userId, claims: data.claims };
 }
 
+export async function getAdministrativeAccess(
+  identity: NonNullable<Awaited<ReturnType<typeof getVerifiedIdentity>>>,
+) {
+  const { data, error } = await identity.supabase
+    .from("administrative_access")
+    .select("user_id,active")
+    .eq("user_id", identity.userId)
+    .maybeSingle();
+  if (error)
+    throw new Error("Não foi possível verificar o acesso administrativo");
+  return data?.active === true ? data : null;
+}
+
 export async function requireAdminIdentity() {
   const identity = await getVerifiedIdentity();
   if (!identity) throw new Error("Sessão inválida");
-
-  const { data: profile, error } = await identity.supabase
-    .from("profiles")
-    .select("role,status")
-    .eq("id", identity.userId)
-    .single();
-  if (error || !profile)
-    throw new Error("Perfil administrativo não encontrado");
+  const administrativeAccess = await getAdministrativeAccess(identity);
 
   requireAdminMfa({
-    role: profile.role,
-    status: profile.status,
+    active: administrativeAccess?.active,
     aal: String(identity.claims.aal ?? ""),
   });
 
-  return { ...identity, profile };
+  return { ...identity, administrativeAccess };
 }

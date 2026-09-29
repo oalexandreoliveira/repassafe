@@ -16,9 +16,8 @@ describe("fluxo MFA administrativo", () => {
     expect(page).toContain('factor.status === "unverified"');
   });
 
-  it("restringe configuração e administração a admin aprovado em aal2", () => {
-    expect(page).toContain('profile?.role !== "admin"');
-    expect(page).toContain('profile.status !== "approved"');
+  it("restringe configuração a uma concessão independente e administração a aal2", () => {
+    expect(page).toContain("await getAdministrativeAccess(identity)");
     expect(page).toContain('identity.claims.aal === "aal2"');
     expect(admin).toContain('redirect("/mfa")');
   });

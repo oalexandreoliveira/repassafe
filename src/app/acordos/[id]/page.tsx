@@ -3,7 +3,11 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { PrintDocumentButton } from "@/components/print-document-button";
 import { formatCurrency, formatDateTime } from "@/features/shifts/schemas";
-import { getVerifiedIdentity, requireAdminIdentity } from "@/lib/auth/session";
+import {
+  getAdministrativeAccess,
+  getVerifiedIdentity,
+  requireAdminIdentity,
+} from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 type AgreementContent = {
@@ -95,15 +99,8 @@ export default async function AgreementDocumentPage({
   const identity = await getVerifiedIdentity();
   if (!identity) redirect("/entrar");
 
-  const { data: profile } = await identity.supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", identity.userId)
-    .single();
-  if (!profile) notFound();
-
   let dataClient = identity.supabase;
-  if (profile.role === "admin") {
+  if (await getAdministrativeAccess(identity)) {
     await requireAdminIdentity();
     dataClient = createAdminClient();
   }

@@ -1,18 +1,16 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { MfaForm } from "@/components/mfa-form";
-import { getVerifiedIdentity } from "@/lib/auth/session";
+import {
+  getAdministrativeAccess,
+  getVerifiedIdentity,
+} from "@/lib/auth/session";
 
 export default async function MfaPage() {
   const identity = await getVerifiedIdentity();
   if (!identity) redirect("/entrar");
 
-  const { data: profile } = await identity.supabase
-    .from("profiles")
-    .select("role,status")
-    .eq("id", identity.userId)
-    .single();
-  if (profile?.role !== "admin" || profile.status !== "approved") {
+  if (!(await getAdministrativeAccess(identity))) {
     redirect("/painel");
   }
   if (identity.claims.aal === "aal2") redirect("/admin");
@@ -28,7 +26,7 @@ export default async function MfaPage() {
 
   return (
     <main className="auth-shell">
-      <Link href="/painel" className="brand">
+      <Link href="/" className="brand">
         <span aria-hidden="true">R</span> Repassafe
       </Link>
       <section className="auth-card">

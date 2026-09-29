@@ -2,8 +2,20 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getVerifiedIdentity } from "@/lib/auth/session";
 import { logoutAction, markNotificationsReadAction } from "@/app/auth/actions";
-import { ProfileForm } from "@/components/profile-form";
 import { groupRoleLabel, profileStatusLabel } from "@/features/admin/labels";
+
+const profileStatusGuidance: Record<string, string> = {
+  pending:
+    "Seu cadastro aguarda a conferência manual do CRM. As atividades ficam disponíveis após a aprovação.",
+  approved:
+    "Seu cadastro profissional está aprovado e você já pode usar as funções liberadas para seu perfil.",
+  changes_requested:
+    "A equipe solicitou correção. Consulte a orientação abaixo e peça a revisão dos dados antes de prosseguir.",
+  rejected:
+    "O cadastro não foi aprovado. Entre em contato com a equipe responsável pelo piloto para esclarecer a decisão.",
+  suspended:
+    "O acesso ao cadastro está suspenso. Entre em contato com a equipe responsável pelo piloto.",
+};
 
 export default async function DashboardPage() {
   const identity = await getVerifiedIdentity();
@@ -50,6 +62,16 @@ export default async function DashboardPage() {
           {profileStatusLabel[profile.status] ?? profile.status}
         </span>
       </section>
+      <section
+        className="card"
+        aria-label="Situação da verificação profissional"
+      >
+        <h2>{profileStatusLabel[profile.status] ?? profile.status}</h2>
+        <p>
+          {profileStatusGuidance[profile.status] ??
+            "A equipe está revisando seu cadastro."}
+        </p>
+      </section>
       {profile.verification_notes ? (
         <section className="card" aria-label="Orientação administrativa">
           <h2>Orientação da equipe</h2>
@@ -59,13 +81,23 @@ export default async function DashboardPage() {
       <div className="dashboard-grid">
         <section className="card">
           <h2>Dados profissionais</h2>
-          <ProfileForm
-            profile={{
-              display_name: profile.display_name,
-              crm_number: profile.crm_number ?? "",
-              crm_state: profile.crm_state ?? "",
-            }}
-          />
+          <dl className="facts">
+            <div>
+              <dt>Nome profissional</dt>
+              <dd>{profile.display_name}</dd>
+            </div>
+            <div>
+              <dt>CRM</dt>
+              <dd>
+                {profile.crm_number}/{profile.crm_state}
+              </dd>
+            </div>
+          </dl>
+          <p>
+            Nome e CRM identificam o cadastro verificado e não podem ser
+            alterados diretamente. Se houver divergência, solicite correção à
+            equipe para que o dado seja revisado antes de novas atividades.
+          </p>
         </section>
         <section className="card">
           <h2>Grupos ativos</h2>

@@ -8,8 +8,12 @@ de deploy. A chave de serviço é exclusiva do servidor e não pode usar o prefi
 `NEXT_PUBLIC_`.
 
 No Supabase Auth, habilite cadastro por e-mail, confirmação obrigatória e inclua
-`NEXT_PUBLIC_APP_URL/auth/confirm` na lista de URLs de redirecionamento. Configure
-SMTP próprio antes do piloto para garantir entrega e identidade das mensagens.
+`NEXT_PUBLIC_APP_URL/auth/confirm` e `NEXT_PUBLIC_APP_URL/auth/recovery` na lista
+de URLs de redirecionamento. Configure SMTP próprio antes do piloto para garantir
+entrega e identidade das mensagens. O fluxo `/senha/esqueci` envia o link de
+recuperação, que retorna por `/auth/recovery` e permite definir uma nova senha em
+`/senha/nova`. `/confirmacao/reenviar` solicita novamente a confirmação do
+cadastro. As respostas são genéricas para não revelar se um e-mail existe.
 
 ## Primeiro administrador
 
@@ -30,6 +34,12 @@ papel exigem procedimento operacional separado e registro de auditoria.
 3. Um administrador em `aal2` registra a decisão de verificação.
 4. Apenas perfis `approved` podem receber vínculo ativo.
 5. O profissional vê somente o próprio perfil e seus vínculos ativos.
+
+Nome e CRM/UF são dados que sustentam a verificação profissional. O profissional
+pode consultá-los no painel, mas não alterá-los diretamente. Correções devem ser
+solicitadas à operação e revisadas antes de nova aprovação. A migration
+`20260924202137_lock_professional_identity_edits.sql` também revoga a permissão
+de atualização direta desses campos pela API.
 
 ## Evidência da consulta manual do CRM
 

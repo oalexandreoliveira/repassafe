@@ -22,3 +22,20 @@ test("protege a configuração MFA sem sessão", async ({ page }) => {
     page.getByRole("heading", { name: "Entrar na plataforma" }),
   ).toBeVisible();
 });
+
+test("oferece recuperação de senha e reenvio de confirmação", async ({
+  page,
+}) => {
+  await page.goto("/entrar");
+  await page.getByRole("link", { name: "Esqueci minha senha" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Esqueci minha senha" }),
+  ).toBeVisible();
+  await expect(page.getByLabel("E-mail")).toBeVisible();
+
+  await page.goto("/confirmacao/reenviar");
+  await expect(
+    page.getByRole("heading", { name: "Reenviar confirmação" }),
+  ).toBeVisible();
+  await expect(page.getByLabel("E-mail")).toBeVisible();
+});

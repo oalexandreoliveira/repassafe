@@ -21,15 +21,30 @@ export const rateLimitPolicies = {
     maxRequests: 3,
     windowSeconds: 86400,
   },
+  recoveryIp: {
+    namespace: "auth.recovery.ip",
+    maxRequests: 5,
+    windowSeconds: 3600,
+  },
+  recoveryEmail: {
+    namespace: "auth.recovery.email",
+    maxRequests: 3,
+    windowSeconds: 86400,
+  },
+  confirmationResendIp: {
+    namespace: "auth.confirmation.resend.ip",
+    maxRequests: 5,
+    windowSeconds: 3600,
+  },
+  confirmationResendEmail: {
+    namespace: "auth.confirmation.resend.email",
+    maxRequests: 3,
+    windowSeconds: 86400,
+  },
   confirmationIp: {
     namespace: "auth.confirmation.ip",
     maxRequests: 20,
     windowSeconds: 900,
-  },
-  profile: {
-    namespace: "profile.update.user",
-    maxRequests: 20,
-    windowSeconds: 3600,
   },
   workflow: {
     namespace: "workflow.command.user",

@@ -49,6 +49,15 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       <button className="button button-primary" disabled={pending}>
         {pending ? "Processando…" : mode === "login" ? "Entrar" : "Criar conta"}
       </button>
+      {mode === "login" ? (
+        <div className="form-help">
+          <Link href="/senha/esqueci">Esqueci minha senha</Link>
+          <span aria-hidden="true"> · </span>
+          <Link href="/confirmacao/reenviar">
+            Reenviar confirmação de e-mail
+          </Link>
+        </div>
+      ) : null}
       {state.message ? (
         <p
           className={`form-message form-message-${state.status}`}

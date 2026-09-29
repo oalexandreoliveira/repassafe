@@ -9,9 +9,48 @@ import {
 } from "@/features/shifts/schemas";
 import { getVerifiedIdentity } from "@/lib/auth/session";
 
-export default async function PersonalHistoryPage() {
+function currentFortalezaMonth() {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Fortaleza",
+    year: "numeric",
+    month: "2-digit",
+  }).formatToParts(new Date());
+  const year = parts.find((part) => part.type === "year")?.value;
+  const month = parts.find((part) => part.type === "month")?.value;
+  return `${year}-${month}`;
+}
+
+function monthRange(month: string) {
+  const match = /^(\d{4})-(0[1-9]|1[0-2])$/.exec(month);
+  if (!match) return null;
+  const year = Number(match[1]);
+  const monthIndex = Number(match[2]) - 1;
+  const start = new Date(Date.UTC(year, monthIndex, 1, 3));
+  const end = new Date(Date.UTC(year, monthIndex + 1, 1, 3));
+  return { start: start.toISOString(), end: end.toISOString() };
+}
+
+export default async function PersonalHistoryPage({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    shiftMonth?: string | string[];
+    substituteName?: string | string[];
+  }>;
+}) {
   const identity = await getVerifiedIdentity();
   if (!identity) redirect("/entrar");
+  const params = await searchParams;
+  const requestedMonth =
+    typeof params.shiftMonth === "string" ? params.shiftMonth : "";
+  const shiftMonth = monthRange(requestedMonth)
+    ? requestedMonth
+    : currentFortalezaMonth();
+  const substituteName =
+    typeof params.substituteName === "string"
+      ? params.substituteName.trim().slice(0, 100)
+      : "";
+  const range = monthRange(shiftMonth)!;
   const [
     { data: myOffers },
     { data: myApplications },
@@ -35,8 +74,57 @@ export default async function PersonalHistoryPage() {
         "id,offer_id,status,owner_id,substitute_id,created_at,cancellation_reason",
       )
       .or(`owner_id.eq.${identity.userId},substitute_id.eq.${identity.userId}`)
-      .order("created_at", { ascending: false }),
+        .order("created_at", { ascending: false }),
   ]);
+  const { data: passedSubstitutions } = await identity.supabase
+    .from("substitutions")
+    .select("id,offer_id,substitute_id")
+    .eq("owner_id", identity.userId)
+    .eq("status", "confirmed");
+  const passedOfferIds = (passedSubstitutions ?? []).map(
+    (substitution) => substitution.offer_id,
+  );
+  const [{ data: passedOffers }, { data: substituteProfiles }] = passedOfferIds.length
+    ? await Promise.all([
+        identity.supabase
+          .from("shift_offers")
+          .select("id,starts_at,ends_at,sector")
+          .in("id", passedOfferIds)
+          .gte("starts_at", range.start)
+          .lt("starts_at", range.end)
+          .order("starts_at"),
+        identity.supabase
+          .from("profiles")
+          .select("id,display_name")
+          .in(
+            "id",
+            [...new Set((passedSubstitutions ?? []).map((row) => row.substitute_id))],
+          ),
+      ])
+    : [{ data: [] }, { data: [] }];
+  const passedOfferById = new Map((passedOffers ?? []).map((offer) => [offer.id, offer]));
+  const substituteProfileById = new Map(
+    (substituteProfiles ?? []).map((profile) => [profile.id, profile]),
+  );
+  const passedShifts = (passedSubstitutions ?? [])
+    .flatMap((substitution) => {
+      const offer = passedOfferById.get(substitution.offer_id);
+      return offer ? [{ ...substitution, offer }] : [];
+    })
+    .sort((left, right) => left.offer.starts_at.localeCompare(right.offer.starts_at));
+  const normalizedSearch = substituteName
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("pt-BR");
+  const passedShiftsFiltered = passedShifts.filter((substitution) => {
+    const profile = substituteProfileById.get(substitution.substitute_id);
+    const displayName = profile?.display_name ?? "";
+    return displayName
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLocaleLowerCase("pt-BR")
+      .includes(normalizedSearch);
+  });
   const offerIds = [
     ...new Set([
       ...(myOffers ?? []).map((offer) => offer.id),
@@ -104,6 +192,70 @@ export default async function PersonalHistoryPage() {
             Ofertas, candidaturas e substituições ligadas à sua conta.
           </p>
         </div>
+      </section>
+      <section className="card admin-section" aria-labelledby="passed-shifts-heading">
+        <h2 id="passed-shifts-heading">Plantões que repassei</h2>
+        <p className="form-help">
+          Pesquise por mês e pelo nome de quem assumiu meus plantões.
+        </p>
+        <form method="get" className="form-grid compact-form">
+          <label>
+            Mês
+            <input type="month" name="shiftMonth" defaultValue={shiftMonth} />
+          </label>
+          <label>
+            Nome do substituto
+            <input
+              type="search"
+              name="substituteName"
+              defaultValue={substituteName}
+              maxLength={100}
+              placeholder="Ex.: Davi"
+            />
+          </label>
+          <button className="button button-primary" type="submit">
+            Pesquisar
+          </button>
+        </form>
+        {passedShiftsFiltered.length ? (
+          <ul className="clean-list">
+            {[...new Set(passedShiftsFiltered.map((row) => row.substitute_id))].map(
+              (substituteId) => {
+                const profile = substituteProfileById.get(substituteId);
+                const doctorShifts = passedShiftsFiltered.filter(
+                  (row) => row.substitute_id === substituteId,
+                );
+                return (
+                  <li key={substituteId}>
+                    <strong>{profile?.display_name ?? "Médico substituto"}</strong>
+                    {doctorShifts.map((substitution) => (
+                      <Link
+                        key={substitution.id}
+                        href={`/plantoes/${substitution.offer_id}`}
+                      >
+                        <span>
+                          Dia{" "}
+                          {new Intl.DateTimeFormat("pt-BR", {
+                            day: "numeric",
+                            timeZone: "America/Fortaleza",
+                          }).format(new Date(substitution.offer.starts_at))}
+                          {" · "}
+                          {formatDateTime(substitution.offer.starts_at)} · {substitution.offer.sector}
+                        </span>
+                      </Link>
+                    ))}
+                  </li>
+                );
+              },
+            )}
+          </ul>
+        ) : (
+          <p>
+            {substituteName
+              ? `Nenhum plantão encontrado para “${substituteName}” neste mês.`
+              : "Nenhum plantão repassado neste mês."}
+          </p>
+        )}
       </section>
       <section className="card admin-section">
         <h2>Ofertas publicadas</h2>
@@ -226,3 +378,4 @@ export default async function PersonalHistoryPage() {
     </main>
   );
 }
+

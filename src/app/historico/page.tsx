@@ -78,7 +78,7 @@ export default async function PersonalHistoryPage({
   ]);
   const { data: passedSubstitutions } = await identity.supabase
     .from("substitutions")
-    .select("id,offer_id,substitute_id")
+    .select("id,offer_id,application_id,substitute_id")
     .eq("owner_id", identity.userId)
     .eq("status", "confirmed");
   const passedOfferIds = (passedSubstitutions ?? []).map(
@@ -99,15 +99,18 @@ export default async function PersonalHistoryPage({
   const passedInMonth = (passedSubstitutions ?? []).filter((row) =>
     passedOfferById.has(row.offer_id),
   );
-  const substituteIds = [...new Set(passedInMonth.map((row) => row.substitute_id))];
-  const { data: substituteProfiles } = substituteIds.length
+  const applicationIds = [...new Set(passedInMonth.map((row) => row.application_id))];
+  const { data: substituteApplications } = applicationIds.length
     ? await identity.supabase
-        .from("profiles")
-        .select("id,display_name")
-        .in("id", substituteIds)
+        .from("shift_applications")
+        .select("id,candidate_display_name")
+        .in("id", applicationIds)
     : { data: [] };
-  const substituteProfileById = new Map(
-    (substituteProfiles ?? []).map((profile) => [profile.id, profile]),
+  const substituteNameByApplicationId = new Map(
+    (substituteApplications ?? []).map((application) => [
+      application.id,
+      application.candidate_display_name,
+    ]),
   );
   const passedShifts = passedInMonth
     .flatMap((substitution) => {
@@ -120,8 +123,8 @@ export default async function PersonalHistoryPage({
     .replace(/[\u0300-\u036f]/g, "")
     .toLocaleLowerCase("pt-BR");
   const passedShiftsFiltered = passedShifts.filter((substitution) => {
-    const profile = substituteProfileById.get(substitution.substitute_id);
-    const displayName = profile?.display_name ?? "";
+    const displayName =
+      substituteNameByApplicationId.get(substitution.application_id) ?? "";
     return displayName
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "")
@@ -224,13 +227,17 @@ export default async function PersonalHistoryPage({
           <ul className="clean-list">
             {[...new Set(passedShiftsFiltered.map((row) => row.substitute_id))].map(
               (substituteId) => {
-                const profile = substituteProfileById.get(substituteId);
                 const doctorShifts = passedShiftsFiltered.filter(
                   (row) => row.substitute_id === substituteId,
                 );
+                const displayName = doctorShifts[0]
+                  ? substituteNameByApplicationId.get(
+                      doctorShifts[0].application_id,
+                    )
+                  : undefined;
                 return (
                   <li key={substituteId}>
-                    <strong>{profile?.display_name ?? "Médico substituto"}</strong>
+                    <strong>{displayName ?? "Médico substituto"}</strong>
                     {doctorShifts.map((substitution) => (
                       <Link
                         key={substitution.id}

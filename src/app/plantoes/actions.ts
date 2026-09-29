@@ -231,11 +231,21 @@ export async function submitEvaluationAction(formData: FormData) {
     target_id: parsed.targetId,
     payload: {
       scores: {
-        attendance: parsed.attendance,
-        punctuality: parsed.punctuality,
-        communication: parsed.communication,
-        schedule_compliance: parsed.scheduleCompliance,
-        operational_requirements: parsed.operationalRequirements,
+        ...(parsed.substituteAttendance !== undefined && {
+          substitute_attendance: parsed.substituteAttendance,
+          substitute_punctuality: parsed.substitutePunctuality,
+          substitute_communication: parsed.substituteCommunication,
+          substitute_schedule_compliance: parsed.substituteScheduleCompliance,
+          substitute_administrative_requirements:
+            parsed.substituteAdministrativeRequirements,
+        }),
+        ...(parsed.ownerInformationClarity !== undefined && {
+          owner_information_clarity: parsed.ownerInformationClarity,
+          owner_information_accuracy: parsed.ownerInformationAccuracy,
+          owner_communication: parsed.ownerCommunication,
+          owner_amount_compliance: parsed.ownerAmountCompliance,
+          owner_payment_timeliness: parsed.ownerPaymentTimeliness,
+        }),
       },
     },
   });
@@ -280,4 +290,3 @@ export async function reviewOccurrenceAction(formData: FormData) {
   if (error) returnWorkflowFeedback(safeWorkflowFailure(error.message));
   revalidatePath("/admin");
 }
-

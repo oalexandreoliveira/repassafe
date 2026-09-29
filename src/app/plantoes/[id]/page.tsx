@@ -372,28 +372,37 @@ export default async function ShiftDetailsPage({
                 action={submitEvaluationAction}
                 className="form-stack compact-form"
               >
-                <h3>{isOwner ? "Avalie o substituto" : "Avalie o plantão"}</h3>
+                <h3>{isOwner ? "Avalie o substituto" : "Avalie o titular"}</h3>
                 <p>
                   {isOwner
-                    ? "Avalie clareza, precisão, comunicação, cumprimento do valor e pagamento no prazo."
-                    : "Avalie comparecimento, pontualidade, comunicação, cumprimento do horário e exigências administrativas."}
+                    ? "Avalie comparecimento, pontualidade, comunicação, cumprimento do horário e exigências administrativas."
+                    : "Avalie clareza e precisão das informações, comunicação, cumprimento do valor combinado e se recebeu no prazo."}
                 </p>
                 <input type="hidden" name="commandId" value={randomUUID()} />
                 <input type="hidden" name="targetId" value={substitution.id} />
                 {(isOwner
                   ? [
-                      ["attendance", "Clareza"],
-                      ["punctuality", "Precisão"],
-                      ["communication", "Comunicação"],
-                      ["scheduleCompliance", "Cumprimento do valor"],
-                      ["operationalRequirements", "Pagamento no prazo"],
+                      ["substituteAttendance", "Comparecimento"],
+                      ["substitutePunctuality", "Pontualidade"],
+                      ["substituteCommunication", "Comunicação"],
+                      [
+                        "substituteScheduleCompliance",
+                        "Cumprimento do horário",
+                      ],
+                      [
+                        "substituteAdministrativeRequirements",
+                        "Exigências administrativas",
+                      ],
                     ]
                   : [
-                      ["attendance", "Comparecimento"],
-                      ["punctuality", "Pontualidade"],
-                      ["communication", "Comunicação"],
-                      ["scheduleCompliance", "Cumprimento do horário"],
-                      ["operationalRequirements", "Exigências administrativas"],
+                      ["ownerInformationClarity", "Clareza das informações"],
+                      ["ownerInformationAccuracy", "Precisão das informações"],
+                      ["ownerCommunication", "Comunicação"],
+                      [
+                        "ownerAmountCompliance",
+                        "Cumprimento do valor combinado",
+                      ],
+                      ["ownerPaymentTimeliness", "Pagamento no prazo"],
                     ]
                 ).map(([name, label]) => (
                   <label key={name}>
@@ -554,4 +563,3 @@ export default async function ShiftDetailsPage({
     </main>
   );
 }
-

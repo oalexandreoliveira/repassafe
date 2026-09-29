@@ -79,11 +79,26 @@ export const occurrenceDecisionSchema = targetCommandSchema.extend({
 });
 
 export const evaluationSchema = targetCommandSchema.extend({
-  attendance: z.coerce.number().int().min(1).max(5),
-  punctuality: z.coerce.number().int().min(1).max(5),
-  communication: z.coerce.number().int().min(1).max(5),
-  scheduleCompliance: z.coerce.number().int().min(1).max(5),
-  operationalRequirements: z.coerce.number().int().min(1).max(5),
+  substituteAttendance: z.coerce.number().int().min(1).max(5).optional(),
+  substitutePunctuality: z.coerce.number().int().min(1).max(5).optional(),
+  substituteCommunication: z.coerce.number().int().min(1).max(5).optional(),
+  substituteScheduleCompliance: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(5)
+    .optional(),
+  substituteAdministrativeRequirements: z.coerce
+    .number()
+    .int()
+    .min(1)
+    .max(5)
+    .optional(),
+  ownerInformationClarity: z.coerce.number().int().min(1).max(5).optional(),
+  ownerInformationAccuracy: z.coerce.number().int().min(1).max(5).optional(),
+  ownerCommunication: z.coerce.number().int().min(1).max(5).optional(),
+  ownerAmountCompliance: z.coerce.number().int().min(1).max(5).optional(),
+  ownerPaymentTimeliness: z.coerce.number().int().min(1).max(5).optional(),
 });
 
 export const completionStatusLabels: Record<string, string> = {
@@ -135,4 +150,3 @@ export function formatDateTime(value: string) {
     timeZone: "America/Fortaleza",
   }).format(new Date(value));
 }
-

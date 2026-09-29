@@ -2,13 +2,14 @@
 
 ## Canais e SLA
 
-O suporte é assistido e não é anunciado como 24x7. Canais oficiais: e-mail de
-suporte e, apenas para incidentes críticos, WhatsApp administrativo. Primeiro
-retorno para ocorrência grave: até 4 horas dentro do horário publicado.
+O suporte é assistido e não é anunciado como 24x7. O canal implementado é
+`/suporte`, com assuntos de atendimento e privacidade, protocolo UUID e fila
+`/admin/suporte` protegida por MFA. Não há e-mail ou WhatsApp oficial
+configurado nem SLA publicado nesta entrega. O responsável é Alexandre Oliveira.
 
 ## Protocolo mínimo
 
-1. gerar identificador `SUP-AAAA-NNNN` no registro externo aprovado;
+1. registrar o protocolo UUID gerado pelo formulário;
 2. registrar solicitante, horário, ambiente, categoria e impacto;
 3. solicitar `x-request-id`, horário e tela — nunca senha, token ou dado clínico;
 4. classificar S1–S4 e vincular incidente quando aplicável;
@@ -16,9 +17,10 @@ retorno para ocorrência grave: até 4 horas dentro do horário publicado.
 6. comunicar solução, contorno ou próxima atualização;
 7. encerrar apenas após confirmação ou duas tentativas documentadas.
 
-US-1105 permanece pós-piloto no escopo oficial; por isso o registro é externo e
-assistido. Não criar tickets em ferramentas pessoais nem copiar banco ou logs
-inteiros para o atendimento.
+A expansão do cadastro implementa o registro interno necessário para esta
+jornada. Solicitações vinculadas à conta permitem acompanhar a resposta no site;
+solicitações sem conta registram contato para atendimento assistido. Não há
+envio automático por e-mail. Não copiar banco ou logs inteiros para atendimento.
 
 ## Diagnóstico seguro
 

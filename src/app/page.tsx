@@ -1,48 +1,20 @@
 import Image from "next/image";
 import { MobileNavigation } from "@/components/mobile-navigation";
+import { LandingSignupLink } from "@/components/landing-signup-link";
+import { RepassePreview } from "@/components/repasse-preview";
+import { repasseSteps } from "@/features/marketing/repasse-steps";
 import Link from "next/link";
 import {
   ArrowRight,
   BadgeCheck,
-  Building2,
-  CalendarPlus,
   Check,
-  ClipboardCheck,
   Info,
   Lock,
-  ShieldCheck,
   ShieldOff,
   Users,
 } from "lucide-react";
 import styles from "./page.module.css";
 
-const steps = [
-  {
-    icon: CalendarPlus,
-    title: "Publicar plantão",
-    text: "Publique para um grupo institucional ou de forma livre para todos os profissionais aprovados.",
-  },
-  {
-    icon: Users,
-    title: "Receber candidaturas",
-    text: "Selecione o profissional que deverá confirmar o interesse em assumir o plantão.",
-  },
-  {
-    icon: ClipboardCheck,
-    title: "Confirmar condições",
-    text: "Confira todas as condições antes de confirmar que deseja assumir este plantão.",
-  },
-  {
-    icon: Building2,
-    title: "Aprovação institucional, quando o grupo exigir",
-    text: "O repasse será concluído quando o responsável pelo grupo registrar a decisão.",
-  },
-  {
-    icon: ShieldCheck,
-    title: "Acordo registrado",
-    text: "A substituição foi concluída e as condições foram registradas.",
-  },
-];
 const safeguards = [
   [BadgeCheck, "Somente médicos previamente verificados"],
   [
@@ -87,48 +59,48 @@ export default function Home() {
             <a href="#como-funciona">Como funciona</a>
             <a href="#seguranca">Segurança</a>
             <a href="#acordo">Rastreabilidade</a>
+            <Link href="/entrar">Entrar</Link>
           </div>
-          <Link href="/entrar" className={styles.navCta}>
-            Entrar <ArrowRight size={16} />
-          </Link>
+          <LandingSignupLink className={styles.navCta} />
         </nav>
       </header>
 
-      <section className={styles.hero}>
+      <section className={styles.hero} aria-labelledby="hero-heading">
         <div className={styles.container}>
           <div className={styles.heroGrid}>
             <div className={styles.heroCopy}>
-              <h1>Repasse seu plantão com clareza e segurança.</h1>
+              <h1 id="hero-heading">
+                Repasse seu plantão <span>com clareza e segurança.</span>
+              </h1>
               <p className={styles.lede}>
                 Encontre um profissional elegível, confirme as condições e
                 registre cada etapa da substituição em um único lugar.
               </p>
               <div className={styles.actions}>
-                <Link href="/entrar" className={styles.primaryButton}>
-                  Entrar na plataforma <ArrowRight size={18} />
-                </Link>
-                <Link href="/cadastro" className={styles.secondaryButton}>
-                  Criar conta
-                </Link>
+                <LandingSignupLink className={styles.primaryButton} />
+                <a href="#como-funciona" className={styles.secondaryButton}>
+                  Como funciona <ArrowRight size={18} aria-hidden="true" />
+                </a>
               </div>
               <p className={styles.support}>
-                Uma rede privada para profissionais e instituições
-                participantes.
+                Crie sua conta e envie seu cadastro para verificação. A
+                habilitação profissional e o acesso institucional são analisados
+                separadamente.
               </p>
             </div>
             <div className={styles.heroVisual}>
-              <div className={styles.heroGlow} />
-              <Image
-                src="/repassafe-hero.png"
-                alt="Mockup do Repassafe com plantões disponíveis, etapas do repasse e selo de confirmação"
-                width={1536}
-                height={1024}
-                priority
-                sizes="(max-width: 800px) 100vw, 54vw"
-              />
-              <span className={styles.visualBadge}>
-                <Lock size={15} /> Processo rastreável
-              </span>
+              <figure className={styles.phoneFigure}>
+                <Image
+                  src="/repassafe-hero-phone.png"
+                  alt="Ilustração de um celular com a lista de plantões do Repassafe"
+                  width={1024}
+                  height={1536}
+                  preload
+                  sizes="(max-width: 640px) 240px, 360px"
+                />
+                <figcaption>Ilustração do produto</figcaption>
+              </figure>
+              <RepassePreview />
             </div>
           </div>
         </div>
@@ -139,22 +111,19 @@ export default function Home() {
           <div className={styles.sectionHeading}>
             <h2>Cada etapa do repasse, registrada</h2>
           </div>
-          <div className={styles.steps}>
-            {steps.map(({ icon: Icon, title, text }, index) => (
-              <article className={styles.stepCard} key={title}>
-                <div className={styles.stepTop}>
-                  <span className={styles.iconChip}>
-                    <Icon size={22} />
-                  </span>
-                  <span className={styles.stepNumber}>
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
+          <ol className={styles.steps}>
+            {repasseSteps.map(({ title, text }, index) => (
+              <li className={styles.stepCard} key={title}>
+                <span className={styles.stepNumber} aria-hidden="true">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <h3>{title}</h3>
+                  <p>{text}</p>
                 </div>
-                <h3>{title}</h3>
-                <p>{text}</p>
-              </article>
+              </li>
             ))}
-          </div>
+          </ol>
         </div>
       </section>
 
@@ -255,9 +224,7 @@ export default function Home() {
             Uma rede privada para profissionais e instituições participantes.
           </p>
           <div className={styles.finalActions}>
-            <Link href="/cadastro" className={styles.invertedButton}>
-              Criar conta <ArrowRight size={18} />
-            </Link>
+            <LandingSignupLink className={styles.invertedButton} />
             <Link href="/entrar" className={styles.outlineButton}>
               Entrar na plataforma
             </Link>

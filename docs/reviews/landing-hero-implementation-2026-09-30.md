@@ -43,3 +43,9 @@ Capturas locais em .impeccable/review/hero-{desktop,tablet,mobile,narrow,reduced
 Scan tipográfico final:19 avisos consultivos design-system-font-size, sem outros tipos. Os avisos remanescentes comparam papéis locais explícitos e valores legados com a escala global incompleta; a revisão visual e os testes de responsividade complementam esse resultado. Nenhum scan geral adicional foi executado.
 
 Imagem nova: public/repassafe-hero-phone.png,1024×1536, alpha real,1.42MB no arquivo fonte; entregue pela otimização de imagens do Next. Edição pela ferramenta nativa imagegen a partir de public/repassafe-hero.png; prompt exato em hero-image-prompt-2026-09-30.txt e nos metadados PNG. A arte original foi preservada com origem registrada. Scan public:2 rasters,0 sem proveniência.
+
+## Correção necessária para publicação
+
+A auditoria do PR identificou GHSA-vcvr-r3jv-pc5j na dependência Next.js 16.3.3. Next e eslint-config-next foram atualizados para a versão corrigida 16.3.6, com lockfile restrito à família Next. Nenhum uso de next/og ou ImageResponse foi encontrado em src. A auditoria de produção após a atualização não encontrou vulnerabilidades conhecidas. CI completo e smoke remoto validam novamente o commit final antes da conclusão da publicação.
+
+Referência oficial: https://github.com/advisories/GHSA-vcvr-r3jv-pc5j e https://github.com/vercel/next.js/releases/tag/v16.3.6.

@@ -5,5 +5,8 @@ enabled = true
 enabled = true
 site_url = "http://127.0.0.1:3000"
 mfa.max_enrolled_factors = 10
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
 [storage]
 enabled = true

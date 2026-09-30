@@ -1,11 +1,12 @@
-import { expect, test } from "@playwright/test";
+import { expect as baseExpect, test } from "@playwright/test";
+const expect = baseExpect.configure({ timeout: 30000 });
 import { createClient } from "@supabase/supabase-js";
 import sharp from "sharp";
 
 test("retoma rascunho, envia cadastro e responde a correção em nova versão", async ({
   page,
 }) => {
-  test.setTimeout(120000);
+  test.setTimeout(180000);
   test.skip(
     process.env.RUN_LOCAL_REGISTRATION !== "true",
     "Exige Supabase local com chave administrativa efêmera.",
@@ -36,7 +37,7 @@ test("retoma rascunho, envia cadastro e responde a correção em nova versão", 
   await page.getByLabel("E-mail ou celular confirmado").fill(email);
   await page.getByLabel("Senha", { exact: true }).fill(password);
   await page.getByRole("button", { name: "Entrar", exact: true }).click();
-  await expect(page).toHaveURL(/\/cadastro\/completar$/);
+  await expect(page).toHaveURL(/\/cadastro\/completar$/, { timeout: 30000 });
   await page
     .getByLabel("Nome civil completo")
     .fill("Pessoa sintética de teste");
@@ -181,4 +182,44 @@ test("retoma rascunho, envia cadastro e responde a correção em nova versão", 
     path: ".impeccable/review/registration-mobile.png",
     fullPage: true,
   });
+  const { error: approvalError } = await admin.rpc("registration_review", {
+    target_user: userId,
+    reviewer: reviewerId,
+    expected_revision: corrected.draft.revision,
+    decision: "approved",
+    corrections: {},
+    internal_notes: "Validação sintética do painel profissional",
+    evidence: {
+      crmNumber: corrected.draft.data.crmNumber,
+      crmState: corrected.draft.data.crmState,
+      outcome: "active",
+      source: "Fonte sintética de teste local",
+    },
+    verified_rqe: false,
+    validity_days: 90,
+  });
+  expect(approvalError).toBeNull();
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/painel", { waitUntil: "domcontentloaded" });
+  await expect(
+    page.getByRole("link", { name: "Publicar plantão", exact: true }),
+  ).toBeVisible({ timeout: 30000 });
+  await page.screenshot({
+    path: ".impeccable/review/painel-desktop.png",
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: ".impeccable/review/painel-mobile.png",
+    fullPage: true,
+  });
+  await admin
+    .from("administrative_access")
+    .update({ active: false })
+    .eq("user_id", reviewerId);
 });

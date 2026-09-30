@@ -17,7 +17,7 @@ export default async function DashboardPage() {
       identity.supabase
         .from("profiles")
         .select(
-          "display_name,crm_number,crm_state,status,role,verification_notes",
+          "display_name,crm_number,crm_state,status,role,verification_notes,verification_valid_until",
         )
         .eq("id", identity.userId)
         .single(),
@@ -37,6 +37,12 @@ export default async function DashboardPage() {
       redirect(identity.claims.aal === "aal2" ? "/admin" : "/mfa");
     redirect("/cadastro/completar");
   }
+  const canPublish =
+    profile.role === "doctor" &&
+    profile.status === "approved" &&
+    !!profile.verification_valid_until &&
+    // eslint-disable-next-line react-hooks/purity -- Server component checks validity once per authenticated request.
+    Date.parse(profile.verification_valid_until) > Date.now();
 
   return (
     <main className="shell dashboard">
@@ -50,13 +56,57 @@ export default async function DashboardPage() {
       </header>
       <section className="dashboard-title">
         <div>
-          <p className="eyebrow">Área do profissional</p>
           <h1>Olá, {profile.display_name}</h1>
         </div>
         <span className={`status status-${profile.status}`}>
           {profileStatusLabel[profile.status] ?? profile.status}
         </span>
       </section>
+      {canPublish ? (
+        <section className="workspace-start" aria-labelledby="start-title">
+          <h2 id="start-title">Seu próximo repasse começa aqui</h2>
+          <p>
+            Publique um plantão, encontre uma oferta ou acompanhe seus acordos.
+          </p>
+          <nav className="actions" aria-label="Ações de plantão">
+            <Link href="/plantoes/novo" className="button button-primary">
+              Publicar plantão
+            </Link>
+            <Link href="/plantoes" className="button button-secondary">
+              Encontrar plantão
+            </Link>
+            <Link href="/historico" className="button button-secondary">
+              Acompanhar repasses
+            </Link>
+          </nav>
+        </section>
+      ) : profile.status === "approved" && profile.role === "approver" ? (
+        <section className="workspace-start">
+          <h2>Acompanhe os repasses dos seus grupos</h2>
+          <p>
+            As decisões institucionais dependem do seu vínculo ativo como
+            aprovador em cada grupo.
+          </p>
+          <Link href="/plantoes" className="button button-primary">
+            Abrir central de repasses
+          </Link>
+        </section>
+      ) : (
+        <section className="workspace-start">
+          <h2>
+            {profile.status === "approved"
+              ? "Atualize sua verificação profissional"
+              : "Continue seu cadastro"}
+          </h2>
+          <p>
+            Acompanhe a análise e confira as orientações da equipe antes de
+            realizar repasses.
+          </p>
+          <Link href="/cadastro/completar" className="button button-primary">
+            Acompanhar cadastro
+          </Link>
+        </section>
+      )}
       {profile.verification_notes ? (
         <section className="card" aria-label="Orientação administrativa">
           <h2>Orientação da equipe</h2>

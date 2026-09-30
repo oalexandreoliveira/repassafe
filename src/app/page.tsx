@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { MobileNavigation } from "@/components/mobile-navigation";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -66,7 +67,7 @@ function Brand() {
   return (
     <span className={styles.brand} aria-label="Repassafe">
       <span className={styles.brandMark} aria-hidden="true">
-        <ShieldCheck size={20} strokeWidth={1.75} />
+        R
       </span>
       Repassafe
     </span>
@@ -81,6 +82,7 @@ export default function Home() {
           <Link href="/" className={styles.brandLink}>
             <Brand />
           </Link>
+          <MobileNavigation />
           <div className={styles.navLinks}>
             <a href="#como-funciona">Como funciona</a>
             <a href="#seguranca">Segurança</a>
@@ -96,7 +98,6 @@ export default function Home() {
         <div className={styles.container}>
           <div className={styles.heroGrid}>
             <div className={styles.heroCopy}>
-              <span className={styles.eyebrow}>REDE PRIVADA</span>
               <h1>Repasse seu plantão com clareza e segurança.</h1>
               <p className={styles.lede}>
                 Encontre um profissional elegível, confirme as condições e
@@ -107,7 +108,7 @@ export default function Home() {
                   Entrar na plataforma <ArrowRight size={18} />
                 </Link>
                 <Link href="/cadastro" className={styles.secondaryButton}>
-                  Solicitar acesso
+                  Criar conta
                 </Link>
               </div>
               <p className={styles.support}>
@@ -136,7 +137,6 @@ export default function Home() {
       <section className={styles.flowSection} id="como-funciona">
         <div className={styles.container}>
           <div className={styles.sectionHeading}>
-            <span className={styles.eyebrow}>DO INÍCIO AO ACORDO</span>
             <h2>Cada etapa do repasse, registrada</h2>
           </div>
           <div className={styles.steps}>
@@ -161,7 +161,6 @@ export default function Home() {
       <section className={styles.recordSection} id="acordo">
         <div className={styles.rings} aria-hidden="true" />
         <div className={styles.recordIntro}>
-          <span className={styles.darkEyebrow}>REGISTRO IMUTÁVEL</span>
           <h2>Clareza de responsabilidades em cada etapa</h2>
           <p>
             As condições confirmadas ficam reunidas em um registro único,
@@ -194,8 +193,8 @@ export default function Home() {
               <Lock size={22} />
             </span>
             <div>
-              <span className={styles.recordLabel}>ACORDO CONFIRMADO</span>
-              <h3>Repasse confirmado</h3>
+              <span className={styles.recordLabel}>DADOS FICTÍCIOS</span>
+              <h3>Exemplo de acordo</h3>
             </div>
             <span className={styles.confirmed}>
               <span /> CONFIRMADO
@@ -228,7 +227,6 @@ export default function Home() {
         <div className={styles.container}>
           <div className={styles.safetyGrid}>
             <div className={styles.safetyCopy}>
-              <span className={styles.eyebrow}>SEGURANÇA POR PADRÃO</span>
               <h2>Acesso controlado, registro rastreável</h2>
               <p>
                 Cada pessoa vê apenas o que precisa para conduzir o repasse com
@@ -252,14 +250,13 @@ export default function Home() {
       <section className={styles.finalWrap}>
         <div className={styles.finalCta}>
           <span className={styles.finalGlow} aria-hidden="true" />
-          <span className={styles.darkEyebrow}>COMECE COM TRANQUILIDADE</span>
           <h2>Repasse seu plantão com clareza e segurança.</h2>
           <p>
             Uma rede privada para profissionais e instituições participantes.
           </p>
           <div className={styles.finalActions}>
             <Link href="/cadastro" className={styles.invertedButton}>
-              Solicitar acesso <ArrowRight size={18} />
+              Criar conta <ArrowRight size={18} />
             </Link>
             <Link href="/entrar" className={styles.outlineButton}>
               Entrar na plataforma
@@ -285,7 +282,7 @@ export default function Home() {
           </div>
           <div className={styles.footerColumn}>
             <span>ACESSO</span>
-            <Link href="/cadastro">Solicitar acesso</Link>
+            <Link href="/cadastro">Criar conta</Link>
             <a href="#acordo">Rastreabilidade</a>
           </div>
         </div>

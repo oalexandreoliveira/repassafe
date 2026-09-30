@@ -1,7 +1,7 @@
 @import "tailwindcss";
 :root {
-  --font-inter: Urbanist, "Plus Jakarta Sans", system-ui, sans-serif;
-  --font-poppins: Urbanist, "Plus Jakarta Sans", system-ui, sans-serif;
+  --font-body: "Plus Jakarta Sans Variable", system-ui, sans-serif;
+  --font-heading: "Urbanist Variable", system-ui, sans-serif;
   --brand: #14403f;
   --brand-dark: #0e2e2d;
   --accent: #e9a23b;
@@ -122,7 +122,349 @@ body {
   margin: 0;
   background: var(--surface);
   color: var(--text);
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-body), sans-serif;
+}
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+  text-wrap: balance;
+}
+input,
+textarea {
+  caret-color: var(--brand);
+}
+a {
+  text-underline-offset: 0.2em;
+}
+.button:hover:not(:disabled) {
+  background: var(--brand-dark);
+  color: white;
+}
+.mobile-navigation {
+  display: none;
+  position: relative;
+}
+.mobile-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--border);
+  color: var(--brand);
+  background: white;
+  font: inherit;
+  cursor: pointer;
+}
+.mobile-links {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 1rem);
+  min-width: min(19rem, calc(100vw - 3rem));
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: white;
+  padding: 0.75rem;
+  box-shadow: 0 12px 30px #14201f20;
+}
+.mobile-links:not([hidden]) {
+  display: grid;
+}
+.mobile-links a {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  color: var(--brand);
+  text-decoration: none;
+}
+.mobile-links a:hover {
+  background: var(--surface);
+}
+.admin-shell {
+  max-width: 100rem;
+  margin-inline: auto;
+  padding: 0 clamp(1rem, 3vw, 3rem) 3rem;
+}
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  min-height: 100px;
+  border-bottom: 1px solid var(--border);
+}
+.admin-header .brand {
+  flex-wrap: wrap;
+  font-size: 1.2rem;
+  font-weight: 650;
+  text-decoration: none;
+}
+.admin-header .brand strong {
+  font: 500 0.85rem var(--font-body);
+  color: var(--muted);
+  padding-left: 1rem;
+  border-left: 1px solid var(--border);
+}
+.admin-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+.admin-header-actions a {
+  color: var(--brand);
+}
+.admin-body {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  padding-top: 2rem;
+}
+.admin-body > aside {
+  position: sticky;
+  top: 1rem;
+  align-self: start;
+}
+.admin-navigation {
+  display: grid;
+  gap: 0.25rem;
+  margin-bottom: 2rem;
+}
+.admin-navigation a {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  color: var(--muted);
+  text-decoration: none;
+  font-weight: 600;
+}
+.admin-navigation a:hover {
+  background: white;
+  color: var(--brand);
+}
+.admin-navigation a[aria-current="page"] {
+  background: var(--brand);
+  color: white;
+}
+.admin-content {
+  min-width: 0;
+}
+.admin-body > #admin-main {
+  min-width: 0;
+}
+.admin-content .card h2 {
+  font: 700 1.35rem var(--font-heading);
+  margin-bottom: 1.25rem;
+}
+.admin-content h1 {
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 1rem;
+}
+.admin-content h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+.admin-content p {
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+.admin-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: end;
+  padding: 1.5rem 0 2rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+.admin-filters label {
+  display: grid;
+  gap: 0.5rem;
+  flex: 1 1 180px;
+  font-weight: 600;
+}
+.admin-filters input,
+.admin-filters select {
+  width: 100%;
+}
+.admin-record {
+  border-bottom: 1px solid var(--border);
+  background: white;
+}
+.admin-record summary {
+  padding: 1.25rem 1.5rem;
+  cursor: pointer;
+  min-height: 64px;
+}
+.admin-record summary:hover {
+  background: #f1f3ef;
+}
+.admin-record h2,
+.admin-record h3 {
+  display: inline;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+.admin-record summary p {
+  margin: 0.4rem 0 0;
+  color: var(--muted);
+}
+.record-detail {
+  padding: 0 1.5rem 1.5rem;
+  max-width: 70ch;
+}
+.registration-data-group {
+  padding-block: 1.25rem;
+  border-bottom: 1px solid var(--border);
+}
+.registration-data-group h3,
+.decision-heading {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+}
+.registration-data-group dl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+  gap: 1.25rem 2rem;
+  margin: 0;
+}
+.registration-data-group dl > div {
+  min-width: 0;
+}
+.registration-data-group dt {
+  color: var(--muted);
+  font-weight: 650;
+  font-size: 0.85rem;
+  margin-bottom: 0.35rem;
+}
+.registration-data-group dd {
+  margin: 0;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.decision-heading {
+  margin-top: 2rem;
+}
+.admin-list:has(> .admin-record) {
+  display: block;
+}
+.action-fields {
+  display: contents;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  min-width: 0;
+}
+.workspace-start {
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  margin: 1.5rem 0 2.5rem;
+  background: #e9efe9;
+  border-radius: 1.25rem;
+}
+.workspace-start h2 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(1.4rem, 3vw, 1.9rem);
+  font-weight: 700;
+}
+.workspace-start p {
+  max-width: 65ch;
+  line-height: 1.6;
+  color: var(--brand-dark);
+}
+.workspace-start .actions {
+  margin-top: 1.25rem;
+}
+.registration-progress {
+  display: grid;
+  gap: 0.75rem;
+  padding: 0;
+  list-style-position: inside;
+  counter-reset: registration;
+}
+.registration-progress li {
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  background: white;
+  color: var(--muted);
+}
+.registration-progress li[aria-current="step"] {
+  border-color: var(--brand);
+  color: var(--brand-dark);
+  font-weight: 600;
+}
+.registration-progress a {
+  color: var(--brand);
+}
+.empty-state {
+  padding: 2rem 0;
+  color: var(--muted);
+}
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 1rem;
+  background: white;
+  color: var(--brand);
+  padding: 1rem;
+  z-index: 100;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+@media (max-width: 960px) {
+  .mobile-navigation {
+    display: block;
+    order: 3;
+  }
+}
+@media (max-width: 800px) {
+  .admin-body {
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 1rem;
+    gap: 1rem;
+  }
+  .admin-body > aside {
+    position: static;
+  }
+  .admin-body > aside > p {
+    display: none;
+  }
+  .admin-navigation {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+  }
+  .admin-navigation a {
+    font-size: 0.85rem;
+    padding: 0.65rem 0.75rem;
+    background: white;
+  }
+  .admin-header {
+    flex-wrap: wrap;
+    padding: 1rem 0;
+  }
+  .admin-header .brand strong {
+    padding-left: 0.5rem;
+  }
+  .admin-header-actions {
+    margin-left: auto;
+  }
+  .admin-record summary,
+  .record-detail {
+    padding-inline: 1rem;
+  }
+  .admin-filters {
+    gap: 0.75rem;
+  }
 }
 .shell {
   min-height: 100vh;
@@ -132,7 +474,7 @@ body {
   display: flex;
   align-items: center;
   gap: 0.7rem;
-  font-family: var(--font-poppins);
+  font-family: var(--font-heading);
   color: var(--brand-dark);
 }
 .brand span {
@@ -153,7 +495,7 @@ body {
   font-weight: 700;
 }
 .hero h1 {
-  font-family: var(--font-poppins);
+  font-family: var(--font-heading);
   font-size: clamp(2.5rem, 7vw, 5.5rem);
   line-height: 1.03;
   letter-spacing: -0.04em;
@@ -179,7 +521,7 @@ body {
   border-radius: 999px;
   min-height: 56px;
   padding: 0.7rem 1.75rem;
-  font: 600 1rem var(--font-inter);
+  font: 600 1rem var(--font-body);
   cursor: pointer;
   text-decoration: none;
 }
@@ -216,7 +558,7 @@ summary:focus-visible {
     0 8px 24px #14201f0f;
 }
 .card h2 {
-  font: 600 1.1rem var(--font-poppins);
+  font: 600 1.1rem var(--font-heading);
   margin-top: 0;
 }
 .card p {
@@ -231,7 +573,8 @@ summary:focus-visible {
   right: 1rem;
   bottom: 1rem;
   max-width: 24rem;
-  border-left: 4px solid var(--accent);
+  border: 1px solid var(--accent);
+  width: min(24rem, calc(100vw - 2rem));
   border-radius: 0.6rem;
   background: #fff;
   padding: 1rem;
@@ -255,7 +598,7 @@ summary:focus-visible {
 }
 .auth-card h1,
 .dashboard h1 {
-  font-family: var(--font-poppins);
+  font-family: var(--font-heading);
   line-height: 1.1;
 }
 .form-stack {
@@ -372,6 +715,15 @@ textarea:focus-visible {
 .dashboard-header h1 {
   margin: 0.35rem 0;
 }
+.dashboard-title h1 {
+  font-size: clamp(1.8rem, 4vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+}
+.clean-list li > a {
+  display: grid;
+  gap: 0.35rem;
+}
 .dashboard-grid,
 .admin-list {
   display: grid;
@@ -478,7 +830,7 @@ textarea:focus-visible {
   color: var(--muted);
 }
 .agreement-card {
-  border-left: 5px solid var(--success);
+  border-color: var(--success);
 }
 .status-open_emergency {
   color: var(--error);

@@ -87,7 +87,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       {state.message ? (
         <p
           className={`form-message form-message-${state.status}`}
-          role="status"
+          role={state.status === "error" ? "alert" : "status"}
         >
           {state.message}
         </p>
@@ -95,7 +95,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       <p className="form-help">
         {mode === "login" ? "Ainda não possui acesso? " : "Já possui acesso? "}
         <Link href={mode === "login" ? "/cadastro" : "/entrar"}>
-          {mode === "login" ? "Solicitar cadastro" : "Entrar"}
+          {mode === "login" ? "Criar conta" : "Entrar"}
         </Link>
       </p>
       {mode === "login" ? (

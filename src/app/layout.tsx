@@ -1,4 +1,6 @@
 import type { Metadata, Viewport } from "next";
+import "@fontsource-variable/urbanist";
+import "@fontsource-variable/plus-jakarta-sans";
 import "./globals.css";
 import { PwaRegistration } from "@/components/pwa-registration";
 

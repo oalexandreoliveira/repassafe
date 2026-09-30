@@ -1,8 +1,9 @@
 "use client";
-import { useActionState, useState } from "react";
+import { startTransition, useActionState, useState } from "react";
 import { reviewRegistrationAction } from "@/app/admin/cadastros/actions";
 import { initialActionState } from "@/features/auth/schemas";
 import { registrationFieldLabels } from "@/features/registration/labels";
+import { brazilianStates } from "@/features/registration/schemas";
 export function RegistrationDecisionForm({
   userId,
   revision,
@@ -38,6 +39,10 @@ export function RegistrationDecisionForm({
           name={name}
           value={values[name]}
           maxLength={name === "internalNotes" ? 4000 : 1000}
+          aria-invalid={!!state.fieldErrors?.[name]}
+          aria-describedby={
+            state.fieldErrors?.[name] ? `${userId}-${name}-error` : undefined
+          }
           onChange={(event) => change(name, event.target.value)}
         />
       ) : (
@@ -46,20 +51,38 @@ export function RegistrationDecisionForm({
           name={name}
           value={values[name]}
           maxLength={name === "crmState" ? 2 : 300}
+          aria-invalid={!!state.fieldErrors?.[name]}
+          aria-describedby={
+            state.fieldErrors?.[name] ? `${userId}-${name}-error` : undefined
+          }
           onChange={(event) => change(name, event.target.value)}
         />
       )}
-      <span className="field-error">{state.fieldErrors?.[name]}</span>
+      <span id={`${userId}-${name}-error`} className="field-error">
+        {state.fieldErrors?.[name]}
+      </span>
     </div>
   );
   return (
-    <form action={action} className="form-stack">
+    <form
+      action={action}
+      className="form-stack"
+      onSubmit={(event) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        startTransition(() => action(formData));
+      }}
+    >
       <input name="userId" type="hidden" value={userId} />
       <input name="revision" type="hidden" value={revision} />
       <label>
         Decisão
         <select
           name="decision"
+          aria-invalid={!!state.fieldErrors?.decision}
+          aria-describedby={
+            state.fieldErrors?.decision ? `${userId}-decision-error` : undefined
+          }
           value={values.decision}
           onChange={(event) => change("decision", event.target.value)}
         >
@@ -69,14 +92,45 @@ export function RegistrationDecisionForm({
           <option value="suspended">Suspender</option>
         </select>
       </label>
+      <span id={`${userId}-decision-error`} className="field-error">
+        {state.fieldErrors?.decision}
+      </span>
       <div className="form-row">
         {input("crmNumber", "CRM conferido")}
-        {input("crmState", "UF conferida")}
+        <div className="form-field">
+          <label htmlFor={`${userId}-crmState`}>UF conferida</label>
+          <select
+            id={`${userId}-crmState`}
+            name="crmState"
+            aria-invalid={!!state.fieldErrors?.crmState}
+            aria-describedby={
+              state.fieldErrors?.crmState
+                ? `${userId}-crmState-error`
+                : undefined
+            }
+            value={values.crmState}
+            onChange={(event) => change("crmState", event.target.value)}
+          >
+            <option value="">Selecione a UF</option>
+            {brazilianStates.map((uf) => (
+              <option key={uf} value={uf}>
+                {uf}
+              </option>
+            ))}
+          </select>
+          <span id={`${userId}-crmState-error`} className="field-error">
+            {state.fieldErrors?.crmState}
+          </span>
+        </div>
       </div>
       <label>
         Situação profissional observada
         <select
           name="outcome"
+          aria-invalid={!!state.fieldErrors?.outcome}
+          aria-describedby={
+            state.fieldErrors?.outcome ? `${userId}-outcome-error` : undefined
+          }
           value={values.outcome}
           onChange={(event) => change("outcome", event.target.value)}
         >
@@ -85,6 +139,9 @@ export function RegistrationDecisionForm({
           <option value="inactive">Inativo</option>
         </select>
       </label>
+      <span id={`${userId}-outcome-error`} className="field-error">
+        {state.fieldErrors?.outcome}
+      </span>
       {input("source", "Fonte da consulta CRM")}
       <label className="checkbox-label">
         <input
@@ -102,6 +159,12 @@ export function RegistrationDecisionForm({
         Campo a corrigir
         <select
           name="correctionField"
+          aria-invalid={!!state.fieldErrors?.correctionField}
+          aria-describedby={
+            state.fieldErrors?.correctionField
+              ? `${userId}-correctionField-error`
+              : undefined
+          }
           value={values.correctionField}
           onChange={(event) => change("correctionField", event.target.value)}
         >
@@ -117,6 +180,9 @@ export function RegistrationDecisionForm({
             ))}
         </select>
       </label>
+      <span id={`${userId}-correctionField-error`} className="field-error">
+        {state.fieldErrors?.correctionField}
+      </span>
       {input("correctionReason", "Orientação visível ao titular", true)}
       {input(
         "internalNotes",

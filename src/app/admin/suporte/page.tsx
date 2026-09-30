@@ -1,8 +1,7 @@
-import Link from "next/link";
+import { AdminActionForm } from "@/components/admin-action-form";
 import { redirect } from "next/navigation";
 import { requireAdminIdentity } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { answerSupportAction } from "@/app/suporte/actions";
 type Request = {
   id: string;
   contact_email: string;
@@ -22,8 +21,7 @@ export default async function AdminSupportPage() {
   });
   if (error) throw new Error("Não foi possível carregar a fila.");
   return (
-    <main className="shell legal-document">
-      <Link href="/admin">Administração</Link>
+    <main className="admin-content">
       <h1>Solicitações de suporte</h1>
       <p>
         Responda pelo canal do titular. Pedidos sem conta exigem contato
@@ -39,7 +37,10 @@ export default async function AdminSupportPage() {
             <p>Protocolo: {request.id}</p>
             <p>Contato: {request.contact_email}</p>
             <p>{request.message}</p>
-            <form action={answerSupportAction} className="form-stack">
+            <AdminActionForm
+              actionName="answerSupportAction"
+              className="form-stack"
+            >
               <input type="hidden" name="id" value={request.id} />
               <label>
                 Resposta
@@ -54,7 +55,7 @@ export default async function AdminSupportPage() {
               <button className="button button-primary">
                 Registrar resposta
               </button>
-            </form>
+            </AdminActionForm>
           </section>
         ))
       ) : (

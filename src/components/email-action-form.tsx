@@ -23,8 +23,22 @@ export function EmailActionForm({
     <form action={formAction} className="form-stack">
       <label>
         E-mail
-        <input name="email" type="email" autoComplete="email" required />
+        <input
+          name="email"
+          type="email"
+          autoComplete="email"
+          required
+          aria-invalid={!!state.fieldErrors?.email}
+          aria-describedby={
+            state.fieldErrors?.email ? "email-error" : undefined
+          }
+        />
       </label>
+      {state.fieldErrors?.email ? (
+        <p id="email-error" className="field-error">
+          {state.fieldErrors.email}
+        </p>
+      ) : null}
       <button className="button button-primary" disabled={pending}>
         {pending
           ? "Enviando…"
@@ -35,7 +49,7 @@ export function EmailActionForm({
       {state.message ? (
         <p
           className={`form-message form-message-${state.status}`}
-          role="status"
+          role={state.status === "error" ? "alert" : "status"}
         >
           {state.message}
         </p>
@@ -59,8 +73,17 @@ export function NewPasswordForm() {
           autoComplete="new-password"
           minLength={8}
           required
+          aria-invalid={!!state.fieldErrors?.password}
+          aria-describedby={
+            state.fieldErrors?.password ? "password-error" : undefined
+          }
         />
       </label>
+      {state.fieldErrors?.password ? (
+        <p id="password-error" className="field-error">
+          {state.fieldErrors.password}
+        </p>
+      ) : null}
       <label>
         Confirme a nova senha
         <input
@@ -69,15 +92,26 @@ export function NewPasswordForm() {
           autoComplete="new-password"
           minLength={8}
           required
+          aria-invalid={!!state.fieldErrors?.passwordConfirmation}
+          aria-describedby={
+            state.fieldErrors?.passwordConfirmation
+              ? "confirmation-error"
+              : undefined
+          }
         />
       </label>
+      {state.fieldErrors?.passwordConfirmation ? (
+        <p id="confirmation-error" className="field-error">
+          {state.fieldErrors.passwordConfirmation}
+        </p>
+      ) : null}
       <button className="button button-primary" disabled={pending}>
         {pending ? "Salvando…" : "Atualizar senha"}
       </button>
       {state.message ? (
         <p
           className={`form-message form-message-${state.status}`}
-          role="status"
+          role={state.status === "error" ? "alert" : "status"}
         >
           {state.message}
         </p>

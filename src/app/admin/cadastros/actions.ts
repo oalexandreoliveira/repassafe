@@ -70,6 +70,17 @@ export async function reviewRegistrationAction(
     return {
       status: "error",
       message: "Indique o campo e a orientação para correção.",
+      fieldErrors: {
+        ...(!allowedFields.includes(parsed.correctionField)
+          ? { correctionField: "Selecione o campo que precisa de correção." }
+          : {}),
+        ...(parsed.correctionReason.trim().length < 5
+          ? {
+              correctionReason:
+                "Descreva a orientação com pelo menos 5 caracteres.",
+            }
+          : {}),
+      },
     };
   const { error } = await createAdminClient().rpc("registration_review", {
     target_user: parsed.userId,

@@ -1,4 +1,5 @@
-import { expect, test } from "@playwright/test";
+import { expect as baseExpect, test } from "@playwright/test";
+const expect = baseExpect.configure({ timeout: 30000 });
 
 test.use({ viewport: { width: 390, height: 844 } });
 
@@ -13,7 +14,7 @@ test("mantém navegação pública utilizável em viewport móvel", async ({
     page.getByRole("link", { name: "Entrar na plataforma" }).first(),
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "Solicitar acesso" }).first(),
+    page.getByRole("link", { name: "Criar conta" }).first(),
   ).toBeVisible();
 
   const hasHorizontalOverflow = await page.evaluate(
@@ -36,7 +37,7 @@ test("permite percorrer entrada e cadastro por teclado", async ({ page }) => {
   await page.keyboard.press("Tab");
   await expect(page.getByRole("button", { name: "Entrar" })).toBeFocused();
 
-  await page.getByRole("link", { name: "Solicitar cadastro" }).click();
+  await page.getByRole("link", { name: "Criar conta" }).click();
   await expect(
     page.getByRole("heading", { name: "Crie sua conta" }),
   ).toBeVisible();

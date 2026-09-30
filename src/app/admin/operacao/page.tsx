@@ -227,10 +227,9 @@ export default async function AdminOperationsPage({
   );
 
   return (
-    <main className="shell dashboard">
+    <main className="admin-content">
       <header className="dashboard-header">
         <div>
-          <p className="eyebrow">Administração protegida por MFA</p>
           <h1>Consulta operacional</h1>
         </div>
         <Link href="/admin" className="button button-secondary">

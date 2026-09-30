@@ -11,6 +11,6 @@ test("apresenta o fluxo do MVP e os acessos principais", async ({ page }) => {
     page.getByRole("link", { name: "Entrar na plataforma" }).first(),
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "Solicitar acesso" }).first(),
+    page.getByRole("link", { name: "Criar conta" }).first(),
   ).toBeVisible();
 });

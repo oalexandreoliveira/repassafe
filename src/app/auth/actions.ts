@@ -238,7 +238,12 @@ export async function resendConfirmationAction(
   formData: FormData,
 ): Promise<ActionState> {
   const parsed = emailSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) return invalidCredentials;
+  if (!parsed.success)
+    return {
+      status: "error",
+      message: "Confira o e-mail informado.",
+      fieldErrors: { email: "Informe um e-mail válido." },
+    };
   const genericMessage =
     "Se a conta precisar de confirmação, enviaremos as instruções por e-mail.";
   try {
@@ -273,7 +278,12 @@ export async function requestPasswordResetAction(
   formData: FormData,
 ): Promise<ActionState> {
   const parsed = emailSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) return invalidCredentials;
+  if (!parsed.success)
+    return {
+      status: "error",
+      message: "Confira o e-mail informado.",
+      fieldErrors: { email: "Informe um e-mail válido." },
+    };
   try {
     const ip = await getRequestIp();
     await enforceRateLimit({
@@ -339,7 +349,16 @@ export async function updatePasswordAction(
   }
   const parsed = passwordResetSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) {
-    return { status: "error", message: parsed.error.issues[0].message };
+    return {
+      status: "error",
+      message: parsed.error.issues[0].message,
+      fieldErrors: Object.fromEntries(
+        parsed.error.issues.map((issue) => [
+          String(issue.path[0]),
+          issue.message,
+        ]),
+      ),
+    };
   }
   const { error } = await identity.supabase.auth.updateUser({
     password: parsed.data.password,

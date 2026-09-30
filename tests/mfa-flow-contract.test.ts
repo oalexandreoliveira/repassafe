@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 
 const form = readFileSync("src/components/mfa-form.tsx", "utf8");
 const page = readFileSync("src/app/mfa/page.tsx", "utf8");
-const admin = readFileSync("src/app/admin/page.tsx", "utf8");
+const admin = readFileSync("src/app/admin/layout.tsx", "utf8");
 
 describe("fluxo MFA administrativo", () => {
   it("cadastra e verifica TOTP pela API oficial", () => {
@@ -20,5 +20,6 @@ describe("fluxo MFA administrativo", () => {
     expect(page).toContain("await getAdministrativeAccess(identity)");
     expect(page).toContain('identity.claims.aal === "aal2"');
     expect(admin).toContain('redirect("/mfa")');
+    expect(admin).toContain("await requireAdminIdentity()");
   });
 });

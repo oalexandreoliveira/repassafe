@@ -59,11 +59,47 @@ export default async function CompleteRegistrationPage() {
           <Link href="#identificacao">Identificação e atuação</Link> —{" "}
           {identityComplete ? "Dados completos" : "Complete os dados e a foto"}
         </li>
-        <li aria-current={identityComplete ? "step" : undefined}>
-          <Link href="#envio">Revisão e envio</Link> —{" "}
-          {sent ? "Recebido pela equipe" : "Revise e envie"}
+        <li
+          aria-current={
+            identityComplete && draft?.state !== "approved" ? "step" : undefined
+          }
+        >
+          <Link href="#envio">Verificação profissional</Link> —{" "}
+          {draft?.state === "approved"
+            ? "Cadastro aprovado"
+            : sent
+              ? "Aguardando análise da equipe"
+              : "Revise e envie para análise"}
+        </li>
+        <li>
+          <Link href="#instituicao">Autorização institucional</Link> —
+          Independente da verificação profissional
         </li>
       </ol>
+      <section className="workspace-start" aria-label="Próximo passo">
+        <h2>
+          {!identityComplete
+            ? "Complete sua identificação"
+            : draft?.state === "changes_requested"
+              ? "Corrija os campos indicados pela equipe"
+              : sent
+                ? "Acompanhe a análise do cadastro"
+                : "Revise os dados e envie para análise"}
+        </h2>
+        <p>
+          {sent
+            ? "O envio foi recebido. A aprovação profissional e os vínculos institucionais serão informados separadamente."
+            : "Os dados salvos ficam disponíveis para você retomar. Salvar um rascunho não envia o cadastro para análise."}
+        </p>
+        <a
+          className="button button-primary"
+          href={identityComplete ? "#envio" : "#identificacao"}
+        >
+          {identityComplete
+            ? "Ver revisão e situação"
+            : "Ir para identificação"}
+        </a>
+      </section>
       <section className="registration-section">
         <h2 id="contatos">Conta e contatos</h2>
         <dl>
@@ -197,6 +233,16 @@ export default async function CompleteRegistrationPage() {
         ) : (
           <p>A equipe ainda não registrou uma decisão.</p>
         )}
+      </section>
+      <section className="registration-section" id="instituicao">
+        <h2>Autorização institucional</h2>
+        <p>
+          A aprovação profissional permite participar das ofertas livres. Para
+          acessar ofertas de um grupo institucional, a equipe precisa registrar
+          um vínculo ativo nesse grupo. Informar uma instituição no cadastro não
+          concede esse acesso.
+        </p>
+        <Link href="/painel">Consultar meus grupos no painel</Link>
       </section>
     </main>
   );

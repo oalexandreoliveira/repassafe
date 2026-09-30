@@ -18,16 +18,23 @@ colors:
   warning-surface: "#fff3cd"
   error-surface: "#fee4e2"
 typography:
+  display:
+    fontFamily: '"Urbanist Variable", system-ui, sans-serif'
+    fontSize: "clamp(2.75rem, 5vw, 4.25rem)"
+    fontWeight: 600
+    lineHeight: 1.02
+    letterSpacing: "-0.045em"
   headline:
-    fontFamily: 'Urbanist, "Plus Jakarta Sans", system-ui, sans-serif'
+    fontFamily: '"Urbanist Variable", system-ui, sans-serif'
     fontSize: "clamp(1.8rem, 4vw, 2.7rem)"
     fontWeight: 700
     lineHeight: 1.15
   title:
+    fontFamily: '"Urbanist Variable", system-ui, sans-serif'
     fontSize: "1.4rem"
     fontWeight: 700
   body:
-    fontFamily: 'Urbanist, "Plus Jakarta Sans", system-ui, sans-serif'
+    fontFamily: '"Plus Jakarta Sans Variable", system-ui, sans-serif'
   label:
     fontWeight: 650
 rounded:
@@ -52,6 +59,12 @@ components:
     textColor: "{colors.brand-dark}"
     rounded: "{rounded.control}"
     padding: "0.7rem 1.75rem"
+  button-primary-hover:
+    backgroundColor: "{colors.brand-dark}"
+    textColor: "{colors.white}"
+  button-secondary-hover:
+    backgroundColor: "{colors.brand-dark}"
+    textColor: "{colors.white}"
   input:
     backgroundColor: "{colors.white}"
     textColor: "{colors.text}"
@@ -71,9 +84,10 @@ components:
 
 Nome descritivo do sistema observado, derivado do compromisso de clareza em PRODUCT.md e da direção aprovada; não representa uma nova escolha de marca. Verde profundo, fundo claro e controles suaves sustentam leitura e conclusão de tarefas em português.
 
-Este registro captura uma extensão da identidade existente. A ausência de DESIGN.md anterior não autoriza substituir o mundo visual. A composição específica do cadastro pertence ao seu contrato de direção, não vira obrigação para todas as páginas.
+Este registro captura uma extensão da identidade existente. Este registro atualiza as regras implementadas, preservando o mundo visual. A composição específica do cadastro pertence ao seu contrato de direção, não vira obrigação para todas as páginas.
 
 **Key Characteristics:**
+
 - Verde profundo em ações e identidade.
 - Fundo claro, bordas discretas e campos brancos.
 - Formulários com rótulos completos, mensagens e foco visível.
@@ -83,12 +97,15 @@ Este registro captura uma extensão da identidade existente. A ausência de DESI
 Paleta de verde profundo com neutros quentes; cores semânticas distinguem resultado e espera.
 
 ### Primary
+
 - **Verde institucional:** brand nas ações principais; brand-dark na marca e ações secundárias.
 
 ### Secondary
+
 - **Âmbar:** accent em avisos de atualização; warning em estados pendentes. Não é uma segunda cor de ação principal.
 
 ### Neutral
+
 - **Fundo claro:** surface no corpo; white nos campos e cartões.
 - **Texto profundo e apoio:** text no conteúdo; muted na orientação.
 - **Divisão suave:** border delimita campos, cartões e seções.
@@ -99,11 +116,14 @@ Success e error têm papéis semânticos, acompanhados de fundos próprios; focu
 
 ## Typography
 
-**Body Font:** Urbanist, Plus Jakarta Sans e fallback system-ui/sans-serif declarados nos dois aliases existentes, --font-inter e --font-poppins. Os nomes dos aliases não significam que Inter ou Poppins sejam carregados.
+**Display Font:** Urbanist Variable, com fallback system-ui/sans-serif, no alias --font-heading.
+**Body Font:** Plus Jakarta Sans Variable, com fallback system-ui/sans-serif, no alias --font-body.
 
-Não foi encontrado carregamento de Urbanist/Plus Jakarta Sans por @font-face ou next/font no escopo. As capturas podem usar uma fonte local ou fallback; não estabelecem uma nova família de marca. O fallback efetivo é uma limitação observada, não uma decisão de display a perpetuar.
+As duas famílias variáveis são carregadas em layout.tsx por @fontsource-variable (versão 5.3.0), com arquivos WOFF2 locais servidos pela aplicação. Urbanist compõe títulos e marca; Plus Jakarta Sans compõe corpo, controles e orientação. Fallback existe para recuperação, não como voz de display.
 
 ### Hierarchy
+
+- **Display:** título público conforme frontmatter; no celular usa clamp(2.55rem, 12vw, 3.5rem).
 - **Headline:** títulos de cadastro, autenticação e documentos, conforme frontmatter. Autenticação possui line-height posterior de 1.1.
 - **Title:** títulos de seções do cadastro/documentos, conforme frontmatter.
 - **Body:** família herdada; cadastro e documentos usam line-height 1.6. Tamanho de body não foi fixado pelo CSS global.
@@ -112,13 +132,15 @@ Não foi encontrado carregamento de Urbanist/Plus Jakarta Sans por @font-face ou
 
 ## Layout
 
-A página usa padding horizontal fluido clamp(1rem, 5vw, 5rem), com 1.25rem vertical. Cadastro e documentos têm limite de 850px, incluindo esse padding pelo box-sizing global. Autenticação limita o cartão a 34rem. Dashboard limita o conteúdo a 84rem.
+A página usa padding horizontal fluido clamp(1rem, 5vw, 5rem), com 1.25rem vertical. Cadastro e documentos têm limite de 850px, incluindo esse padding pelo box-sizing global. Autenticação limita o cartão a 34rem. Dashboard limita o conteúdo a 84rem. Administração usa limite de 100rem e grade de 230px mais conteúdo flexível, com navegação lateral sticky; até 800px vira uma coluna com navegação em duas colunas. A página pública usa container de 1200px e grade de duas colunas que passa a uma até 960px.
 
-Campos agrupados usam colunas auto-fit com mínimo de 10rem e gap de 1rem. No cadastro, até 600px, form-row passa a uma coluna. Cartões reduzem padding e raio até 640px. Cabeçalhos flexíveis quebram linha, valores longos usam overflow-wrap. Seções do cadastro têm espaçamento vertical de 2rem e divisória inferior; não usam o cartão elevado como envoltório obrigatório.
+Campos agrupados usam colunas auto-fit com mínimo de 10rem e gap de 1rem. No cadastro, até 600px, form-row passa a uma coluna. Cartões reduzem padding e raio até 640px. Cabeçalhos flexíveis quebram linha, valores longos usam overflow-wrap. Seções do cadastro têm espaçamento vertical de 2rem e divisória inferior; não usam o cartão elevado como envoltório obrigatório. Registros administrativos se abrem sob demanda; filtros ficam antes da lista, com paginação quando necessário. Detalhes de cadastro agrupam identificação/contato, atuação, vínculo declarado, resposta às correções e demais informações, em pares de rótulo/valor com grade adaptável de mínimo 15rem. O detalhe limita a leitura a 70ch.
 
 ## Elevation & Depth
 
 O sistema combina fundo tonal e sombras difusas, sem deslocamentos rígidos. Cartões usam 0 1px 2px #14201f0a e 0 8px 24px #14201f0f; autenticação usa 0 20px 60px #0a3b3714. O cadastro observado permanece diretamente sobre o fundo claro.
+
+O menu móvel usa sombra 0 12px 30px #14201f20. A página pública mantém elevação suave em hover e transições de 0.25s; prefers-reduced-motion reduz transições a 0.01ms e remove a animação da imagem. Movimentos públicos não tornam animação obrigatória nas áreas operacionais.
 
 ## Shapes
 
@@ -127,31 +149,39 @@ Campos de uma linha e botões têm contorno de cápsula. Textareas têm raio de 
 ## Components
 
 ### Buttons
-Ações legíveis, com altura mínima de 56px. Primary usa brand/white; secondary é transparente com brand-dark e borda brand. Foco visível tem outline de 3px, offset de 3px. Disabled usa opacity 0.65 e cursor wait. Não há variante de hover própria no CSS observado; não inventar token para ela.
+
+Ações operacionais legíveis, com altura mínima de 56px. A página pública usa ações de 52px e CTA de navegação de 48px. Primary usa brand/white; secondary é transparente com brand-dark e borda brand. Foco visível tem outline de 3px, offset de 3px. Disabled usa opacity 0.65 e cursor wait. Hover de ambas as variantes operacionais usa brand-dark/white quando habilitadas. A página pública usa focus como fundo de hover da ação principal, com deslocamento suave de -2px e sombra; a secundária usa fundo verde claro. Esses estados públicos permanecem locais à página.
 
 ### Cards / Containers
+
 Cartões brancos têm borda fina e sombra difusa. Seus valores estão no frontmatter; no celular aplicam card-mobile e padding de 1.25rem. Cadastro organiza seções por divisórias, sem impor cards a cada grupo.
 
 ### Inputs / Fields
+
 Campos brancos com borda border, altura mínima de 56px e família herdada. Foco visível usa outline de 3px e offset de 2px. aria-invalid em input/select altera a borda para error. Rótulo e mensagem localizada devem permanecer associados ao campo; registration, auth e suporte já exemplificam aria-describedby.
 
 ### Chips
+
 Status são cápsulas de texto em negrito, padding de 0.4rem 0.75rem. Aprovado usa success; pendente/correção usa warning; rejeitado/suspenso usa error, cada um com seu fundo semântico.
 
 ### Navigation
-Marca e navegação ficam em cabeçalho flexível que pode quebrar linha. Links permanecem textuais e usam o foco compartilhado. O monograma R observado é identidade textual, não licença para usar caracteres como ícones de ações.
+
+A página pública mantém links textuais no desktop e menu expansível até 960px; o botão informa aria-expanded e controla links ocultos com hidden, fecha ao navegar e devolve foco ao botão quando Escape o fecha. Administração oferece sete áreas persistentes: fila de cadastros, pessoas, instituições/grupos, operação, ocorrências, suporte/privacidade e auditoria. Links administrativos têm altura mínima de 48px, hover branco/brand e área atual brand/white com aria-current; até 800px formam uma grade de duas colunas. Foco segue o outline compartilhado. O monograma R observado é identidade textual, não licença para usar caracteres como ícones de ações.
 
 ### Feedback
+
 Mensagens têm raio feedback e padding de 0.75rem, com alert para erros e status para resultados nas superfícies revisadas. Pending muda o texto da ação e desabilita seu botão. Esses estados não substituem validação funcional.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** preservar verde profundo, fundo claro e a família declarada existente.
+
+- **Do** preservar verde profundo, fundo claro e a dupla de fontes locais com papéis de corpo e títulos.
 - **Do** manter foco visível, mensagens por campo e resultados textuais nas ações.
 - **Do** verificar composição e teclado no celular e desktop junto da validação funcional.
 
 ### Don't:
+
 - **Don't** interpretar ausência de baseline como autorização para redesenhar a marca.
 - **Don't** transformar o fallback de fonte ou uma foto quebrada em padrão visual.
 - **Don't** propagar eyebrows decorativos encontrados fora do cadastro como regra do sistema.

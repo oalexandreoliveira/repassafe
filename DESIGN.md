@@ -123,16 +123,20 @@ As duas famílias variáveis são carregadas em layout.tsx por @fontsource-varia
 
 ### Hierarchy
 
-- **Display:** título público conforme frontmatter; no celular usa clamp(2.55rem, 12vw, 3.5rem).
+- **Display:** título público conserva família, tamanho e peso do frontmatter; o hero usa ajuste local de line-height 1.04 e letter-spacing -0.04em. Até 640px, usa clamp(2.375rem, 10vw, 2.75rem), line-height 1.06 e letter-spacing -0.035em. A largura máxima é 17ch.
 - **Headline:** títulos de cadastro, autenticação e documentos, conforme frontmatter. Autenticação possui line-height posterior de 1.1.
 - **Title:** títulos de seções do cadastro/documentos, conforme frontmatter.
 - **Body:** família herdada; cadastro e documentos usam line-height 1.6. Tamanho de body não foi fixado pelo CSS global.
 - **Label:** peso 650 nos rótulos de form-stack/form-grid; legendas usam 700.
 - **Field error:** texto de erro localizado usa 0.9rem.
 
+Na landing, o texto de apresentação limita a leitura a 52ch, com tamanho de 1.125rem no desktop e 1rem até 640px, e line-height 1.6. Apoio cadastral e legenda da imagem usam 0.875rem/1.5. Esses ajustes são papéis locais da superfície, sem ampliar a escala global.
+
 ## Layout
 
 A página usa padding horizontal fluido clamp(1rem, 5vw, 5rem), com 1.25rem vertical. Cadastro e documentos têm limite de 850px, incluindo esse padding pelo box-sizing global. Autenticação limita o cartão a 34rem. Dashboard limita o conteúdo a 84rem. Administração usa limite de 100rem e grade de 230px mais conteúdo flexível, com navegação lateral sticky; até 800px vira uma coluna com navegação em duas colunas. A página pública usa container de 1200px e grade de duas colunas que passa a uma até 960px.
+
+No hero público, ações antecedem o telefone ilustrativo na ordem de leitura. A figura tem largura de 360px, limitada a 100% do espaço disponível, altura proporcional e legenda “Ilustração do produto”; até 640px, usa 240px e fica centralizada. O painel de etapas se sobrepõe junto ao telefone no desktop e passa ao fluxo normal até 640px. A explicação completa usa uma lista ordenada plana: cinco colunas no desktop e uma coluna com número, título e descrição separados por divisórias até 960px. Essa composição pertence à landing.
 
 Campos agrupados usam colunas auto-fit com mínimo de 10rem e gap de 1rem. No cadastro, até 600px, form-row passa a uma coluna. Cartões reduzem padding e raio até 640px. Cabeçalhos flexíveis quebram linha, valores longos usam overflow-wrap. Seções do cadastro têm espaçamento vertical de 2rem e divisória inferior; não usam o cartão elevado como envoltório obrigatório. Registros administrativos se abrem sob demanda; filtros ficam antes da lista, com paginação quando necessário. Detalhes de cadastro agrupam identificação/contato, atuação, vínculo declarado, resposta às correções e demais informações, em pares de rótulo/valor com grade adaptável de mínimo 15rem. O detalhe limita a leitura a 70ch.
 
@@ -140,7 +144,7 @@ Campos agrupados usam colunas auto-fit com mínimo de 10rem e gap de 1rem. No ca
 
 O sistema combina fundo tonal e sombras difusas, sem deslocamentos rígidos. Cartões usam 0 1px 2px #14201f0a e 0 8px 24px #14201f0f; autenticação usa 0 20px 60px #0a3b3714. O cadastro observado permanece diretamente sobre o fundo claro.
 
-O menu móvel usa sombra 0 12px 30px #14201f20. A página pública mantém elevação suave em hover e transições de 0.25s; prefers-reduced-motion reduz transições a 0.01ms e remove a animação da imagem. Movimentos públicos não tornam animação obrigatória nas áreas operacionais.
+O menu móvel usa sombra 0 12px 30px #14201f20. Na landing, ações usam feedback de fundo e sombra em 160ms; suas setas se deslocam 3px em hover, com cubic-bezier(0.16, 1, 0.3, 1). O telefone permanece estático. A demonstração do processo responde à seleção com traçado de 600ms no mesmo easing, sem autoplay ou loop. Prefers-reduced-motion remove a animação do traço de confirmação, a transição do percurso e o deslocamento das setas, preservando seleção e conteúdo. Esses parâmetros pertencem à landing; movimentos públicos não tornam animação obrigatória nas áreas operacionais.
 
 ## Shapes
 
@@ -150,7 +154,9 @@ Campos de uma linha e botões têm contorno de cápsula. Textareas têm raio de 
 
 ### Buttons
 
-Ações operacionais legíveis, com altura mínima de 56px. A página pública usa ações de 52px e CTA de navegação de 48px. Primary usa brand/white; secondary é transparente com brand-dark e borda brand. Foco visível tem outline de 3px, offset de 3px. Disabled usa opacity 0.65 e cursor wait. Hover de ambas as variantes operacionais usa brand-dark/white quando habilitadas. A página pública usa focus como fundo de hover da ação principal, com deslocamento suave de -2px e sombra; a secundária usa fundo verde claro. Esses estados públicos permanecem locais à página.
+Ações operacionais legíveis, com altura mínima de 56px. A página pública usa ações de 52px e CTA de navegação de 48px. Primary usa brand/white; secondary é transparente com brand-dark e borda brand. Foco visível tem outline de 3px, offset de 3px. Disabled usa opacity 0.65 e cursor wait. Hover de ambas as variantes operacionais usa brand-dark/white quando habilitadas. A página pública usa focus como fundo de hover da ação principal, com sombra e deslocamento da seta; a secundária usa fundo verde claro. Esses estados públicos permanecem locais à página.
+
+Os três pontos principais de aquisição da landing — cabeçalho, hero e fechamento — compartilham rótulo “Criar conta”, destino /cadastro e seta decorativa. Cabeçalho e hero usam brand/white; o fechamento inverte o contraste sobre o fundo verde. O componente compartilhado mantém texto e destino consistentes. Criar conta continua separado da verificação profissional e da autorização institucional explicadas junto à ação.
 
 ### Cards / Containers
 
@@ -171,6 +177,10 @@ A página pública mantém links textuais no desktop e menu expansível até 960
 ### Feedback
 
 Mensagens têm raio feedback e padding de 0.75rem, com alert para erros e status para resultados nas superfícies revisadas. Pending muda o texto da ação e desabilita seu botão. Esses estados não substituem validação funcional.
+
+### Demonstração do repasse
+
+O painel público apresenta cinco etapas com tabs de 44px, estado selecionado brand/white, etapas anteriores em verde claro e painel associado por aria-controls/aria-labelledby. Clique, setas esquerda/direita e Home/End selecionam uma etapa; apenas a tab selecionada entra na sequência de Tab. O conteúdo inicial aparece sem depender de animação. A conexão acompanha a seleção e a etapa de acordo acrescenta um traço de confirmação; movimento reduzido mantém os mesmos estados e textos. A aprovação institucional explicita “quando o grupo exige”. Demonstração e lista completa compartilham a mesma sequência de domínio. Trata-se de um padrão local explicativo, não de uma confirmação operacional.
 
 ## Do's and Don'ts
 

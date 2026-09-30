@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-29T20:57:39.3306556-03:00",
+  "generatedAt": "2026-09-30T16:34:22Z",
   "title": "Design System: Repassafe",
   "extensions": {
     "shadows": [
@@ -40,13 +40,25 @@
     ],
     "motion": [
       {
-        "value": "0.25s cubic-bezier(0.22, 1, 0.36, 1)",
+        "value": "160ms cubic-bezier(0.16, 1, 0.3, 1)",
         "name": "public-action",
-        "purpose": "Transformação das ações públicas; prefers-reduced-motion reduz transições a 0.01ms e remove animação da imagem."
+        "purpose": "Local à landing: deslocamento de 3px das setas em hover; fundo e sombra usam feedback de 160ms. Prefers-reduced-motion remove transição e deslocamento das setas. O telefone permanece estático."
+      },
+      {
+        "value": "600ms cubic-bezier(0.16, 1, 0.3, 1)",
+        "name": "public-process-trace",
+        "purpose": "Local à landing: conexão das etapas e traço de confirmação do acordo respondem à seleção manual das tabs, sem autoplay ou loop. Prefers-reduced-motion remove o traçado animado e mantém seleção e conteúdo."
       }
     ]
   },
   "components": [
+    {
+      "name": "Aquisição na landing",
+      "kind": "button",
+      "description": "Criar conta aponta para /cadastro nos três pontos principais: cabeçalho, hero e fechamento. Amostra da variante do hero; o cabeçalho usa 48px de altura mínima e o fechamento inverte o contraste. Padrão local à landing.",
+      "html": "<a class=\"ds-signup\" href=\"/cadastro\">Criar conta <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14m-7-7 7 7-7 7\"/></svg></a>",
+      "css": ".ds-signup{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 24px;border-radius:999px;background:var(--brand);color:white;text-decoration:none;font:650 1rem var(--font-body);transition:background 160ms,box-shadow 160ms}.ds-signup:hover{background:var(--focus);box-shadow:0 16px 40px rgba(20,32,31,.12)}.ds-signup:focus-visible{outline:3px solid var(--focus);outline-offset:3px}.ds-signup svg{transition:transform 160ms cubic-bezier(.16,1,.3,1)}.ds-signup:hover svg{transform:translateX(3px)}@media(prefers-reduced-motion:reduce){.ds-signup svg,.ds-signup:hover svg{transition:none;transform:none}}"
+    },
     {
       "name": "Ação principal",
       "kind": "button",

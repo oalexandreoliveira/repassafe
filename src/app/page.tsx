@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { MobileNavigation } from "@/components/mobile-navigation";
 import { LandingSignupLink } from "@/components/landing-signup-link";
 import { RepassePreview } from "@/components/repasse-preview";
@@ -89,17 +88,6 @@ export default function Home() {
               </p>
             </div>
             <div className={styles.heroVisual}>
-              <figure className={styles.phoneFigure}>
-                <Image
-                  src="/repassafe-hero-phone.png"
-                  alt="Ilustração de um celular com a lista de plantões do Repassafe"
-                  width={1024}
-                  height={1536}
-                  preload
-                  sizes="(max-width: 640px) 240px, 360px"
-                />
-                <figcaption>Ilustração do produto</figcaption>
-              </figure>
               <RepassePreview />
             </div>
           </div>

@@ -1,10 +1,3 @@
----
-version: 1
-slug: "src-app-page-tsx"
-primary_target: "src/app/page.tsx"
-related_targets: ["src/components/repasse-preview.tsx","src/components/repasse-preview.module.css","src/components/publish-shift-fields.tsx","src/components/shift-offer-card.tsx"]
----
-
 # Demonstração fiel do hero
 
 O usuário identificou uma quebra de confiança: a interface do telefone ilustrativo não correspondia ao app. Essa evidência substitui o parecer anterior sobre a adequação da imagem. A direção agora é mostrar o funcionamento existente, com preenchimento de dados e movimento controlável.
@@ -36,3 +29,11 @@ Orçamento: sem nova dependência, vídeo, raster, canvas ou efeitos contínuos.
 Os campos preservam names, validação HTML, opções dos grupos, aceite e botão submit do formulário real. A ação no servidor e a consulta autorizada de grupos permanecem na rota autenticada. O cartão preserva labels, formatadores de data/moeda, status, ações e conteúdo de candidaturas/substituições da lista real. A diferença do recorte é o espaço disponível e a navegação de reprodução, identificada como demonstração.
 
 Dados totalmente fictícios; não usa sessão, consulta de dados reais ou ação de publicação. Exemplo específico de oferta livre, sem aprovação institucional. O resultado é apenas oferta aberta, nunca confirmação automática de substituição ou acordo. Os rasters rejeitados foram retirados de public e ficam no histórico Git.
+
+Validação local: 48 testes unitários, lint, formatação e build Next 16.3.6 aprovados. Sete testes públicos no build de produção aprovados, incluindo os dois cenários da demonstração. Capturas motion-*.png em .impeccable/review registram preenchimento, conferência, publicação em quatro larguras e movimento reduzido. Testes autenticados com banco não foram executados nesta rodada; a regressão do formulário compartilhado verifica envio dos nomes de campos, grupos, aceite obrigatório e editabilidade. Nenhuma requisição POST durante a demonstração.
+
+A primeira inspeção encontrou recorte inferior no cartão em 320px; a área móvel foi ampliada, com teste de altura do conteúdo publicado. O controle de reprodução permanece disponível ao terminar para preservar o foco. A rodada final de capturas usa build de produção, sem indicadores de desenvolvimento.
+
+## Publicação
+
+O backup anterior foi substituído por repassafe-staging-20260930T215115Z. Hashes, restauração, contagens de 27 tabelas e 40 cenários de banco foram validados em destino isolado; evidência e limites em docs/operations/backup-restore-validation-2026-09-30.md. O novo backup está dentro do RPO de 24 horas para a publicação desta rodada. Não houve alteração de banco nesta implementação.

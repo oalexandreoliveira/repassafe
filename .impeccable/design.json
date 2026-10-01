@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-09-30T16:34:22Z",
+  "generatedAt": "2026-10-01T02:43:50.290Z",
   "title": "Design System: Repassafe",
   "extensions": {
     "shadows": [
@@ -18,6 +18,11 @@
         "value": "0 12px 30px #14201f20",
         "name": "mobile-menu",
         "purpose": "Menu expansível público."
+      },
+      {
+        "name": "public-demo-window",
+        "value": "0 20px 48px #14201f12",
+        "purpose": "Janela local da demonstração com componentes reais."
       }
     ],
     "breakpoints": [
@@ -42,12 +47,12 @@
       {
         "value": "160ms cubic-bezier(0.16, 1, 0.3, 1)",
         "name": "public-action",
-        "purpose": "Local à landing: deslocamento de 3px das setas em hover; fundo e sombra usam feedback de 160ms. Prefers-reduced-motion remove transição e deslocamento das setas. O telefone permanece estático."
+        "purpose": "Local à landing: deslocamento de 3px das setas em hover; fundo e sombra usam feedback de 160ms. Prefers-reduced-motion remove transição e deslocamento das setas."
       },
       {
-        "value": "600ms cubic-bezier(0.16, 1, 0.3, 1)",
-        "name": "public-process-trace",
-        "purpose": "Local à landing: conexão das etapas e traço de confirmação do acordo respondem à seleção manual das tabs, sem autoplay ou loop. Prefers-reduced-motion remove o traçado animado e mantém seleção e conteúdo."
+        "name": "public-publication-demo",
+        "value": "13000ms",
+        "purpose": "Sequência única de preenchimento, conferência e oferta Aberto; pausa fora de vista ou em aba oculta, controles manuais, sem loop. Movimento reduzido exibe dados estáticos e etapas manuais. Local à landing."
       }
     ]
   },

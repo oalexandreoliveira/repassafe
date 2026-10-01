@@ -1,0 +1,171 @@
+.demo {
+  min-width: 0;
+  width: 100%;
+}
+.window {
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  overflow: hidden;
+  box-shadow: 0 20px 48px #14201f12;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  background: white;
+}
+.header > span:last-child {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.header :global(.brand) {
+  font-size: 1.2rem;
+  font-weight: 650;
+}
+.viewport {
+  height: 450px;
+  overflow: hidden;
+  overflow-anchor: none;
+}
+.screen {
+  padding: 24px;
+}
+.screen > h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0 0 24px;
+}
+.screen :global(.form-help) {
+  margin: 0 0 20px;
+}
+.screen input,
+.screen select,
+.screen textarea {
+  max-width: 100%;
+}
+.screen [data-confirming="true"] > button {
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
+}
+.progress {
+  height: 3px;
+  background: var(--border);
+}
+.progress span {
+  display: block;
+  height: 100%;
+  background: var(--brand);
+  transform-origin: left;
+}
+.controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 16px;
+}
+.tabs {
+  display: flex;
+  flex: 1;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.tabs button,
+.playback {
+  min-height: 44px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 999px;
+  cursor: pointer;
+  font: 600 0.875rem var(--font-body);
+}
+.tabs button {
+  padding: 0 12px;
+}
+.tabs button[aria-selected="true"] {
+  color: var(--brand);
+  background: var(--surface);
+  border-color: var(--border);
+}
+.tabs button:hover,
+.playback:hover {
+  color: var(--brand);
+  background: var(--surface);
+}
+.playback {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  flex: 0 0 44px;
+  border-color: var(--border);
+}
+.description {
+  min-height: 76px;
+  padding-top: 12px;
+}
+.description p {
+  margin: 0;
+  color: var(--text);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+.disclosure {
+  margin: 8px 0 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.transcript {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.transcript summary {
+  width: fit-content;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.transcript p {
+  margin: 0;
+}
+@media (max-width: 640px) {
+  .header {
+    padding: 12px;
+  }
+  .header :global(.brand) {
+    font-size: 1rem;
+    gap: 8px;
+  }
+  .header > span:last-child {
+    font-size: 0.75rem;
+  }
+  .viewport {
+    height: 560px;
+  }
+  .screen {
+    padding: 16px;
+  }
+  .controls {
+    flex-wrap: wrap;
+  }
+  .tabs {
+    flex-basis: 100%;
+  }
+  .tabs button {
+    flex: 1;
+    padding-inline: 8px;
+  }
+  .description {
+    min-height: 8rem;
+  }
+}

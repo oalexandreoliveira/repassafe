@@ -1,45 +1,66 @@
 import { expect, test } from "@playwright/test";
 
-test("hero prioriza cadastro e explica o repasse por teclado e toque", async ({
+test("hero demonstra publicação real, permite controle e respeita movimento reduzido", async ({
   page,
 }) => {
   test.setTimeout(120000);
+  const mutations: string[] = [];
+  page.on("request", (request) => {
+    if (request.method() === "POST") mutations.push(request.url());
+  });
+  await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/");
+  await page.evaluate(() => document.fonts.ready);
   const hero = page.getByRole("region", {
     name: "Repasse seu plantão com clareza e segurança.",
   });
+  const demo = page.getByRole("region", {
+    name: "Demonstração de publicação de plantão",
+  });
+  const screen = demo.locator("[data-scene]");
   await expect(hero.getByRole("link", { name: "Criar conta" })).toHaveAttribute(
     "href",
     "/cadastro",
   );
-  await expect(
-    hero.getByRole("link", { name: "Como funciona" }),
-  ).toHaveAttribute("href", "#como-funciona");
-  const image = hero.getByRole("img", { name: /Ilustração de um celular/ });
-  await expect
-    .poll(() =>
-      image.evaluate(
-        (element: HTMLImageElement) =>
-          element.complete && element.naturalWidth > 0,
-      ),
-    )
-    .toBe(true);
-  await page.evaluate(() => document.fonts.ready);
-  const first = page.getByRole("tab", { name: "1. Publicação" });
+  await expect(hero.locator("img")).toHaveCount(0);
+  await demo.getByRole("button", { name: "Pausar demonstração" }).click();
+  const pausedValue = await screen.locator('[name="sector"]').inputValue();
+  await page.waitForTimeout(400);
+  expect(await screen.locator('[name="sector"]').inputValue()).toBe(
+    pausedValue,
+  );
+  const first = demo.getByRole("tab", { name: "Preencher", exact: true });
   await first.focus();
   await first.press("ArrowRight");
-  await expect(page.getByRole("tab", { name: "2. Candidatura" })).toBeFocused();
-  await expect(page.getByRole("tabpanel")).toContainText("Receba candidaturas");
+  await expect(demo.getByRole("tab", { name: "Conferir" })).toBeFocused();
+  await expect(screen.locator('[name="paymentTerms"]')).toHaveValue(
+    "Pagamento em até 30 dias",
+  );
+  await hero.screenshot({
+    path: ".impeccable/review/motion-confirm-desktop.png",
+  });
   await page.keyboard.press("End");
-  await expect(page.getByRole("tab", { name: "5. Acordo" })).toBeFocused();
-  await expect(page.getByRole("tabpanel")).toContainText(
-    "Após as confirmações e a aprovação exigida",
+  await expect(demo.getByRole("tab", { name: "Publicado" })).toBeFocused();
+  await expect(screen.locator(".status")).toHaveText("Aberto");
+  await expect(screen.locator(".button")).toHaveText("Gerenciar");
+  await expect(screen).toHaveAttribute("inert", "");
+  await expect(demo.getByRole("tabpanel")).toContainText("ainda depende");
+  await demo.getByRole("button", { name: "Repetir demonstração" }).click();
+  await expect(screen).toHaveAttribute("data-running", "true");
+  await expect(screen.locator('[name="sector"]')).toHaveValue(
+    "Clínica médica",
+    { timeout: 10000 },
   );
-  await page.getByRole("tab", { name: "4. Aprovação" }).click();
-  await expect(page.getByRole("tabpanel")).toContainText(
-    "Quando o grupo exige",
-  );
-  await first.click();
+  await demo.getByRole("button", { name: "Pausar demonstração" }).click();
+  await hero.screenshot({ path: ".impeccable/review/motion-fill-desktop.png" });
+  await demo.getByRole("button", { name: "Reproduzir demonstração" }).click();
+  await expect(screen.locator('[name="ownerTermsAcknowledged"]')).toBeChecked({
+    timeout: 10000,
+  });
+  await expect(screen).toHaveAttribute("data-scene", "2", { timeout: 10000 });
+  await expect(screen).toHaveAttribute("data-running", "false", {
+    timeout: 5000,
+  });
   for (const [width, height, name] of [
     [1440, 1000, "desktop"],
     [768, 1024, "tablet"],
@@ -55,18 +76,13 @@ test("hero prioriza cadastro e explica o repasse por teclado e toque", async ({
           document.documentElement.clientWidth,
       ),
     ).toBe(true);
-    const rect = await image.boundingBox();
-    expect(rect!.x).toBeGreaterThanOrEqual(0);
-    expect(rect!.x + rect!.width).toBeLessThanOrEqual(width);
-    await hero.screenshot({
-      path: `.impeccable/review/hero-${name}.png`,
-    });
-    if (name === "desktop" || name === "mobile") {
-      await page.screenshot({
-        path: `.impeccable/review/landing-${name}.png`,
-        fullPage: true,
-      });
-    }
+    expect(
+      await screen.evaluate((node) => node.scrollWidth <= node.clientWidth),
+    ).toBe(true);
+    expect(
+      await screen.evaluate((node) => node.scrollHeight <= node.clientHeight),
+    ).toBe(true);
+    await hero.screenshot({ path: `.impeccable/review/motion-${name}.png` });
   }
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.evaluate(() => {
@@ -79,24 +95,83 @@ test("hero prioriza cadastro e explica o repasse por teclado e toque", async ({
         document.documentElement.clientWidth,
     ),
   ).toBe(true);
-  await expect(hero.getByRole("link", { name: "Criar conta" })).toBeVisible();
   await page.evaluate(() => {
     document.documentElement.style.zoom = "1";
   });
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.getByRole("tab", { name: "5. Acordo" }).click();
-  await expect(page.getByRole("tabpanel")).toContainText(
-    "as condições ficam registradas",
-  );
-  expect(
-    await page
-      .getByRole("tabpanel")
-      .locator("svg path")
-      .evaluate((element) => getComputedStyle(element).animationName),
-  ).toBe("none");
-  await page
-    .getByRole("region", {
-      name: "Repasse seu plantão com clareza e segurança.",
-    })
-    .screenshot({ path: ".impeccable/review/hero-reduced-motion.png" });
+  await first.click();
+  await expect(screen).toHaveAttribute("data-running", "false");
+  await expect(screen.locator('[name="sector"]')).toHaveValue("Clínica médica");
+  const datesFit = await screen.evaluate((node) => {
+    const inputs = [
+      ...node.querySelectorAll<HTMLInputElement>(
+        'input[type="datetime-local"]',
+      ),
+    ];
+    return inputs.every((input) => {
+      const field = input.getBoundingClientRect();
+      const label = input.closest("label")!.getBoundingClientRect();
+      return field.left >= label.left - 1 && field.right <= label.right + 1;
+    });
+  });
+  expect(datesFit).toBe(true);
+  await expect(
+    demo.getByRole("button", { name: "Pausar demonstração" }),
+  ).toHaveCount(0);
+  await hero.screenshot({ path: ".impeccable/review/motion-reduced.png" });
+  for (const width of [320, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    const positions = [];
+    for (const name of ["Preencher", "Conferir", "Publicado"]) {
+      await demo.getByRole("tab", { name, exact: true }).click();
+      if (name === "Preencher") {
+        expect(
+          await screen.evaluate((node) =>
+            [
+              ...node.querySelectorAll<HTMLInputElement>(
+                'input[type="datetime-local"]',
+              ),
+            ].every(
+              (input) =>
+                input.getBoundingClientRect().right <=
+                input.closest("label")!.getBoundingClientRect().right + 1,
+            ),
+          ),
+        ).toBe(true);
+        await hero.screenshot({
+          path: `.impeccable/review/motion-fields-${width}.png`,
+        });
+      }
+      positions.push(
+        await demo
+          .getByText(/Recortes da interface do app/)
+          .evaluate(
+            (node) => node.getBoundingClientRect().top + window.scrollY,
+          ),
+      );
+    }
+    expect(Math.max(...positions) - Math.min(...positions)).toBeLessThan(1);
+  }
+  await demo.getByText("Ler demonstração", { exact: true }).click();
+  await expect(
+    demo.getByText(/Isso ainda não confirma um repasse/),
+  ).toBeVisible();
+  expect(mutations).toEqual([]);
+});
+
+test("demonstração suspende reprodução fora de vista", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/");
+  const demo = page.getByRole("region", {
+    name: "Demonstração de publicação de plantão",
+  });
+  const screen = demo.locator("[data-scene]");
+  await expect(screen).toHaveAttribute("data-running", "true");
+  await page.locator("footer").scrollIntoViewIfNeeded();
+  await expect(screen).toHaveAttribute("data-running", "false");
+  const previous = await screen.locator('[name="sector"]').inputValue();
+  await page.waitForTimeout(400);
+  expect(await screen.locator('[name="sector"]').inputValue()).toBe(previous);
+  await demo.scrollIntoViewIfNeeded();
+  await expect(screen).toHaveAttribute("data-running", "true");
 });

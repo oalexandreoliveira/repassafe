@@ -5,6 +5,7 @@ const sections = [
   ["/admin/cadastros", "Fila de cadastros"],
   ["/admin/pessoas", "Pessoas"],
   ["/admin/instituicoes", "Instituições e grupos"],
+  ["/admin/metricas", "Métricas do piloto"],
   ["/admin/operacao", "Operação"],
   ["/admin/ocorrencias", "Ocorrências"],
   ["/admin/suporte", "Suporte e privacidade"],

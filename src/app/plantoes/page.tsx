@@ -1,10 +1,8 @@
 import Link from "next/link";
+import { ShiftOfferCard } from "@/components/shift-offer-card";
 import { listShiftWorkspace } from "@/lib/shifts/data";
 import {
   applicationStatusLabels,
-  formatCurrency,
-  formatDateTime,
-  offerStatusLabels,
   substitutionStatusLabels,
 } from "@/features/shifts/schemas";
 import {
@@ -60,30 +58,12 @@ export default async function ShiftsPage({
             const application = applicationByOffer.get(offer.id);
             const substitution = substitutionByOffer.get(offer.id);
             return (
-              <article className="card shift-card" key={offer.id}>
-                <div className="shift-card-heading">
-                  <div>
-                    <p className="eyebrow">{group?.name ?? "Oferta livre"}</p>
-                    <h2>{offer.sector}</h2>
-                  </div>
-                  <span className={`status status-${offer.status}`}>
-                    {offerStatusLabels[offer.status] ?? offer.status}
-                  </span>
-                </div>
-                <dl className="facts">
-                  <div>
-                    <dt>Início</dt>
-                    <dd>{formatDateTime(offer.starts_at)}</dd>
-                  </div>
-                  <div>
-                    <dt>Término</dt>
-                    <dd>{formatDateTime(offer.ends_at)}</dd>
-                  </div>
-                  <div>
-                    <dt>Valor</dt>
-                    <dd>{formatCurrency(offer.value_cents)}</dd>
-                  </div>
-                </dl>
+              <ShiftOfferCard
+                key={offer.id}
+                offer={offer}
+                groupName={group?.name}
+                isOwner={offer.owner_id === identity.userId}
+              >
                 {application ? (
                   <p className="status">
                     {applicationStatusLabels[application.status]}
@@ -94,15 +74,7 @@ export default async function ShiftsPage({
                     {substitutionStatusLabels[substitution.status]}
                   </p>
                 ) : null}
-                <Link
-                  className="button button-secondary"
-                  href={`/plantoes/${offer.id}`}
-                >
-                  {offer.owner_id === identity.userId
-                    ? "Gerenciar"
-                    : "Ver detalhes"}
-                </Link>
-              </article>
+              </ShiftOfferCard>
             );
           })
         ) : (

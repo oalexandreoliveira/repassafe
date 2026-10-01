@@ -202,131 +202,6 @@
   position: relative;
   z-index: 1;
   min-width: 0;
-  min-height: 596px;
-}
-.phoneFigure {
-  width: 360px;
-  max-width: 100%;
-  margin: 0 0 0 auto;
-  text-align: center;
-}
-.phoneFigure img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-.phoneFigure figcaption {
-  margin-top: 8px;
-  color: var(--muted);
-  font-size: var(--landing-meta-size);
-  line-height: 1.5;
-}
-.processPreview {
-  position: absolute;
-  left: 0;
-  bottom: 64px;
-  width: min(360px, 100%);
-  padding: 22px;
-  border: 1px solid var(--border);
-  border-radius: 24px;
-  background: var(--landing-surface);
-  box-shadow: 0 16px 40px rgba(20, 32, 31, 0.1);
-}
-.previewHeading {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--teal);
-}
-.previewHeading p {
-  margin: 0;
-  font-size: var(--landing-body-size);
-  font-weight: 650;
-}
-.previewSteps {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  margin-block: 18px;
-}
-.previewSteps button {
-  position: relative;
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  background: var(--landing-surface);
-  color: var(--teal);
-  font-size: var(--landing-body-size);
-  font-weight: 650;
-  font-variant-numeric: tabular-nums;
-  cursor: pointer;
-  transition:
-    background var(--landing-motion-feedback),
-    color var(--landing-motion-feedback);
-}
-.previewSteps button:hover,
-.previewSteps button[data-passed="true"] {
-  background: #dce8e2;
-  border-color: var(--teal);
-}
-.previewSteps button[aria-selected="true"] {
-  color: white;
-  background: var(--teal);
-  border-color: var(--teal);
-}
-.previewTrack {
-  position: absolute;
-  top: 21px;
-  left: 22px;
-  right: 22px;
-  height: 2px;
-  overflow: hidden;
-  background: var(--border);
-}
-.previewTrack span {
-  display: block;
-  height: 100%;
-  background: var(--teal);
-  transform-origin: left;
-  transition: transform var(--landing-motion-arrival) var(--landing-ease);
-}
-.previewPanel {
-  min-height: 110px;
-}
-.previewPanel p {
-  margin: 8px 0 0;
-  font-size: var(--landing-body-size);
-  line-height: 1.55;
-  color: var(--muted);
-}
-.previewPanel .previewTitle {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 0;
-  color: var(--teal-deep);
-  font-weight: 650;
-}
-.agreementCheck path {
-  stroke-dasharray: 24;
-  animation: agreement-ink var(--landing-motion-arrival) var(--landing-ease);
-}
-.previewHint {
-  margin: 12px 0 0;
-  color: var(--muted);
-  font-size: 0.75rem;
-  line-height: 1.5;
-}
-@keyframes agreement-ink {
-  from {
-    stroke-dashoffset: 24;
-  }
-  to {
-    stroke-dashoffset: 0;
-  }
 }
 .flowSection {
   padding: 72px 0 88px;
@@ -817,20 +692,7 @@
   .heroVisual {
     min-height: 0;
   }
-  .phoneFigure {
-    width: 240px;
-    margin-inline: auto;
-  }
-  .processPreview {
-    position: relative;
-    bottom: auto;
-    width: 100%;
-    margin: 20px auto 0;
-    padding: 20px;
-  }
-  .previewPanel {
-    min-height: 110px;
-  }
+
   .flowSection,
   .safetySection {
     padding: 76px 0;
@@ -910,10 +772,6 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .agreementCheck path {
-    animation: none;
-  }
-  .previewTrack span,
   .navCta svg,
   .primaryButton svg,
   .invertedButton svg,

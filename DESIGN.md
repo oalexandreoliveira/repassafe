@@ -130,13 +130,13 @@ As duas famílias variáveis são carregadas em layout.tsx por @fontsource-varia
 - **Label:** peso 650 nos rótulos de form-stack/form-grid; legendas usam 700.
 - **Field error:** texto de erro localizado usa 0.9rem.
 
-Na landing, o texto de apresentação limita a leitura a 52ch, com tamanho de 1.125rem no desktop e 1rem até 640px, e line-height 1.6. Apoio cadastral e legenda da imagem usam 0.875rem/1.5. Esses ajustes são papéis locais da superfície, sem ampliar a escala global.
+Na landing, o texto de apresentação limita a leitura a 52ch, com tamanho de 1.125rem no desktop e 1rem até 640px, e line-height 1.6. Apoio cadastral usa 0.875rem/1.5; a identificação de dados fictícios usa 0.75rem/1.5. Esses ajustes são papéis locais da superfície, sem ampliar a escala global.
 
 ## Layout
 
 A página usa padding horizontal fluido clamp(1rem, 5vw, 5rem), com 1.25rem vertical. Cadastro e documentos têm limite de 850px, incluindo esse padding pelo box-sizing global. Autenticação limita o cartão a 34rem. Dashboard limita o conteúdo a 84rem. Administração usa limite de 100rem e grade de 230px mais conteúdo flexível, com navegação lateral sticky; até 800px vira uma coluna com navegação em duas colunas. A página pública usa container de 1200px e grade de duas colunas que passa a uma até 960px.
 
-No hero público, ações antecedem o telefone ilustrativo na ordem de leitura. A figura tem largura de 360px, limitada a 100% do espaço disponível, altura proporcional e legenda “Ilustração do produto”; até 640px, usa 240px e fica centralizada. O painel de etapas se sobrepõe junto ao telefone no desktop e passa ao fluxo normal até 640px. A explicação completa usa uma lista ordenada plana: cinco colunas no desktop e uma coluna com número, título e descrição separados por divisórias até 960px. Essa composição pertence à landing.
+No hero público, ações antecedem a demonstração na ordem de leitura. A janela reutiliza campos e cartão reais do produto, com recorte de 450px no desktop e 560px até 640px. Controles externos têm altura mínima de 44px; no celular as três etapas ocupam uma linha própria. A descrição reserva espaço para o texto mais longo, evitando deslocamento da página. A explicação completa mantém cinco etapas em lista plana, que passa a uma coluna até 960px. Essa composição pertence à landing.
 
 Campos agrupados usam colunas auto-fit com mínimo de 10rem e gap de 1rem. No cadastro, até 600px, form-row passa a uma coluna. Cartões reduzem padding e raio até 640px. Cabeçalhos flexíveis quebram linha, valores longos usam overflow-wrap. Seções do cadastro têm espaçamento vertical de 2rem e divisória inferior; não usam o cartão elevado como envoltório obrigatório. Registros administrativos se abrem sob demanda; filtros ficam antes da lista, com paginação quando necessário. Detalhes de cadastro agrupam identificação/contato, atuação, vínculo declarado, resposta às correções e demais informações, em pares de rótulo/valor com grade adaptável de mínimo 15rem. O detalhe limita a leitura a 70ch.
 
@@ -144,7 +144,7 @@ Campos agrupados usam colunas auto-fit com mínimo de 10rem e gap de 1rem. No ca
 
 O sistema combina fundo tonal e sombras difusas, sem deslocamentos rígidos. Cartões usam 0 1px 2px #14201f0a e 0 8px 24px #14201f0f; autenticação usa 0 20px 60px #0a3b3714. O cadastro observado permanece diretamente sobre o fundo claro.
 
-O menu móvel usa sombra 0 12px 30px #14201f20. Na landing, ações usam feedback de fundo e sombra em 160ms; suas setas se deslocam 3px em hover, com cubic-bezier(0.16, 1, 0.3, 1). O telefone permanece estático. A demonstração do processo responde à seleção com traçado de 600ms no mesmo easing, sem autoplay ou loop. Prefers-reduced-motion remove a animação do traço de confirmação, a transição do percurso e o deslocamento das setas, preservando seleção e conteúdo. Esses parâmetros pertencem à landing; movimentos públicos não tornam animação obrigatória nas áreas operacionais.
+O menu móvel usa sombra 0 12px 30px #14201f20. A janela da demonstração usa 0 20px 48px #14201f12. Na landing, ações usam feedback de fundo e sombra em 160ms; suas setas se deslocam 3px em hover, com cubic-bezier(0.16, 1, 0.3, 1). A demonstração executa uma sequência de 13 segundos sem loop, pausada fora da viewport ou em aba oculta. Prefers-reduced-motion mantém dados estáticos e etapas manuais, removendo também o deslocamento das setas. Esses parâmetros pertencem à landing; movimentos públicos não tornam animação obrigatória nas áreas operacionais.
 
 ## Shapes
 
@@ -180,7 +180,7 @@ Mensagens têm raio feedback e padding de 0.75rem, com alert para erros e status
 
 ### Demonstração do repasse
 
-O painel público apresenta cinco etapas com tabs de 44px, estado selecionado brand/white, etapas anteriores em verde claro e painel associado por aria-controls/aria-labelledby. Clique, setas esquerda/direita e Home/End selecionam uma etapa; apenas a tab selecionada entra na sequência de Tab. O conteúdo inicial aparece sem depender de animação. A conexão acompanha a seleção e a etapa de acordo acrescenta um traço de confirmação; movimento reduzido mantém os mesmos estados e textos. A aprovação institucional explicita “quando o grupo exige”. Demonstração e lista completa compartilham a mesma sequência de domínio. Trata-se de um padrão local explicativo, não de uma confirmação operacional.
+A demonstração apresenta Preencher, Conferir e Publicado, reutilizando PublishShiftFields e ShiftOfferCard. Os controles de pausa, reprodução e repetição ficam fora do recorte. Clique, setas e Home/End selecionam etapas; apenas a tab selecionada entra na sequência de Tab. Foco nas etapas pausa a reprodução. O recorte visual é inert e aria-hidden; descrição e transcrição oferecem o equivalente textual. Dados fictícios são identificados explicitamente. Publicado significa oferta Aberto, não acordo confirmado. O formulário real conserva edição, validação e envio; o recorte demonstrativo não envia dados. Datas nativas usam width: 100% e min-width: 0 no componente compartilhado.
 
 ## Do's and Don'ts
 

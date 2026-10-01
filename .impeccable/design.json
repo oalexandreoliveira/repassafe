@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-01T02:43:50.290Z",
+  "generatedAt": "2026-10-01T14:01:49.446Z",
   "title": "Design System: Repassafe",
   "extensions": {
     "shadows": [
@@ -54,7 +54,241 @@
         "value": "13000ms",
         "purpose": "Sequência única de preenchimento, conferência e oferta Aberto; pausa fora de vista ou em aba oculta, controles manuais, sem loop. Movimento reduzido exibe dados estáticos e etapas manuais. Local à landing."
       }
-    ]
+    ],
+    "colorMeta": {
+      "brand": {
+        "role": "primary",
+        "displayName": "Verde institucional profundo",
+        "tonalRamp": [
+          "oklch(15% 0.048 193)",
+          "oklch(26% 0.048 193)",
+          "oklch(37% 0.048 193)",
+          "oklch(48% 0.048 193)",
+          "oklch(59% 0.048 193)",
+          "oklch(70% 0.048 193)",
+          "oklch(82% 0.048 193)",
+          "oklch(95% 0.048 193)"
+        ]
+      },
+      "brand-dark": {
+        "role": "primary",
+        "displayName": "Verde institucional escuro",
+        "tonalRamp": [
+          "oklch(15% 0.037 192)",
+          "oklch(26% 0.037 192)",
+          "oklch(37% 0.037 192)",
+          "oklch(48% 0.037 192)",
+          "oklch(59% 0.037 192)",
+          "oklch(70% 0.037 192)",
+          "oklch(82% 0.037 192)",
+          "oklch(95% 0.037 192)"
+        ]
+      },
+      "accent": {
+        "role": "secondary",
+        "displayName": "Âmbar de atenção",
+        "tonalRamp": [
+          "oklch(15% 0.142 72)",
+          "oklch(26% 0.142 72)",
+          "oklch(37% 0.142 72)",
+          "oklch(48% 0.142 72)",
+          "oklch(59% 0.142 72)",
+          "oklch(70% 0.142 72)",
+          "oklch(82% 0.142 72)",
+          "oklch(95% 0.142 72)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Papel claro quente",
+        "tonalRamp": [
+          "oklch(15% 0.007 97)",
+          "oklch(26% 0.007 97)",
+          "oklch(37% 0.007 97)",
+          "oklch(48% 0.007 97)",
+          "oklch(59% 0.007 97)",
+          "oklch(70% 0.007 97)",
+          "oklch(82% 0.007 97)",
+          "oklch(95% 0.007 97)"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Grafite esverdeado",
+        "tonalRamp": [
+          "oklch(15% 0.017 190)",
+          "oklch(26% 0.017 190)",
+          "oklch(37% 0.017 190)",
+          "oklch(48% 0.017 190)",
+          "oklch(59% 0.017 190)",
+          "oklch(70% 0.017 190)",
+          "oklch(82% 0.017 190)",
+          "oklch(95% 0.017 190)"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Verde cinzento de apoio",
+        "tonalRamp": [
+          "oklch(15% 0.023 189)",
+          "oklch(26% 0.023 189)",
+          "oklch(37% 0.023 189)",
+          "oklch(48% 0.023 189)",
+          "oklch(59% 0.023 189)",
+          "oklch(70% 0.023 189)",
+          "oklch(82% 0.023 189)",
+          "oklch(95% 0.023 189)"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Areia divisória",
+        "tonalRamp": [
+          "oklch(15% 0.016 99)",
+          "oklch(26% 0.016 99)",
+          "oklch(37% 0.016 99)",
+          "oklch(48% 0.016 99)",
+          "oklch(59% 0.016 99)",
+          "oklch(70% 0.016 99)",
+          "oklch(82% 0.016 99)",
+          "oklch(95% 0.016 99)"
+        ]
+      },
+      "success": {
+        "role": "tertiary",
+        "displayName": "Verde de sucesso",
+        "tonalRamp": [
+          "oklch(15% 0.087 159)",
+          "oklch(26% 0.087 159)",
+          "oklch(37% 0.087 159)",
+          "oklch(48% 0.087 159)",
+          "oklch(59% 0.087 159)",
+          "oklch(70% 0.087 159)",
+          "oklch(82% 0.087 159)",
+          "oklch(95% 0.087 159)"
+        ]
+      },
+      "warning": {
+        "role": "secondary",
+        "displayName": "Âmbar de espera",
+        "tonalRamp": [
+          "oklch(15% 0.107 71)",
+          "oklch(26% 0.107 71)",
+          "oklch(37% 0.107 71)",
+          "oklch(48% 0.107 71)",
+          "oklch(59% 0.107 71)",
+          "oklch(70% 0.107 71)",
+          "oklch(82% 0.107 71)",
+          "oklch(95% 0.107 71)"
+        ]
+      },
+      "error": {
+        "role": "tertiary",
+        "displayName": "Vermelho de erro",
+        "tonalRamp": [
+          "oklch(15% 0.177 23)",
+          "oklch(26% 0.177 23)",
+          "oklch(37% 0.177 23)",
+          "oklch(48% 0.177 23)",
+          "oklch(59% 0.177 23)",
+          "oklch(70% 0.177 23)",
+          "oklch(82% 0.177 23)",
+          "oklch(95% 0.177 23)"
+        ]
+      },
+      "focus": {
+        "role": "primary",
+        "displayName": "Verde de foco",
+        "tonalRamp": [
+          "oklch(15% 0.057 190)",
+          "oklch(26% 0.057 190)",
+          "oklch(37% 0.057 190)",
+          "oklch(48% 0.057 190)",
+          "oklch(59% 0.057 190)",
+          "oklch(70% 0.057 190)",
+          "oklch(82% 0.057 190)",
+          "oklch(95% 0.057 190)"
+        ]
+      },
+      "white": {
+        "role": "neutral",
+        "displayName": "Branco de superfície",
+        "tonalRamp": [
+          "oklch(15% 0.000 90)",
+          "oklch(26% 0.000 90)",
+          "oklch(37% 0.000 90)",
+          "oklch(48% 0.000 90)",
+          "oklch(59% 0.000 90)",
+          "oklch(70% 0.000 90)",
+          "oklch(82% 0.000 90)",
+          "oklch(95% 0.000 90)"
+        ]
+      },
+      "success-surface": {
+        "role": "neutral",
+        "displayName": "Fundo de sucesso",
+        "tonalRamp": [
+          "oklch(15% 0.041 156)",
+          "oklch(26% 0.041 156)",
+          "oklch(37% 0.041 156)",
+          "oklch(48% 0.041 156)",
+          "oklch(59% 0.041 156)",
+          "oklch(70% 0.041 156)",
+          "oklch(82% 0.041 156)",
+          "oklch(95% 0.041 156)"
+        ]
+      },
+      "warning-surface": {
+        "role": "neutral",
+        "displayName": "Fundo de espera",
+        "tonalRamp": [
+          "oklch(15% 0.051 93)",
+          "oklch(26% 0.051 93)",
+          "oklch(37% 0.051 93)",
+          "oklch(48% 0.051 93)",
+          "oklch(59% 0.051 93)",
+          "oklch(70% 0.051 93)",
+          "oklch(82% 0.051 93)",
+          "oklch(95% 0.051 93)"
+        ]
+      },
+      "error-surface": {
+        "role": "neutral",
+        "displayName": "Fundo de erro",
+        "tonalRamp": [
+          "oklch(15% 0.029 23)",
+          "oklch(26% 0.029 23)",
+          "oklch(37% 0.029 23)",
+          "oklch(48% 0.029 23)",
+          "oklch(59% 0.029 23)",
+          "oklch(70% 0.029 23)",
+          "oklch(82% 0.029 23)",
+          "oklch(95% 0.029 23)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Urbanist Variable",
+        "purpose": "Títulos públicos e identidade tipográfica."
+      },
+      "headline": {
+        "displayName": "Urbanist Variable",
+        "purpose": "Títulos de cadastro, autenticação e documentos."
+      },
+      "title": {
+        "displayName": "Urbanist Variable",
+        "purpose": "Títulos de seção."
+      },
+      "body": {
+        "displayName": "Plus Jakarta Sans Variable",
+        "purpose": "Corpo, controles e orientação."
+      },
+      "label": {
+        "displayName": "Plus Jakarta Sans Variable",
+        "purpose": "Rótulos e controles; peso 650 quando especificado."
+      }
+    }
   },
   "components": [
     {

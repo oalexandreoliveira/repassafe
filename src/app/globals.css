@@ -768,6 +768,76 @@ textarea:focus-visible {
 .admin-section {
   margin-top: 2rem;
 }
+.pilot-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.pilot-metric {
+  padding: 1.25rem 1.5rem 1.25rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.pilot-metric:nth-last-child(-n + 4) {
+  border-bottom: 0;
+}
+.pilot-metric dt,
+.pilot-conversion-list dt {
+  color: var(--muted);
+  font-weight: 600;
+  line-height: 1.45;
+}
+.pilot-metric dd,
+.pilot-conversion-list dd {
+  margin: 0.45rem 0 0;
+  color: var(--brand-dark);
+  font-size: 1.4rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.pilot-conversion-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.25rem;
+}
+.pilot-conversion-list > div {
+  min-width: 0;
+}
+.pilot-conversion-list p {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+}
+.pilot-metrics-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.pilot-metrics-table th,
+.pilot-metrics-table td {
+  padding: 0.8rem 1rem 0.8rem 0;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.pilot-metrics-table th {
+  color: var(--muted);
+  font-weight: 650;
+}
+.pilot-metrics-table td:last-child {
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+}
+.pilot-metrics .admin-filters {
+  justify-content: flex-start;
+}
+.pilot-metrics .admin-filters label {
+  flex: 0 1 230px;
+}
+.pilot-metrics .admin-filters .button {
+  min-height: 48px;
+}
 .compact-form {
   margin-top: 1rem;
 }
@@ -937,5 +1007,25 @@ code {
   }
   .audit-table {
     max-width: 100%;
+  }
+}
+@media (max-width: 760px) {
+  .pilot-metric-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .pilot-metric:nth-last-child(-n + 4) {
+    border-bottom: 1px solid var(--border);
+  }
+  .pilot-metric:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+  .pilot-conversion-list {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .pilot-metrics .admin-filters label,
+  .pilot-metrics .admin-filters .button {
+    flex-basis: 100%;
+    width: 100%;
   }
 }

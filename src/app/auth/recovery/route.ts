@@ -57,4 +57,3 @@ export async function GET(request: NextRequest) {
     new URL("/senha/esqueci?erro=recuperacao", request.url),
   );
 }
-

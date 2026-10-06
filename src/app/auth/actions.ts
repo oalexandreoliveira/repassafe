@@ -414,4 +414,3 @@ export async function markNotificationsReadAction() {
   revalidatePath("/painel");
   revalidatePath("/notificacoes");
 }
-

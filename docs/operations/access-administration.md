@@ -106,4 +106,3 @@ consultam a concessão novamente, mesmo com um JWT `aal2` ainda válido. Suspens
 profissional e revogação gerencial são decisões distintas; se ambas forem
 necessárias, execute e audite ambas. Preserve as identidades de Auth que
 aparecem na auditoria; desative o acesso em vez de apagar a trilha.
-

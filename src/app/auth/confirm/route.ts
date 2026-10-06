@@ -71,4 +71,3 @@ export async function GET(request: NextRequest) {
     new URL("/entrar?erro=confirmacao", request.url),
   );
 }
-

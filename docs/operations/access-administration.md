@@ -7,8 +7,22 @@ Defina `NEXT_PUBLIC_APP_URL`, `NEXT_PUBLIC_SUPABASE_URL`,
 de deploy. A chave de serviço é exclusiva do servidor e não pode usar o prefixo
 `NEXT_PUBLIC_`.
 
-No Supabase Auth, habilite cadastro por e-mail, confirmação obrigatória e inclua
-`NEXT_PUBLIC_APP_URL/auth/confirm` na lista de URLs de redirecionamento. Configure
+No Vercel, defina `NEXT_PUBLIC_APP_URL` por ambiente. Para o projeto
+`repassafe-staging`, use `https://repassafe-staging.vercel.app` no ambiente
+Preview que publica o staging. Não use `localhost` nesse deploy.
+
+No Supabase Auth do mesmo projeto, configure `Site URL` como
+`https://repassafe-staging.vercel.app` e inclua estes caminhos na lista de URLs
+de redirecionamento:
+
+- `https://repassafe-staging.vercel.app/auth/confirm`;
+- `https://repassafe-staging.vercel.app/auth/recovery`.
+
+Os templates de confirmação e convite devem apontar para `/auth/confirm` com
+`token_hash` e `type`; o template de recuperação deve apontar para
+`/auth/recovery` com `token_hash` e `type=recovery`. O callback processa links
+PKCE (`code`) e links por token hash. Convites de contas com concessão
+administrativa seguem para definição de senha e, depois, para MFA. Configure
 SMTP próprio antes do piloto para garantir entrega e identidade das mensagens.
 
 ## Acesso administrativo independente
@@ -92,3 +106,4 @@ consultam a concessão novamente, mesmo com um JWT `aal2` ainda válido. Suspens
 profissional e revogação gerencial são decisões distintas; se ambas forem
 necessárias, execute e audite ambas. Preserve as identidades de Auth que
 aparecem na auditoria; desative o acesso em vez de apagar a trilha.
+

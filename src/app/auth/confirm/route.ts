@@ -42,9 +42,7 @@ export async function GET(request: NextRequest) {
     if (!error) userId = data.user?.id ?? null;
   } else if (
     tokenHash &&
-    (tokenType === "signup" ||
-      tokenType === "invite" ||
-      tokenType === "email")
+    (tokenType === "signup" || tokenType === "invite" || tokenType === "email")
   ) {
     const { data, error } = await supabase.auth.verifyOtp({
       token_hash: tokenHash,

@@ -1,5 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import {
+  getAdministrativeAccess,
+  getVerifiedIdentity,
+} from "@/lib/auth/session";
 import { rateLimitPolicies } from "@/features/security/rate-limits";
 import { recordAuditEvent } from "@/lib/security/audit";
 import {
@@ -27,19 +31,39 @@ export async function GET(request: NextRequest) {
     throw error;
   }
 
+  const supabase = await createClient();
   const code = request.nextUrl.searchParams.get("code");
+  const tokenHash = request.nextUrl.searchParams.get("token_hash");
+  const tokenType = request.nextUrl.searchParams.get("type");
+
+  let userId: string | null = null;
   if (code) {
-    const supabase = await createClient();
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error && data.user) {
-      await recordAuditEvent({
-        actorId: data.user.id,
-        eventType: "auth.email_confirmed",
-        entityType: "authentication",
-        entityId: data.user.id,
-      });
-      return NextResponse.redirect(new URL("/cadastro/completar", request.url));
+    if (!error) userId = data.user?.id ?? null;
+  } else if (
+    tokenHash &&
+    (tokenType === "signup" || tokenType === "invite" || tokenType === "email")
+  ) {
+    const { data, error } = await supabase.auth.verifyOtp({
+      token_hash: tokenHash,
+      type: tokenType,
+    });
+    if (!error) userId = data.user?.id ?? null;
+  }
+
+  if (userId) {
+    await recordAuditEvent({
+      actorId: userId,
+      eventType: "auth.email_confirmed",
+      entityType: "authentication",
+      entityId: userId,
+    });
+
+    const identity = await getVerifiedIdentity();
+    if (identity && (await getAdministrativeAccess(identity))) {
+      return NextResponse.redirect(new URL("/senha/nova", request.url));
     }
+    return NextResponse.redirect(new URL("/cadastro/completar", request.url));
   }
   return NextResponse.redirect(
     new URL("/entrar?erro=confirmacao", request.url),

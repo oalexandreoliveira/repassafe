@@ -299,9 +299,9 @@ export async function requestPasswordResetAction(
   } catch (error) {
     if (error instanceof RateLimitExceededError) {
       return {
-        status: "success",
+        status: "error",
         message:
-          "Se o endereço puder receber recuperação, enviaremos as instruções por e-mail.",
+          "Aguarde alguns minutos antes de pedir outro link de recuperação.",
       };
     }
     throw error;
@@ -328,6 +328,11 @@ export async function requestPasswordResetAction(
     } catch {
       // Keep responses generic even when audit storage is unavailable.
     }
+    return {
+      status: "error",
+      message:
+        "Não foi possível enviar as instruções agora. Aguarde alguns minutos e tente novamente.",
+    };
   }
   return {
     status: "success",
@@ -375,6 +380,7 @@ export async function updatePasswordAction(
     entityType: "authentication",
     entityId: identity.userId,
   });
+  if (await getAdministrativeAccess(identity)) redirect("/mfa");
   return {
     status: "success",
     message: "Senha atualizada. Você já pode entrar.",

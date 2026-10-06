@@ -27,19 +27,31 @@ export async function GET(request: NextRequest) {
     throw error;
   }
 
+  const supabase = await createClient();
   const code = request.nextUrl.searchParams.get("code");
+  const tokenHash = request.nextUrl.searchParams.get("token_hash");
+  const tokenType = request.nextUrl.searchParams.get("type");
+  let userId: string | null = null;
+
   if (code) {
-    const supabase = await createClient();
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error && data.user) {
-      await recordAuditEvent({
-        actorId: data.user.id,
-        eventType: "auth.password_recovery_started",
-        entityType: "authentication",
-        entityId: data.user.id,
-      });
-      return NextResponse.redirect(new URL("/senha/nova", request.url));
-    }
+    if (!error) userId = data.user?.id ?? null;
+  } else if (tokenHash && tokenType === "recovery") {
+    const { data, error } = await supabase.auth.verifyOtp({
+      token_hash: tokenHash,
+      type: "recovery",
+    });
+    if (!error) userId = data.user?.id ?? null;
+  }
+
+  if (userId) {
+    await recordAuditEvent({
+      actorId: userId,
+      eventType: "auth.password_recovery_started",
+      entityType: "authentication",
+      entityId: userId,
+    });
+    return NextResponse.redirect(new URL("/senha/nova", request.url));
   }
   return NextResponse.redirect(
     new URL("/senha/esqueci?erro=recuperacao", request.url),

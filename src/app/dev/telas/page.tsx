@@ -26,6 +26,9 @@ const previews = [
   ["s10", "S10 · Acordo registrado"],
   ["acordos", "Acordos · lista (derivada)"],
   ["s11", "S11 · Notificações"],
+  ["cadastro-completar", "Cadastro · completar (derivada)"],
+  ["senha-nova", "Senha · nova senha (derivada)"],
+  ["mfa", "MFA · verificação (derivada)"],
 ] as const;
 
 export default async function ScreenPreviewIndex() {

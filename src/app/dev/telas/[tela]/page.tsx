@@ -13,6 +13,10 @@ import {
   SubstituteConditions,
 } from "@/components/screens/conditions-confirmation";
 import { MyPublished } from "@/components/screens/my-published";
+import { AuthScreen } from "@/components/screens/auth-screen";
+import { RegistrationOverview } from "@/components/screens/registration-overview";
+import { NewPasswordForm } from "@/components/email-action-form";
+import { MfaForm } from "@/components/mfa-form";
 import { offerPresentation } from "@/features/shifts/presentation";
 import { requireDevPages } from "../../enabled";
 import {
@@ -256,6 +260,57 @@ const screens: Record<string, () => React.ReactNode> = {
       substitutionId="40000000-0000-4000-8000-000000000001"
       confirm={noop}
     />
+  ),
+  "cadastro-completar": () => (
+    <RegistrationOverview
+      smsEnabled={false}
+      user={{
+        email: "ana.moreira@exemplo.com",
+        email_confirmed_at: "2026-10-01T12:00:00.000Z",
+        phone: undefined,
+        phone_confirmed_at: undefined,
+      }}
+      registration={{
+        draft: {
+          state: "changes_requested",
+          revision: 2,
+          photo_path: null,
+          cpf: null,
+          data: {
+            civilName: "Ana Moreira",
+            displayName: "Dra. Ana Moreira",
+            practicesMedicine: "yes",
+            crmNumber: "123456",
+            crmState: "MA",
+          },
+          correction_fields: {
+            cpf: "Confira os 11 números do CPF.",
+          },
+        },
+        acceptances: [],
+        decisions: [
+          {
+            revision: 1,
+            outcome: "changes_requested",
+            fields: { cpf: "Confira os 11 números do CPF." },
+            decided_at: "2026-10-05T12:00:00.000Z",
+          },
+        ],
+      }}
+    />
+  ),
+  "senha-nova": () => (
+    <AuthScreen title="Defina uma nova senha">
+      <NewPasswordForm />
+    </AuthScreen>
+  ),
+  mfa: () => (
+    <AuthScreen
+      title="Verificação em duas etapas"
+      intro="Confirme sua identidade para abrir a administração."
+    >
+      <MfaForm factorId="preview" />
+    </AuthScreen>
   ),
   acordos: () => (
     <AgreementsList

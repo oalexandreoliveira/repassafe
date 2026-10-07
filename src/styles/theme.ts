@@ -21,6 +21,7 @@ export const colors = {
   textOnDark: "#FFFFFF",
   textOnDarkMuted: "#B9C7CF",
   border: "#DCE3E1",
+  fieldBorder: "#7A8C96",
   divider: "#EDF1F0",
   track: "#E3EAE8",
   neutral100: "#F1F4F3",

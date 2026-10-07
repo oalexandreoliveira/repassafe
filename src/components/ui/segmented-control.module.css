@@ -23,7 +23,7 @@
   border-radius: var(--rs-radius-sm);
   color: var(--rs-text-secondary);
   font: var(--rs-type-label);
-  font-size: 14px;
+  font-size: 0.875rem;
   text-align: center;
   text-decoration: none;
   transition: background-color var(--rs-duration) var(--rs-ease);

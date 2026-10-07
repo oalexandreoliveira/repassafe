@@ -69,6 +69,11 @@
       "$type": "color",
       "$value": "#DCE3E1"
     },
+    "field-border": {
+      "$type": "color",
+      "$value": "#7A8C96",
+      "$description": "Contorno de campos e controles de formulário (>= 3:1 sobre branco e Base)."
+    },
     "divider": {
       "$type": "color",
       "$value": "#EDF1F0"

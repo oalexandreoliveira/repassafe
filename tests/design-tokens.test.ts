@@ -71,7 +71,7 @@ describe("design tokens", () => {
     expect(offenders).toEqual([]);
   });
 
-  it("keeps text pairs used by the screens at WCAG AA contrast", () => {
+  it("keeps text and control pairs used by the screens at WCAG AA contrast", () => {
     const tokens = Object.fromEntries(
       declarations(read("src/styles/tokens.css")),
     );
@@ -120,5 +120,21 @@ describe("design tokens", () => {
       }))
       .filter(({ ratio }) => ratio < 4.5);
     expect(failing).toEqual([]);
+
+    // Contorno de campos e controles (WCAG 1.4.11): 3:1 sobre cartão e fundo.
+    const controlPairs = [
+      ["field-border", "white"],
+      ["field-border", "base"],
+      ["teal", "white"],
+      ["teal", "base"],
+    ];
+    expect(
+      controlPairs
+        .map(([foreground, background]) => ({
+          pair: `${foreground} on ${background}`,
+          ratio: contrast(foreground, background),
+        }))
+        .filter(({ ratio }) => ratio < 3),
+    ).toEqual([]);
   });
 });

@@ -33,14 +33,14 @@
 }
 .label {
   color: var(--rs-text-muted);
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 0.75rem;
+  line-height: 1rem;
 }
 .value {
   margin: 0;
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 600;
-  line-height: 21px;
+  line-height: 1.3125rem;
   overflow-wrap: anywhere;
 }
 @media (max-width: 340px) {

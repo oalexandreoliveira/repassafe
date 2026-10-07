@@ -53,6 +53,8 @@ Proporção visual alvo: Base 55% · Tinta 20% · Verde 15% · Menta 7% · Âmba
 
 **Contraste (WCAG 2.1 AA, já verificado):** Tinta/Base 13.9:1 · Branco/Verde 5.0:1 · Tinta/Menta 9.7:1 · `#4A5B66`/branco 7.0:1. Não use cinza mais claro que `--rs-text-muted` para texto.
 
+**Contorno de controles (v2.2):** campos, busca e toggle desligado usam `--rs-field-border` #7A8C96 (3.5:1 sobre branco, 3.3:1 sobre Base), para atender ao contraste de componentes (WCAG 1.4.11, mínimo 3:1). `--rs-border` #DCE3E1 fica para linhas, chips e botões secundários, que são identificados pelo texto.
+
 ### Status do plantão (sempre cor **+ texto** + ponto; nunca só cor)
 
 | Estado (enum sugerido) | Rótulo PT-BR | Fundo | Texto | Ponto |
@@ -86,6 +88,7 @@ Se o código já tiver um enum de status diferente, **mapeie** para esta tabela 
 | Botão | Figtree | 600 | 16 | 0 |
 | Registro (hash, ID, horário de auditoria, eyebrow) | JetBrains Mono | 400 | 12/20 | eyebrow: +0.06em, MAIÚSCULAS |
 
+- Na web, a escala é servida em rem (valor/16; 16px = 1rem), para acompanhar o tamanho de fonte escolhido pela pessoa. Os valores da tabela continuam sendo a referência em px a 100%.
 - JetBrains Mono é **exclusiva** de dados de registro (código RPS, sha256, carimbos de data/hora, trilha de auditoria) e de eyebrows de seção. Ela comunica "isto é imutável".
 - Fontes do Google Fonts (licença OFL). No mobile nativo, embarque os arquivos (Expo: `@expo-google-fonts/sora`, `/figtree`, `/jetbrains-mono`).
 - Não use Inter, Roboto ou Arial como fonte primária.
@@ -117,7 +120,7 @@ Crie estes componentes uma única vez e reutilize. Nomes sugeridos — adapte à
 | `StatusChip` | Pill, padding 5×10, ponto 7px + texto Figtree 600 12. Cores pela tabela de status. `align-self: flex-start` (nunca esticar). |
 | `FilterChip` | Altura 38, pill, padding 0×14. Selecionado: bg Tinta texto branco. Não selecionado: branco com contorno `#DCE3E1`. Lista com rolagem horizontal. |
 | `ShiftCard` | Cartão branco raio 20, padding 16, gap 8. Linha 1: `StatusChip` + nome do grupo (ícone pessoas 14px, 12px muted). Linha 2: título Sora 600 17 "Setor · Hospital". Linha 3: data e horário com ícones calendário/relógio 16px Verde. Linha 4: meta 13px muted. Ação opcional (Button 44). Variante selecionada: ring 2px Verde. |
-| `TextField` / `Select` / `TextArea` | Label acima (13/600 `#33454F`, gap 6). Campo: altura 50, raio 14, contorno 1.5px `#DCE3E1`, fundo branco, texto 16 Tinta, padding 0×14. Foco: contorno Verde + `--rs-focus-ring`. Erro: contorno `#C2453A` + mensagem 13px `#8E2A22`. |
+| `TextField` / `Select` / `TextArea` | Label acima (13/600 `#33454F`, gap 6). Campo: altura mínima 50, raio 14, contorno 1.5px `--rs-field-border` #7A8C96, fundo branco, texto 16 Tinta, padding 0×14. Foco: contorno Verde + `--rs-focus-ring`. Erro: contorno `#C2453A` + mensagem 13px `#8E2A22`. |
 | `SearchField` | Altura 46, raio 14, ícone lupa 18px muted à esquerda. |
 | `SegmentedControl` | Trilho `#E3EAE8` raio 14 padding 4; item ativo branco raio 11; altura do item 40–44; Figtree 600 14–15. |
 | `InfoBanner` | Raio 16, padding 12×14, ícone 18px + texto 13/1.45. Variantes: `info` (bg Névoa, texto `#0B5E5B`), `warning` (bg `#FCEBC7`, texto `#6E4300`), `neutral` (branco com tile de ícone `#E3E9EE`), `dark` (bg Tinta, texto branco, ícone Menta). |

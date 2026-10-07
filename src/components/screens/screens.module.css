@@ -13,7 +13,7 @@
 }
 .detailTitle {
   margin: 0;
-  font: 700 24px/1.2 var(--rs-font-display);
+  font: 700 1.5rem/1.2 var(--rs-font-display);
   letter-spacing: var(--rs-track-h1);
   overflow-wrap: anywhere;
 }
@@ -23,8 +23,8 @@
   gap: 5px;
   margin: 0;
   color: var(--rs-text-muted);
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
 }
 .notes {
   display: grid;
@@ -38,14 +38,14 @@
 .notesText {
   margin: 0;
   color: var(--rs-text-body);
-  font-size: 15px;
+  font-size: 0.9375rem;
   line-height: 1.45;
   overflow-wrap: anywhere;
 }
 .sectionTitle {
   margin: 8px 0 0;
   scroll-margin-top: 16px;
-  font: 600 17px/22px var(--rs-font-display);
+  font: 600 1.0625rem/1.375rem var(--rs-font-display);
 }
 .sectionHeader {
   display: flex;
@@ -56,8 +56,8 @@
 }
 .sectionNote {
   color: var(--rs-text-muted);
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
 }
 .panel {
   display: grid;
@@ -68,18 +68,18 @@
 }
 .panelTitle {
   margin: 0;
-  font: 600 15px/20px var(--rs-font-display);
+  font: 600 0.9375rem/1.25rem var(--rs-font-display);
 }
 .panelText {
   margin: 0;
   color: var(--rs-text-secondary);
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.45;
 }
 .help {
   margin: 0;
   color: var(--rs-text-muted);
-  font-size: 13px;
+  font-size: 0.8125rem;
   line-height: 1.45;
 }
 .actions {
@@ -114,17 +114,17 @@
 }
 .darkCardLabel {
   color: var(--rs-text-on-dark-muted);
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
 }
 .darkCardTitle {
   margin: 0;
-  font: 600 18px/24px var(--rs-font-display);
+  font: 600 1.125rem/1.5rem var(--rs-font-display);
 }
 .darkCardMeta {
   color: var(--rs-mist);
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
 .formGrid2 {
   display: grid;
@@ -160,7 +160,7 @@
   max-width: 340px;
   margin: 0;
   color: var(--rs-mist);
-  font-size: 15px;
+  font-size: 0.9375rem;
   line-height: 1.45;
 }
 @media print {
@@ -189,8 +189,8 @@
   padding: 10px 0;
   border-bottom: 1px solid var(--rs-divider);
   color: var(--rs-ink);
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
   text-decoration: none;
 }
 .rowLink:last-child {
@@ -202,7 +202,7 @@
 .tip {
   margin: 0;
   color: var(--rs-text-muted);
-  font-size: 13px;
+  font-size: 0.8125rem;
   line-height: 1.45;
 }
 .intro {
@@ -225,7 +225,7 @@
 .inlineLinks {
   margin: 0;
   color: var(--rs-text-secondary);
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.5;
 }
 .inlineLinks a {

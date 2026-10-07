@@ -21,8 +21,8 @@
 .caption {
   margin: 0;
   color: var(--rs-text-muted);
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
 }
 .steps {
   display: grid;
@@ -34,7 +34,7 @@
 }
 .stepsTitle {
   margin: 0;
-  font: 600 15px/20px var(--rs-font-display);
+  font: 600 0.9375rem/1.25rem var(--rs-font-display);
 }
 .list {
   display: grid;
@@ -74,17 +74,17 @@
 }
 .stepTitle {
   color: var(--rs-ink);
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 600;
-  line-height: 21px;
+  line-height: 1.3125rem;
 }
 .step[data-state="upcoming"] .stepTitle {
   color: var(--rs-text-muted);
 }
 .stepDescription {
   color: var(--rs-text-muted);
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
 }
 .stepLink {
   color: inherit;

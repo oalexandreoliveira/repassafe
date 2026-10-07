@@ -17,6 +17,7 @@ colors:
   text-muted: "#4A5B66"
   text-on-dark-muted: "#B9C7CF"
   border: "#DCE3E1"
+  field-border: "#7A8C96"
   divider: "#EDF1F0"
   track: "#E3EAE8"
   neutral-100: "#F1F4F3"
@@ -214,13 +215,15 @@ Proporção visual alvo: Base 55% · Tinta 20% · Verde 15% · Menta 7% · Âmba
 
 **The Texto mínimo Rule.** Nenhum texto mais claro que `text-muted` (#4A5B66, 7.0:1 sobre branco).
 
+**The Contorno de controle Rule.** Campos, busca e toggle desligado usam `field-border` (#7A8C96, 3.5:1 sobre branco e 3.3:1 sobre Base). `border` (#DCE3E1) fica para linhas, chips e botões secundários, identificados pelo texto.
+
 ## Typography
 
 **Display Font:** Sora (títulos de tela, seção e cartão).
 **Body Font:** Figtree (texto, rótulos, botões, chips).
 **Mono Font:** JetBrains Mono, exclusiva de dados de registro (RPS/ID, sha256, carimbos de auditoria) e eyebrows de agrupamento.
 
-As três famílias são servidas pela aplicação a partir de `@fontsource` (Sora 600/700, Figtree 400–700, JetBrains Mono 400), sem chamada a terceiros, compatível com a CSP `font-src 'self'`.
+As três famílias são servidas pela aplicação a partir de `@fontsource` (Sora 600/700, Figtree 400–700, JetBrains Mono 400), sem chamada a terceiros, compatível com a CSP `font-src 'self'`. A escala tipográfica é servida em rem (px/16), para acompanhar o tamanho de fonte escolhido pela pessoa; os valores em px acima são a referência a 100%.
 
 ## Layout
 

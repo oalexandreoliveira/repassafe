@@ -587,7 +587,7 @@ textarea {
   width: 100%;
   min-width: 0;
   min-height: var(--rs-input-h);
-  border: 1.5px solid var(--rs-border);
+  border: 1.5px solid var(--rs-field-border);
   border-radius: var(--rs-radius-md);
   background: var(--rs-white);
   color: var(--rs-text);

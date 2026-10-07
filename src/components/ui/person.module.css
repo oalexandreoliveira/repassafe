@@ -8,12 +8,12 @@
   border-radius: var(--rs-radius-md);
   background: var(--rs-neutral-200);
   color: var(--rs-text-secondary);
-  font: 700 15px/1 var(--rs-font-display);
+  font: 700 0.9375rem/1 var(--rs-font-display);
 }
 .avatarLarge {
   width: 46px;
   height: 46px;
-  font-size: 16px;
+  font-size: 1rem;
 }
 .avatarMist {
   background: var(--rs-mist);
@@ -46,13 +46,13 @@
 }
 .rowLabel {
   color: var(--rs-text-muted);
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 0.75rem;
+  line-height: 1rem;
 }
 .rowName {
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 600;
-  line-height: 21px;
+  line-height: 1.3125rem;
   overflow-wrap: anywhere;
 }
 .candidate {
@@ -85,9 +85,9 @@
   min-width: 0;
 }
 .candidateName {
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
-  line-height: 22px;
+  line-height: 1.375rem;
   overflow-wrap: anywhere;
 }
 .candidateDetails {
@@ -96,13 +96,13 @@
   align-items: center;
   gap: 2px 8px;
   color: var(--rs-text-muted);
-  font-size: 13px;
-  line-height: 18px;
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
 }
 .candidateMeta {
   color: var(--rs-text-muted);
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 0.75rem;
+  line-height: 1rem;
 }
 .radio {
   flex: none;

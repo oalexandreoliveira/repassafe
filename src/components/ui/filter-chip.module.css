@@ -20,14 +20,14 @@
   position: relative;
   display: inline-flex;
   align-items: center;
-  height: 38px;
+  min-height: 38px;
   padding: 0 14px;
   border: 1.5px solid var(--rs-border);
   border-radius: var(--rs-radius-pill);
   background: var(--rs-white);
   color: var(--rs-ink);
   font: var(--rs-type-label);
-  font-size: 14px;
+  font-size: 0.875rem;
   white-space: nowrap;
   text-decoration: none;
   cursor: pointer;

@@ -5,7 +5,7 @@
   margin: 0;
   padding: 12px 14px;
   border-radius: var(--rs-radius-lg);
-  font-size: 13px;
+  font-size: 0.8125rem;
   line-height: 1.45;
 }
 .banner > svg {
@@ -39,7 +39,7 @@
   padding: 14px;
   background: var(--rs-white);
   color: var(--rs-text-secondary);
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.4;
 }
 .neutral strong {

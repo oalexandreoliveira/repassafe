@@ -8,8 +8,8 @@
 }
 .label {
   color: var(--rs-text-muted);
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
 /* Seletor reforçado para vencer a base global de input/checkbox. */
 .row input.switch {
@@ -23,7 +23,7 @@
   padding: 0;
   border: 0;
   border-radius: var(--rs-radius-md);
-  background: var(--rs-disabled);
+  background: var(--rs-field-border);
   appearance: none;
   cursor: pointer;
   transition: background-color var(--rs-duration) var(--rs-ease);

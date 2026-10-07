@@ -1,4 +1,4 @@
-/* Repassafe — design tokens (v2.1)
+/* Repassafe — design tokens (v2.2)
    Fonte única de verdade para cores, tipografia, raios, espaçamentos e sombras.
    Nunca use hex soltos no código: referencie sempre estas variáveis (ou o preset Tailwind / theme.ts equivalentes). */
 
@@ -27,7 +27,8 @@
   --rs-text-on-teal: #FFFFFF;
 
   /* ---------- Linhas e superfícies neutras ---------- */
-  --rs-border: #DCE3E1;       /* contorno de inputs e botões secundários claros */
+  --rs-border: #DCE3E1;       /* linhas, chips e botões secundários claros */
+  --rs-field-border: #7A8C96; /* contorno de campos e controles de formulário (>= 3:1 sobre branco e Base) */
   --rs-divider: #EDF1F0;      /* separador de linhas dentro de cartões */
   --rs-track: #E3EAE8;        /* fundo de segmented control, barra inferior */
   --rs-neutral-100: #F1F4F3;
@@ -49,20 +50,20 @@
   --rs-font-body: "Figtree", ui-sans-serif, system-ui, sans-serif;
   --rs-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* escala: tamanho / altura de linha / peso / tracking */
-  --rs-type-display: 700 44px/52px var(--rs-font-display);   --rs-track-display: -0.03em;
-  --rs-type-h1: 700 26px/31px var(--rs-font-display);        --rs-track-h1: -0.02em;   /* título de tela principal */
-  --rs-type-h1-sm: 700 22px/28px var(--rs-font-display);     --rs-track-h1-sm: -0.02em; /* título com botão voltar */
-  --rs-type-h2: 600 18px/24px var(--rs-font-display);        --rs-track-h2: -0.01em;
-  --rs-type-card-title: 600 17px/22px var(--rs-font-display);
-  --rs-type-body: 400 16px/24px var(--rs-font-body);
-  --rs-type-body-sm: 400 15px/21px var(--rs-font-body);
-  --rs-type-label: 600 13px/18px var(--rs-font-body);
-  --rs-type-caption: 500 13px/18px var(--rs-font-body);
-  --rs-type-micro: 600 12px/16px var(--rs-font-body);        /* chips, legendas da tab bar */
-  --rs-type-button: 600 16px/20px var(--rs-font-body);
-  --rs-type-mono: 400 12px/20px var(--rs-font-mono);
-  --rs-type-eyebrow: 400 12px/16px var(--rs-font-mono);      --rs-track-eyebrow: 0.06em; /* MAIÚSCULAS */
+  /* escala: peso / tamanho / altura de linha (rem = px/16, acompanha a fonte do sistema) / tracking */
+  --rs-type-display: 700 2.75rem/3.25rem var(--rs-font-display);   --rs-track-display: -0.03em;
+  --rs-type-h1: 700 1.625rem/1.9375rem var(--rs-font-display);        --rs-track-h1: -0.02em;   /* título de tela principal */
+  --rs-type-h1-sm: 700 1.375rem/1.75rem var(--rs-font-display);     --rs-track-h1-sm: -0.02em; /* título com botão voltar */
+  --rs-type-h2: 600 1.125rem/1.5rem var(--rs-font-display);        --rs-track-h2: -0.01em;
+  --rs-type-card-title: 600 1.0625rem/1.375rem var(--rs-font-display);
+  --rs-type-body: 400 1rem/1.5rem var(--rs-font-body);
+  --rs-type-body-sm: 400 0.9375rem/1.3125rem var(--rs-font-body);
+  --rs-type-label: 600 0.8125rem/1.125rem var(--rs-font-body);
+  --rs-type-caption: 500 0.8125rem/1.125rem var(--rs-font-body);
+  --rs-type-micro: 600 0.75rem/1rem var(--rs-font-body);        /* chips, legendas da tab bar */
+  --rs-type-button: 600 1rem/1.25rem var(--rs-font-body);
+  --rs-type-mono: 400 0.75rem/1.25rem var(--rs-font-mono);
+  --rs-type-eyebrow: 400 0.75rem/1rem var(--rs-font-mono);      --rs-track-eyebrow: 0.06em; /* MAIÚSCULAS */
 
   /* ---------- Raios ---------- */
   --rs-radius-xs: 7px;     /* ponto de status (círculo 7–8px) */

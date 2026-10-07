@@ -9,7 +9,7 @@ export const colors = {
   mint: '#8EE0CC', mist: '#D9F1EC', base: '#F6F8F7', white: '#FFFFFF', light: '#E9F5F2', amber: '#F2B544',
   text: '#0E2A3B', textBody: '#1E3A47', textSecondary: '#33454F', textMuted: '#4A5B66',
   textOnDark: '#FFFFFF', textOnDarkMuted: '#B9C7CF',
-  border: '#DCE3E1', divider: '#EDF1F0', track: '#E3EAE8',
+  border: '#DCE3E1', fieldBorder: '#7A8C96', divider: '#EDF1F0', track: '#E3EAE8',
   neutral100: '#F1F4F3', neutral200: '#E3E9EE', disabled: '#C9D4D1',
 } as const;
 

@@ -27,7 +27,7 @@
   margin: 0;
   padding: 0;
   list-style: none;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 .toc a {
   color: var(--rs-teal-dark);
@@ -76,8 +76,8 @@
 .swatch {
   display: grid;
   gap: 6px;
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 0.75rem;
+  line-height: 1rem;
 }
 .swatch span:first-child {
   height: 48px;
@@ -104,7 +104,7 @@
 .mapping {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 .mapping th,
 .mapping td {
@@ -118,7 +118,7 @@
   font-weight: 600;
 }
 .mapping code {
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 .frame {
   overflow: hidden;

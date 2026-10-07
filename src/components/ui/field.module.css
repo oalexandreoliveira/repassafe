@@ -39,7 +39,7 @@
 }
 .textarea {
   padding: 12px 14px;
-  font-size: 15px;
+  font-size: 0.9375rem;
   line-height: 1.4;
 }
 .checkbox {
@@ -49,7 +49,7 @@
   min-height: var(--rs-touch-min);
   padding: 4px 2px;
   color: var(--rs-text-body);
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.45;
   cursor: pointer;
 }
@@ -71,9 +71,9 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  height: 46px;
+  min-height: 46px;
   padding: 0 14px;
-  border: 1.5px solid var(--rs-border);
+  border: 1.5px solid var(--rs-field-border);
   border-radius: var(--rs-radius-md);
   background: var(--rs-white);
   color: var(--rs-text-muted);
@@ -85,12 +85,12 @@
 .searchInput {
   flex: 1;
   min-width: 0;
+  align-self: stretch;
   min-height: 0;
-  height: 100%;
   padding: 0;
   border: 0;
   background: transparent;
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 .searchInput::placeholder {
   color: var(--rs-text-muted);

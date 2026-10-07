@@ -175,3 +175,32 @@
   padding: 0;
   border: 0;
 }
+/* Telas sem top bar começam abaixo da área segura. */
+.topSpace {
+  padding-top: env(safe-area-inset-top);
+}
+.rowLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: var(--rs-touch-min);
+  padding: 10px 0;
+  border-bottom: 1px solid var(--rs-divider);
+  color: var(--rs-ink);
+  font-size: 14px;
+  line-height: 20px;
+  text-decoration: none;
+}
+.rowLink:last-child {
+  border-bottom: 0;
+}
+.rowLink:hover {
+  color: var(--rs-teal-dark);
+}
+.tip {
+  margin: 0;
+  color: var(--rs-text-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}

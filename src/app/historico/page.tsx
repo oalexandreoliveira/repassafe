@@ -7,7 +7,7 @@ import {
 import { getVerifiedIdentity } from "@/lib/auth/session";
 import styles from "@/components/screens/screens.module.css";
 import { AppScreen, TopBar } from "@/components/ui/app-shell";
-import { Button } from "@/components/ui/button";
+import { Button, ButtonLink } from "@/components/ui/button";
 import { TextField } from "@/components/ui/field";
 import { ShiftCard } from "@/components/ui/shift-card";
 import { formatHourRangeShort, formatShiftDay } from "@/features/shifts/format";
@@ -198,6 +198,9 @@ export default async function PersonalHistoryPage({
       <p className={styles.help}>
         Ofertas, candidaturas e substituições ligadas à sua conta.
       </p>
+      <ButtonLink href="/acordos/registrados" variant="secondary" block>
+        Acordos registrados e pagamentos
+      </ButtonLink>
 
       <section className={styles.stack} aria-labelledby="passed-shifts-heading">
         <h2 id="passed-shifts-heading" className={styles.sectionTitle}>

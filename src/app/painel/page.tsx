@@ -94,6 +94,9 @@ export default async function DashboardPage() {
           <ButtonLink href="/plantoes" block>
             Abrir central de repasses
           </ButtonLink>
+          <ButtonLink href="/acordos/registrados" variant="secondary" block>
+            Aprovar acordos registrados dos meus grupos
+          </ButtonLink>
         </section>
       ) : (
         <section className={styles.panel} aria-labelledby="start-heading">
@@ -111,6 +114,24 @@ export default async function DashboardPage() {
           </ButtonLink>
         </section>
       )}
+
+      {profile.role === "doctor" ? (
+        <section className={styles.panel} aria-labelledby="external-heading">
+          <h2 id="external-heading" className={styles.panelTitle}>
+            Acordos combinados fora do app
+          </h2>
+          <p className={styles.panelText}>
+            Confira convites e acompanhe os pagamentos. Para registrar um
+            acordo, complete seu cadastro; a análise pode estar pendente.
+          </p>
+          <ButtonLink href="/acordos/registrados/novo" block>
+            Registrar acordo
+          </ButtonLink>
+          <ButtonLink href="/acordos/registrados" variant="secondary" block>
+            Acordos registrados
+          </ButtonLink>
+        </section>
+      ) : null}
 
       {profile.verification_notes ? (
         <InfoBanner variant="neutral">

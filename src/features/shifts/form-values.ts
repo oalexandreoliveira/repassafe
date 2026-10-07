@@ -61,9 +61,14 @@ const money = /^\d{1,7}([,.]\d{1,2})?$/;
 /** Mensagens por campo; nomeiam o problema e como corrigir. */
 export function validateShiftForm(
   values: ShiftFormValues,
-  { minDate }: { minDate?: string } = {},
+  {
+    minDate,
+    requireGroup = false,
+  }: { minDate?: string; requireGroup?: boolean } = {},
 ): ShiftFormErrors {
   const errors: ShiftFormErrors = {};
+  if (requireGroup && !values.groupId)
+    errors.groupId = "Escolha o grupo em que o plantão será publicado.";
   if (values.sector.trim().length < 2)
     errors.sector = "Informe o setor com pelo menos 2 caracteres.";
   if (!values.date) errors.date = "Escolha a data do plantão.";

@@ -4,7 +4,9 @@ import { useRef, useState } from "react";
 import {
   PublishShiftFields,
   type PublishGroup,
+  type PublishMode,
 } from "@/components/publish-shift-fields";
+import { ButtonLink } from "@/components/ui/button";
 import { PublishShiftReview } from "@/components/publish-shift-review";
 import { AppScreen, TopBar } from "@/components/ui/app-shell";
 import { Button } from "@/components/ui/button";
@@ -31,7 +33,11 @@ const fieldIds: Partial<Record<ShiftFormField, string>> = {
   paymentTerms: "field-paymentTerms",
 };
 
-function useShiftForm(initial: ShiftFormValues, minDate?: string) {
+function useShiftForm(
+  initial: ShiftFormValues,
+  minDate?: string,
+  requireGroup = false,
+) {
   const [values, setValues] = useState(initial);
   const [errors, setErrors] = useState<ShiftFormErrors>({});
   const onChange = (field: ShiftFormField, value: string) => {
@@ -40,7 +46,7 @@ function useShiftForm(initial: ShiftFormValues, minDate?: string) {
   };
   /** Valida e leva o foco ao primeiro campo com erro. */
   const validate = () => {
-    const found = validateShiftForm(values, { minDate });
+    const found = validateShiftForm(values, { minDate, requireGroup });
     setErrors(found);
     const first = Object.keys(found)[0] as ShiftFormField | undefined;
     if (first) document.getElementById(fieldIds[first] ?? "")?.focus();
@@ -57,11 +63,14 @@ export function PublishShiftForm({
   minDate,
   initialValues,
   initialStep = 1,
+  mode = "both",
 }: {
   action: FormAction;
   commandId: string;
   groups: PublishGroup[];
   minDate: string;
+  /** Vindo de "Publicar em grupo" ou "Publicar livre". */
+  mode?: PublishMode;
   /** Valores iniciais (prévias de tela). */
   initialValues?: Partial<ShiftFormValues>;
   initialStep?: 1 | 2;
@@ -69,9 +78,20 @@ export function PublishShiftForm({
   const [step, setStep] = useState<1 | 2>(initialStep);
   const top = useRef<HTMLDivElement>(null);
   const form = useShiftForm(
-    { ...emptyShiftForm, groupId: groups[0]?.id ?? "", ...initialValues },
+    {
+      ...emptyShiftForm,
+      groupId: mode === "free" ? "" : (groups[0]?.id ?? ""),
+      ...initialValues,
+    },
     minDate,
+    mode === "group",
   );
+  const title =
+    mode === "group"
+      ? "Publicar plantão em grupo"
+      : mode === "free"
+        ? "Publicar plantão livre"
+        : "Publicar plantão";
   const group = groups.find((item) => item.id === form.values.groupId);
   const goTo = (next: 1 | 2) => {
     setStep(next);
@@ -95,7 +115,7 @@ export function PublishShiftForm({
       <AppScreen
         header={
           step === 1 ? (
-            <TopBar title="Publicar plantão" backHref="/plantoes" />
+            <TopBar title={title} backHref="/plantoes" />
           ) : (
             <TopBar
               title="Revisar e publicar"
@@ -132,12 +152,28 @@ export function PublishShiftForm({
             Revise os campos indicados para continuar.
           </InfoBanner>
         ) : null}
+        {mode === "group" && groups.length === 0 ? (
+          <InfoBanner variant="warning">
+            Você ainda não participa de nenhum grupo. Publique como plantão
+            livre, aberto a todos os médicos aprovados.
+          </InfoBanner>
+        ) : null}
+        {mode === "group" && groups.length === 0 ? (
+          <ButtonLink
+            href="/plantoes/novo?modo=livre"
+            variant="secondary"
+            block
+          >
+            Publicar plantão livre
+          </ButtonLink>
+        ) : null}
         <div hidden={step !== 1}>
           <PublishShiftFields
             values={form.values}
             onChange={form.onChange}
             errors={form.errors}
             groups={groups}
+            mode={mode}
             minDate={minDate}
           />
         </div>

@@ -10,7 +10,13 @@ type GroupRow = {
   institutions: { name: string } | { name: string }[] | null;
 };
 
-export default async function NewShiftPage() {
+export default async function NewShiftPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ modo?: string }>;
+}) {
+  const { modo } = await searchParams;
+  const mode = modo === "grupo" ? "group" : modo === "livre" ? "free" : "both";
   const identity = await requireApprovedProfessional();
   const { data: memberships } = await identity.supabase
     .from("group_memberships")
@@ -37,6 +43,7 @@ export default async function NewShiftPage() {
       action={publishOfferAction}
       commandId={randomUUID()}
       groups={groups}
+      mode={mode}
       minDate={dayKey(new Date())}
     />
   );

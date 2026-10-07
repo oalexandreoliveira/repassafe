@@ -11,6 +11,9 @@ import {
 import { PATIENT_DATA_NOTICE } from "@/features/shifts/copy";
 import styles from "./publish-shift-fields.module.css";
 
+/** Modos de publicação: em grupo, livre (todos os aprovados) ou escolha no formulário. */
+export type PublishMode = "both" | "group" | "free";
+
 export type PublishGroup = {
   id: string;
   name: string;
@@ -28,6 +31,7 @@ export function PublishShiftFields({
   errors = {},
   groups = [],
   showGroup = true,
+  mode = "both",
   minDate,
   readOnly = false,
 }: {
@@ -37,6 +41,8 @@ export function PublishShiftFields({
   groups?: PublishGroup[];
   /** Na edição o grupo não muda e segue como campo oculto. */
   showGroup?: boolean;
+  /** "group" exige um grupo; "free" publica sem grupo; "both" deixa escolher. */
+  mode?: PublishMode;
   /** Primeira data aceita (hoje, no fuso do produto). */
   minDate?: string;
   readOnly?: boolean;
@@ -58,13 +64,19 @@ export function PublishShiftFields({
     <div className={styles.fields}>
       <input type="hidden" name="startsAt" value={startsAt} />
       <input type="hidden" name="endsAt" value={endsAt} />
-      {showGroup ? (
+      {showGroup && mode !== "free" ? (
         <SelectField
           label="Grupo"
           name="groupId"
+          required={mode === "group"}
           {...bind("groupId")}
           disabled={readOnly}
         >
+          {mode === "group" ? (
+            <option value="" disabled>
+              Selecione seu grupo
+            </option>
+          ) : null}
           {groups.map((item) => (
             <option value={item.id} key={item.id}>
               {item.institutionName
@@ -72,10 +84,16 @@ export function PublishShiftFields({
                 : item.name}
             </option>
           ))}
-          <option value="">Oferta livre — sem grupo</option>
+          {mode === "both" ? (
+            <option value="">Oferta livre — sem grupo</option>
+          ) : null}
         </SelectField>
       ) : (
-        <input type="hidden" name="groupId" value={values.groupId} />
+        <input
+          type="hidden"
+          name="groupId"
+          value={mode === "free" ? "" : values.groupId}
+        />
       )}
       <TextField
         label="Setor"

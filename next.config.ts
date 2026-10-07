@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 const development = process.env.NODE_ENV === "development";
 
 const nextConfig: NextConfig = {
+  devIndicators: false,
+  experimental: { serverActions: { bodySizeLimit: "5mb" } },
   allowedDevOrigins: ["127.0.0.1"],
   poweredByHeader: false,
   async headers() {

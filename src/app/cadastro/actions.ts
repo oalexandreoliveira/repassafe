@@ -70,7 +70,7 @@ export async function saveRegistrationAction(
       return failure(
         error.code === "40001"
           ? "Seu cadastro mudou em outra sessão. Recarregue para continuar."
-          : "Não foi possível salvar. Revise CPF e telefone ou procure suporte.",
+          : "Não foi possível salvar agora. Confira os formatos de CPF e celular indicados no formulário e tente novamente; se persistir, fale com o suporte.",
       );
     revalidatePath("/cadastro/completar");
     return {

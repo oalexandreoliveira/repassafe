@@ -4,6 +4,7 @@ import {
   RootTopBar,
   ScreenHeading,
 } from "@/components/ui/app-shell";
+import { ButtonLink } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ShiftCard } from "@/components/ui/shift-card";
 import { TabBar } from "@/components/ui/tab-bar";
@@ -51,6 +52,26 @@ export function AgreementsList({
         title="Acordos"
         subtitle="Repasses registrados, com data, hora e trilha de auditoria"
       />
+      <section className={styles.panel} aria-labelledby="external-heading">
+        <h2 id="external-heading" className={styles.panelTitle}>
+          Acordos combinados fora do app
+        </h2>
+        <p className={styles.panelText}>
+          {canPublish
+            ? "Registre um repasse combinado em outro canal e acompanhe o pagamento."
+            : "Aprove os acordos registrados pelos médicos dos seus grupos."}
+        </p>
+        {canPublish ? (
+          <ButtonLink href="/acordos/registrados/novo" block>
+            Registrar acordo
+          </ButtonLink>
+        ) : null}
+        <ButtonLink href="/acordos/registrados" variant="secondary" block>
+          {canPublish
+            ? "Acordos registrados e pagamentos"
+            : "Aprovar acordos registrados dos meus grupos"}
+        </ButtonLink>
+      </section>
       {agreements.length ? (
         <ul className={styles.list}>
           {agreements.map((agreement) => (

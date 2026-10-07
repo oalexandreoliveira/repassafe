@@ -1,22 +1,33 @@
 import Link from "next/link";
+import { ChevronLeft } from "lucide-react";
+import { AppScreen } from "@/components/ui/app-shell";
+import { IconLink } from "@/components/ui/icon-button";
+import { Logo } from "@/components/ui/logo";
 import "./style.css";
+
+/** Acordos combinados fora do app (derivada): mesma estrutura de tela do app. */
 export default function RegisteredAgreementsLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <main className="shell registration-shell external-agreement">
-      <header className="dashboard-header">
-        <Link href="/painel" className="brand">
-          <span aria-hidden="true">R</span> Repassafe
-        </Link>
-        <nav className="actions" aria-label="Navegação de acordos">
-          <Link href="/acordos/registrados">Meus registros</Link>
-          <Link href="/painel">Painel</Link>
-        </nav>
-      </header>
-      {children}
-    </main>
+    <AppScreen
+      header={
+        <header className="external-agreement-bar">
+          <IconLink
+            href="/acordos"
+            label="Voltar aos acordos"
+            icon={<ChevronLeft size={20} />}
+          />
+          <Logo priority />
+          <nav aria-label="Navegação de acordos">
+            <Link href="/acordos/registrados">Meus registros</Link>
+          </nav>
+        </header>
+      }
+    >
+      <div className="external-agreement">{children}</div>
+    </AppScreen>
   );
 }

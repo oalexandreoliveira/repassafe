@@ -146,3 +146,10 @@
   justify-self: end;
   width: fit-content;
 }
+@media print {
+  .footer,
+  .tabBar,
+  .fab {
+    display: none;
+  }
+}

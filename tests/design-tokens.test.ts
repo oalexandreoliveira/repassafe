@@ -59,9 +59,14 @@ describe("design tokens", () => {
       read(file)
         .split("\n")
         .map((line, index) => ({ file, line: index + 1, text: line }))
-        .filter(({ text }) =>
-          /#[0-9a-f]{3,8}\b|rgba?\(|border-radius:\s*\d/i.test(text),
-        ),
+        .filter(({ text }) => {
+          // Zero e tokens (var(--rs-radius-*)) são permitidos; números literais não.
+          const bare = text.replace(/var\([^)]*\)/g, "");
+          return (
+            /#[0-9a-f]{3,8}\b|rgba?\(/i.test(bare) ||
+            /border-radius:[^;]*\b(?!0\b)\d/.test(bare)
+          );
+        }),
     );
     expect(offenders).toEqual([]);
   });

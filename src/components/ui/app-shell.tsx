@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Bell, ChevronLeft, Plus } from "lucide-react";
 import type { ReactNode } from "react";
-import { IconLink } from "@/components/ui/icon-button";
+import { IconButton, IconLink } from "@/components/ui/icon-button";
 import { Logo } from "@/components/ui/logo";
 import styles from "./app-shell.module.css";
 
@@ -40,20 +40,31 @@ export function AppScreen({
 /** Top bar com voltar (44×44, círculo branco) e título Sora 22. */
 export function TopBar({
   title,
-  backHref,
   backLabel = "Voltar",
+  ...back
 }: {
   title: string;
-  backHref: string;
   backLabel?: string;
-}) {
+} & (
+  | { backHref: string; onBack?: never }
+  /** Voltar dentro da mesma tela (ex.: etapa anterior de um formulário). */
+  | { onBack: () => void; backHref?: never }
+)) {
   return (
     <header className={styles.topBar}>
-      <IconLink
-        href={backHref}
-        label={backLabel}
-        icon={<ChevronLeft size={20} />}
-      />
+      {back.backHref !== undefined ? (
+        <IconLink
+          href={back.backHref}
+          label={backLabel}
+          icon={<ChevronLeft size={20} />}
+        />
+      ) : (
+        <IconButton
+          label={backLabel}
+          icon={<ChevronLeft size={20} />}
+          onClick={back.onBack}
+        />
+      )}
       <h1 className={styles.topTitle}>{title}</h1>
     </header>
   );

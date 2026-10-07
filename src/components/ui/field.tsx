@@ -51,7 +51,7 @@ function Field({
   children: ReactNode;
 }) {
   return (
-    <div className={styles.field}>
+    <div className={styles.field} data-field="">
       <label className={styles.label} htmlFor={fieldId}>
         {label}
       </label>
@@ -164,7 +164,7 @@ export function CheckboxField({
   Omit<InputHTMLAttributes<HTMLInputElement>, "type">) {
   const { fieldId, errorId, aria } = describe({ name, id, error });
   return (
-    <div className={styles.field}>
+    <div className={styles.field} data-field="">
       <label className={styles.checkbox} htmlFor={fieldId}>
         <input type="checkbox" id={fieldId} name={name} {...aria} {...props} />
         <span>{label}</span>

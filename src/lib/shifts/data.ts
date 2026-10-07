@@ -28,32 +28,35 @@ export async function requireApprovedProfessional() {
 
 export async function listShiftWorkspace() {
   const identity = await requireApprovedProfessional();
-  const [{ data: offers }, { data: applications }, { data: substitutions }] =
-    await Promise.all([
-      identity.supabase
-        .from("shift_offers")
-        .select(
-          "id,owner_id,starts_at,ends_at,sector,value_cents,status,groups(name)",
-        )
-        .gt("starts_at", new Date().toISOString())
-        .order("starts_at"),
-      identity.supabase
-        .from("shift_applications")
-        .select("id,offer_id,status")
-        .eq("candidate_id", identity.userId),
-      identity.supabase
-        .from("substitutions")
-        .select(
-          "id,offer_id,status,confirmation_deadline,owner_id,substitute_id",
-        )
-        .order("created_at", { ascending: false }),
-    ]);
+  const [
+    { data: offers, error: offersError },
+    { data: applications, error: applicationsError },
+    { data: substitutions, error: substitutionsError },
+  ] = await Promise.all([
+    identity.supabase
+      .from("shift_offers")
+      .select(
+        "id,owner_id,starts_at,ends_at,sector,value_cents,status,published_at,groups(name,institutions(name))",
+      )
+      .gt("starts_at", new Date().toISOString())
+      .order("starts_at"),
+    identity.supabase
+      .from("shift_applications")
+      .select("id,offer_id,status")
+      .eq("candidate_id", identity.userId),
+    identity.supabase
+      .from("substitutions")
+      .select("id,offer_id,status,confirmation_deadline,owner_id,substitute_id")
+      .order("created_at", { ascending: false }),
+  ]);
 
   return {
     identity,
     offers: offers ?? [],
     applications: applications ?? [],
     substitutions: substitutions ?? [],
+    /** Some list could not be loaded; screens show a retry state instead of "empty". */
+    failed: Boolean(offersError || applicationsError || substitutionsError),
   };
 }
 
@@ -62,7 +65,7 @@ export async function getShiftDetails(offerId: string) {
   const { data: offer } = await identity.supabase
     .from("shift_offers")
     .select(
-      "id,group_id,owner_id,starts_at,ends_at,sector,value_cents,payment_terms,notes,status,groups(name,requires_approval)",
+      "id,group_id,owner_id,starts_at,ends_at,sector,value_cents,payment_terms,notes,status,published_at,groups(name,requires_approval,institutions(name))",
     )
     .eq("id", offerId)
     .single();

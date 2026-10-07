@@ -1,0 +1,177 @@
+/* Composição compartilhada pelas telas do app (somente layout e tipografia via tokens). */
+.stack {
+  display: grid;
+  gap: 10px;
+}
+.dayGroup {
+  display: grid;
+  gap: 12px;
+}
+.detailHead {
+  display: grid;
+  gap: 8px;
+}
+.detailTitle {
+  margin: 0;
+  font: 700 24px/1.2 var(--rs-font-display);
+  letter-spacing: var(--rs-track-h1);
+  overflow-wrap: anywhere;
+}
+.detailGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin: 0;
+  color: var(--rs-text-muted);
+  font-size: 13px;
+  line-height: 18px;
+}
+.notes {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+}
+.notesLabel {
+  color: var(--rs-text-secondary);
+  font: var(--rs-type-label);
+}
+.notesText {
+  margin: 0;
+  color: var(--rs-text-body);
+  font-size: 15px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.sectionTitle {
+  margin: 8px 0 0;
+  font: 600 17px/22px var(--rs-font-display);
+}
+.sectionHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 4px 12px;
+}
+.sectionNote {
+  color: var(--rs-text-muted);
+  font-size: 13px;
+  line-height: 18px;
+}
+.panel {
+  display: grid;
+  gap: 12px;
+  padding: var(--rs-card-padding);
+  border-radius: var(--rs-radius-xl);
+  background: var(--rs-white);
+}
+.panelTitle {
+  margin: 0;
+  font: 600 15px/20px var(--rs-font-display);
+}
+.panelText {
+  margin: 0;
+  color: var(--rs-text-secondary);
+  font-size: 14px;
+  line-height: 1.45;
+}
+.help {
+  margin: 0;
+  color: var(--rs-text-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.actions {
+  display: grid;
+  gap: 10px;
+}
+.disclosure {
+  border-radius: var(--rs-radius-xl);
+  background: var(--rs-white);
+}
+.disclosure > summary {
+  display: flex;
+  align-items: center;
+  min-height: var(--rs-touch-min);
+  padding: 12px var(--rs-card-padding);
+  color: var(--rs-ink);
+  font-weight: 600;
+  cursor: pointer;
+}
+.disclosureBody {
+  display: grid;
+  gap: 12px;
+  padding: 0 var(--rs-card-padding) var(--rs-card-padding);
+}
+.darkCard {
+  display: grid;
+  gap: 6px;
+  padding: 16px 18px;
+  border-radius: var(--rs-radius-xl);
+  background: var(--rs-ink);
+  color: var(--rs-white);
+}
+.darkCardLabel {
+  color: var(--rs-text-on-dark-muted);
+  font-size: 13px;
+  line-height: 18px;
+}
+.darkCardTitle {
+  margin: 0;
+  font: 600 18px/24px var(--rs-font-display);
+}
+.darkCardMeta {
+  color: var(--rs-mist);
+  font-size: 14px;
+  line-height: 20px;
+}
+.formGrid2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.list {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.successHeader {
+  /* De borda a borda, por cima do gutter da tela. */
+  margin: -4px calc(var(--rs-screen-gutter) * -1) 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: calc(36px + env(safe-area-inset-top)) 24px 28px;
+  border-radius: 0 0 var(--rs-radius-2xl) var(--rs-radius-2xl);
+  background: var(--rs-ink);
+  color: var(--rs-white);
+  text-align: center;
+}
+.successTitle {
+  margin: 0;
+  font: var(--rs-type-h1);
+  letter-spacing: var(--rs-track-h1);
+}
+.successText {
+  max-width: 340px;
+  margin: 0;
+  color: var(--rs-mist);
+  font-size: 15px;
+  line-height: 1.45;
+}
+@media print {
+  .noPrint {
+    display: none !important;
+  }
+}
+.fieldset {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}

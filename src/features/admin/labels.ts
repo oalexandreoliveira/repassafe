@@ -1,3 +1,5 @@
+import type { ShiftStatus } from "@/styles/theme";
+
 export const groupRoleLabel: Record<string, string> = {
   doctor: "Médico",
   approver: "Aprovador",
@@ -49,3 +51,23 @@ export const auditEntityLabels: Record<string, string> = {
   support_request: "Suporte",
   authentication: "Conta",
 };
+
+/** Situação cadastral na paleta de status do design system (cor + texto). */
+export function profileStatusPresentation(status: string): {
+  tone: ShiftStatus;
+  label: string;
+} {
+  const label = profileStatusLabel[status] ?? status;
+  switch (status) {
+    case "approved":
+      return { tone: "confirmed", label };
+    case "pending":
+    case "changes_requested":
+      return { tone: "pending", label };
+    case "rejected":
+    case "suspended":
+      return { tone: "cancelled", label };
+    default:
+      return { tone: "empty", label };
+  }
+}

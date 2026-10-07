@@ -1,6 +1,7 @@
 /* Base de input/select/textarea (altura 50, contorno 1.5, raio 14, foco) vem de globals.css. */
 .field {
   display: grid;
+  align-content: start;
   gap: 6px;
   min-width: 0;
 }

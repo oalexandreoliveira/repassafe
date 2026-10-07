@@ -4,7 +4,13 @@ import { PublishShiftFields } from "@/components/publish-shift-fields";
 import { publishOfferAction } from "@/app/plantoes/actions";
 import { requireApprovedProfessional } from "@/lib/shifts/data";
 
-export default async function NewShiftPage() {
+export default async function NewShiftPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ modo?: string }>;
+}) {
+  const { modo } = await searchParams;
+  const mode = modo === "grupo" ? "group" : modo === "livre" ? "free" : "both";
   const identity = await requireApprovedProfessional();
   const { data: memberships } = await identity.supabase
     .from("group_memberships")
@@ -21,8 +27,13 @@ export default async function NewShiftPage() {
       </header>
       <section className="dashboard-title">
         <div>
-          <p className="eyebrow">Novo repasse</p>
-          <h1>Publicar plantão</h1>
+          <h1>
+            {mode === "group"
+              ? "Publicar plantão em grupo"
+              : mode === "free"
+                ? "Publicar plantão livre"
+                : "Publicar plantão"}
+          </h1>
         </div>
       </section>
       <section className="card form-card">
@@ -34,6 +45,7 @@ export default async function NewShiftPage() {
         <form action={publishOfferAction} className="form-stack">
           <input type="hidden" name="commandId" value={randomUUID()} />
           <PublishShiftFields
+            mode={mode}
             groups={(memberships ?? []).map((membership) => {
               const group = Array.isArray(membership.groups)
                 ? membership.groups[0]

@@ -198,6 +198,9 @@ export default async function PersonalHistoryPage({
         <div>
           <p className="eyebrow">Área do profissional</p>
           <h1>Meu histórico</h1>
+          <Link href="/acordos/registrados">
+            Acordos registrados e pagamentos
+          </Link>
           <p className="form-help">
             Ofertas, candidaturas e substituições ligadas à sua conta.
           </p>

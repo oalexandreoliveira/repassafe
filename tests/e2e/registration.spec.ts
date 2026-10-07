@@ -202,7 +202,7 @@ test("retoma rascunho, envia cadastro e responde a correção em nova versão", 
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/painel", { waitUntil: "domcontentloaded" });
   await expect(
-    page.getByRole("link", { name: "Publicar plantão", exact: true }),
+    page.getByRole("link", { name: "Publicar plantão em grupo", exact: true }),
   ).toBeVisible({ timeout: 30000 });
   await page.screenshot({
     path: ".impeccable/review/painel-desktop.png",

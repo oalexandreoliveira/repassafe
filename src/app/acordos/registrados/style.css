@@ -1,0 +1,163 @@
+.external-agreement {
+  max-width: 980px;
+}
+.external-agreement h1 {
+  margin-block: 2rem 0.75rem;
+}
+.external-agreement h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-block: 1.5rem 0.75rem;
+}
+.external-agreement p {
+  max-width: 72ch;
+}
+.external-agreement fieldset {
+  border-radius: 0;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  margin: 0 0 2rem;
+  padding: 1.5rem 0;
+  min-width: 0;
+  display: grid;
+  gap: 1rem;
+}
+.agreement-form {
+  margin-top: 2rem;
+}
+.agreement-commitment {
+  font-size: clamp(1.15rem, 2.4vw, 1.4rem);
+  line-height: 1.45;
+  color: var(--brand-dark);
+  margin-block: 1rem;
+  overflow-wrap: anywhere;
+}
+.agreement-summary dl {
+  margin-top: 1.5rem;
+}
+.external-agreement legend {
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.external-agreement input,
+.external-agreement select,
+.external-agreement textarea {
+  min-width: 0;
+  width: 100%;
+}
+.external-agreement [hidden] {
+  display: none;
+}
+.external-agreement .agreement-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-weight: 500;
+  margin-block: 1rem;
+}
+.external-agreement .agreement-checkbox input {
+  width: 1.25rem;
+  min-height: 1.25rem;
+  flex-shrink: 0;
+  margin-top: 0.3rem;
+  accent-color: var(--brand);
+}
+.agreement-review,
+.agreement-summary {
+  padding: clamp(1rem, 3vw, 2rem);
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 1.25rem;
+  margin-block: 1.5rem;
+}
+.external-agreement dl {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) 2fr;
+  column-gap: 1.5rem;
+  row-gap: 0.75rem;
+}
+.external-agreement dt {
+  font-weight: 700;
+}
+.external-agreement dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+.agreement-action {
+  margin-block: 1.5rem;
+}
+.agreement-share {
+  display: grid;
+  gap: 0.75rem;
+  margin-block: 1.5rem;
+}
+.agreement-list,
+.agreement-events {
+  list-style: none;
+  padding: 0;
+}
+.agreement-list li,
+.agreement-events li {
+  border-bottom: 1px solid var(--border);
+  padding-block: 1.25rem;
+  overflow-wrap: anywhere;
+}
+.agreement-list h2 {
+  margin-top: 0;
+}
+.agreement-events p {
+  white-space: pre-wrap;
+}
+.agreement-record-id {
+  overflow-wrap: anywhere;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+.external-agreement summary {
+  cursor: pointer;
+  min-height: 44px;
+  padding-block: 0.5rem;
+  font-weight: 650;
+}
+.external-agreement .actions {
+  flex-wrap: wrap;
+}
+.external-agreement .button {
+  white-space: normal;
+  text-align: center;
+}
+@media (max-width: 600px) {
+  .external-agreement dl {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+  .external-agreement dd {
+    margin-bottom: 0.75rem;
+  }
+  .external-agreement .actions {
+    align-items: stretch;
+  }
+  .external-agreement .actions .button {
+    width: 100%;
+  }
+}
+@media print {
+  .external-agreement header,
+  .external-agreement form,
+  .agreement-share,
+  .external-agreement .button {
+    display: none;
+  }
+  .external-agreement {
+    max-width: none;
+    padding: 0;
+  }
+  .agreement-summary {
+    border: 0;
+    padding: 0;
+  }
+  .external-agreement details > * {
+    display: block;
+  }
+}

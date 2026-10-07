@@ -615,6 +615,11 @@ textarea:focus-visible {
   color: var(--rs-status-cancelled-fg);
   background: var(--rs-status-cancelled-bg);
 }
+/* Gerada dinamicamente (form-message-${status}) pelos formulários com useActionState. */
+.form-message-success {
+  color: var(--rs-status-confirmed-fg);
+  background: var(--rs-status-confirmed-bg);
+}
 .form-help {
   color: var(--rs-text-muted);
 }

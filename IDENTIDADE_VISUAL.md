@@ -1,5 +1,7 @@
 # Identidade Visual — Repassafe
 
+> **Substituído.** Este documento descreve a proposta de identidade anterior e é mantido apenas como histórico. A identidade vigente (v2.1) está em `design/DESIGN.md`, `design/SCREENS.md` e `design/tokens/`.
+
 > Proposta-base para orientar o design do produto, a construção da marca e a implementação das interfaces do Repassafe.
 
 ## 1. Visão geral

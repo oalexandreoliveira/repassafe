@@ -75,9 +75,11 @@ e trilha de auditoria.
 ## Brand Commitments
 
 O produto se chama Repassafe e atende em português do Brasil. A identidade
-existente deve ser preservada em evoluções; não há solicitação de rebranding.
-Termos, suporte e políticas devem usar apenas dados e canais confirmados, sem
-inventar CNPJ, endereço, contato ou prazo de atendimento.
+visual v2.1 (símbolo de dois blocos em diagonal, Tinta, Verde-repasse, Menta,
+Sora, Figtree e JetBrains Mono) foi aprovada e substitui a anterior; sua
+especificação está em `design/`. Evoluções devem preservá-la sem redesenhar a
+marca. Termos, suporte e políticas devem usar apenas dados e canais confirmados,
+sem inventar CNPJ, endereço, contato ou prazo de atendimento.
 
 ## Evidence on Hand
 

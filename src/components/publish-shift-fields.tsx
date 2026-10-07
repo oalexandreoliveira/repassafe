@@ -14,26 +14,36 @@ export type ShiftFormExample = {
 export function PublishShiftFields({
   groups = [],
   example,
+  mode = "both",
 }: {
   groups?: { id: string; name: string }[];
   example?: ShiftFormExample;
+  mode?: "both" | "group" | "free";
 }) {
   const preview = (
     name: Exclude<keyof ShiftFormExample, "ownerTermsAcknowledged">,
   ) => (example ? { value: example[name], readOnly: true } : {});
   return (
     <>
-      <label>
-        Grupo (opcional)
-        <select name="groupId" defaultValue="">
-          <option value="">Oferta livre — sem grupo</option>
-          {groups.map((group) => (
-            <option value={group.id} key={group.id}>
-              {group.name}
+      {mode === "free" ? (
+        <input type="hidden" name="groupId" value="" />
+      ) : (
+        <label>
+          {mode === "group" ? "Grupo" : "Grupo (opcional)"}
+          <select name="groupId" defaultValue="" required={mode === "group"}>
+            <option value="" disabled={mode === "group"}>
+              {mode === "group"
+                ? "Selecione seu grupo"
+                : "Oferta livre — sem grupo"}
             </option>
-          ))}
-        </select>
-      </label>
+            {groups.map((group) => (
+              <option value={group.id} key={group.id}>
+                {group.name}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
       <div className="form-row">
         <label>
           Início

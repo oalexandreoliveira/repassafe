@@ -69,8 +69,23 @@ export default async function DashboardPage() {
             Publique um plantão, encontre uma oferta ou acompanhe seus acordos.
           </p>
           <nav className="actions" aria-label="Ações de plantão">
-            <Link href="/plantoes/novo" className="button button-primary">
-              Publicar plantão
+            <Link
+              href="/plantoes/novo?modo=grupo"
+              className="button button-primary"
+            >
+              Publicar plantão em grupo
+            </Link>
+            <Link
+              href="/plantoes/novo?modo=livre"
+              className="button button-secondary"
+            >
+              Publicar plantão livre
+            </Link>
+            <Link
+              href="/acordos/registrados/novo"
+              className="button button-secondary"
+            >
+              Registrar acordo
             </Link>
             <Link href="/plantoes" className="button button-secondary">
               Encontrar plantão
@@ -106,6 +121,41 @@ export default async function DashboardPage() {
             Acompanhar cadastro
           </Link>
         </section>
+      )}
+      {profile.role === "doctor" && (
+        <section
+          className="workspace-start"
+          aria-label="Acordos combinados fora do app"
+        >
+          <h2>Acordos combinados fora do app</h2>
+          <p>
+            Confira convites e acompanhe os pagamentos. Para registrar um
+            acordo, complete seu cadastro; a análise pode estar pendente.
+          </p>
+          <nav className="actions" aria-label="Registros de acordos">
+            {!canPublish && (
+              <Link
+                className="button button-primary"
+                href="/acordos/registrados/novo"
+              >
+                Registrar acordo
+              </Link>
+            )}
+            <Link
+              className="button button-secondary"
+              href="/acordos/registrados"
+            >
+              Acordos registrados
+            </Link>
+          </nav>
+        </section>
+      )}
+      {profile.role === "approver" && (
+        <p>
+          <Link href="/acordos/registrados">
+            Aprovar acordos registrados dos meus grupos
+          </Link>
+        </p>
       )}
       {profile.verification_notes ? (
         <section className="card" aria-label="Orientação administrativa">

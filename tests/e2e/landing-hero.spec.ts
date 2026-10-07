@@ -22,7 +22,8 @@ test("hero demonstra publicação real, permite controle e respeita movimento re
     "href",
     "/cadastro",
   );
-  await expect(hero.locator("img")).toHaveCount(0);
+  // Sem imagens raster no hero; o logo oficial é SVG.
+  await expect(hero.locator('img:not([src$=".svg"])')).toHaveCount(0);
   await demo.getByRole("button", { name: "Pausar demonstração" }).click();
   const pausedValue = await screen.locator('[name="sector"]').inputValue();
   await page.waitForTimeout(400);
@@ -33,16 +34,14 @@ test("hero demonstra publicação real, permite controle e respeita movimento re
   await first.focus();
   await first.press("ArrowRight");
   await expect(demo.getByRole("tab", { name: "Conferir" })).toBeFocused();
-  await expect(screen.locator('[name="paymentTerms"]')).toHaveValue(
-    "Pagamento em até 30 dias",
-  );
+  await expect(screen).toContainText("Pagamento em até 30 dias");
   await hero.screenshot({
     path: ".impeccable/review/motion-confirm-desktop.png",
   });
   await page.keyboard.press("End");
   await expect(demo.getByRole("tab", { name: "Publicado" })).toBeFocused();
-  await expect(screen.locator(".status")).toHaveText("Aberto");
-  await expect(screen.locator(".button")).toHaveText("Gerenciar");
+  await expect(screen.locator("[data-tone]")).toHaveText("Aberto");
+  await expect(screen).toContainText("Seu plantão");
   await expect(screen).toHaveAttribute("inert", "");
   await expect(demo.getByRole("tabpanel")).toContainText("ainda depende");
   await demo.getByRole("button", { name: "Repetir demonstração" }).click();
@@ -105,13 +104,13 @@ test("hero demonstra publicação real, permite controle e respeita movimento re
   const datesFit = await screen.evaluate((node) => {
     const inputs = [
       ...node.querySelectorAll<HTMLInputElement>(
-        'input[type="datetime-local"]',
+        'input[type="date"], input[type="time"]',
       ),
     ];
     return inputs.every((input) => {
       const field = input.getBoundingClientRect();
-      const label = input.closest("label")!.getBoundingClientRect();
-      return field.left >= label.left - 1 && field.right <= label.right + 1;
+      const wrapper = input.closest("[data-field]")!.getBoundingClientRect();
+      return field.left >= wrapper.left - 1 && field.right <= wrapper.right + 1;
     });
   });
   expect(datesFit).toBe(true);
@@ -129,12 +128,13 @@ test("hero demonstra publicação real, permite controle e respeita movimento re
           await screen.evaluate((node) =>
             [
               ...node.querySelectorAll<HTMLInputElement>(
-                'input[type="datetime-local"]',
+                'input[type="date"], input[type="time"]',
               ),
             ].every(
               (input) =>
                 input.getBoundingClientRect().right <=
-                input.closest("label")!.getBoundingClientRect().right + 1,
+                input.closest("[data-field]")!.getBoundingClientRect().right +
+                  1,
             ),
           ),
         ).toBe(true);

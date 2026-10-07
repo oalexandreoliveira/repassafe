@@ -1,49 +1,43 @@
 import { randomUUID } from "node:crypto";
-import Link from "next/link";
-import { PublishShiftFields } from "@/components/publish-shift-fields";
 import { publishOfferAction } from "@/app/plantoes/actions";
+import { PublishShiftForm } from "@/components/screens/publish-shift-form";
+import { dayKey } from "@/features/shifts/format";
 import { requireApprovedProfessional } from "@/lib/shifts/data";
-import { Logo } from "@/components/ui/logo";
+
+type GroupRow = {
+  name: string;
+  requires_approval: boolean;
+  institutions: { name: string } | { name: string }[] | null;
+};
 
 export default async function NewShiftPage() {
   const identity = await requireApprovedProfessional();
   const { data: memberships } = await identity.supabase
     .from("group_memberships")
-    .select("group_id,groups(name)")
+    .select("group_id,groups(name,requires_approval,institutions(name))")
     .eq("profile_id", identity.userId)
     .eq("active", true);
 
+  const groups = (memberships ?? []).map((membership) => {
+    const raw = membership.groups as GroupRow | GroupRow[] | null;
+    const group = Array.isArray(raw) ? raw[0] : raw;
+    const institution = Array.isArray(group?.institutions)
+      ? group?.institutions[0]
+      : group?.institutions;
+    return {
+      id: membership.group_id,
+      name: group?.name ?? "Grupo",
+      requiresApproval: Boolean(group?.requires_approval),
+      institutionName: institution?.name,
+    };
+  });
+
   return (
-    <main className="shell dashboard">
-      <header className="dashboard-header">
-        <Link href="/plantoes" className="brand">
-          <Logo priority />
-        </Link>
-      </header>
-      <section className="dashboard-title">
-        <div>
-          <p className="eyebrow">Novo repasse</p>
-          <h1>Publicar plantão</h1>
-        </div>
-      </section>
-      <section className="card form-card">
-        <p className="form-help">
-          Você pode publicar para um dos seus grupos ou de forma livre para
-          todos os profissionais aprovados. Datas e horários no fuso de
-          Fortaleza.
-        </p>
-        <form action={publishOfferAction} className="form-stack">
-          <input type="hidden" name="commandId" value={randomUUID()} />
-          <PublishShiftFields
-            groups={(memberships ?? []).map((membership) => {
-              const group = Array.isArray(membership.groups)
-                ? membership.groups[0]
-                : membership.groups;
-              return { id: membership.group_id, name: group?.name ?? "Grupo" };
-            })}
-          />
-        </form>
-      </section>
-    </main>
+    <PublishShiftForm
+      action={publishOfferAction}
+      commandId={randomUUID()}
+      groups={groups}
+      minDate={dayKey(new Date())}
+    />
   );
 }

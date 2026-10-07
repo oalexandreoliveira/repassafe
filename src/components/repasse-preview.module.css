@@ -168,3 +168,7 @@
     min-height: 8rem;
   }
 }
+.stack {
+  display: grid;
+  gap: var(--rs-stack-gap);
+}

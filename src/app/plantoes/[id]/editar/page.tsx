@@ -1,9 +1,10 @@
 import { randomUUID } from "node:crypto";
-import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { updateOfferAction } from "@/app/plantoes/actions";
+import { EditShiftForm } from "@/components/screens/publish-shift-form";
+import { dayKey } from "@/features/shifts/format";
+import { splitLocal } from "@/features/shifts/form-values";
 import { getShiftDetails } from "@/lib/shifts/data";
-import { Logo } from "@/components/ui/logo";
 
 function localInputValue(value: string) {
   const parts = new Intl.DateTimeFormat("en-CA", {
@@ -37,88 +38,24 @@ export default async function EditShiftPage({
   }
 
   const offer = workspace.offer;
-  const action = updateOfferAction.bind(null, id);
+  const start = splitLocal(localInputValue(offer.starts_at));
+  const end = splitLocal(localInputValue(offer.ends_at));
   return (
-    <main className="shell dashboard">
-      <header className="dashboard-header">
-        <Link href={`/plantoes/${id}`} className="brand">
-          <Logo priority />
-        </Link>
-      </header>
-      <section className="dashboard-title">
-        <div>
-          <p className="eyebrow">Oferta sem candidaturas</p>
-          <h1>Editar plantão</h1>
-        </div>
-      </section>
-      <section className="card form-card">
-        <p className="form-help">Datas e horários no fuso de Fortaleza.</p>
-        <form action={action} className="form-stack">
-          <input type="hidden" name="commandId" value={randomUUID()} />
-          <input type="hidden" name="groupId" value={offer.group_id} />
-          <div className="form-row">
-            <label>
-              Início
-              <input
-                type="datetime-local"
-                name="startsAt"
-                defaultValue={localInputValue(offer.starts_at)}
-                required
-              />
-            </label>
-            <label>
-              Término
-              <input
-                type="datetime-local"
-                name="endsAt"
-                defaultValue={localInputValue(offer.ends_at)}
-                required
-              />
-            </label>
-          </div>
-          <div className="form-row">
-            <label>
-              Setor
-              <input name="sector" defaultValue={offer.sector} required />
-            </label>
-            <label>
-              Valor (R$)
-              <input
-                name="value"
-                inputMode="decimal"
-                defaultValue={(offer.value_cents / 100)
-                  .toFixed(2)
-                  .replace(".", ",")}
-                required
-              />
-            </label>
-          </div>
-          <label>
-            Condições de pagamento
-            <input
-              name="paymentTerms"
-              defaultValue={offer.payment_terms}
-              required
-            />
-          </label>
-          <label>
-            Observações operacionais
-            <textarea name="notes" defaultValue={offer.notes ?? ""} />
-          </label>
-          <label className="checkbox-label">
-            <input
-              type="checkbox"
-              name="ownerTermsAcknowledged"
-              value="true"
-              required
-            />
-            Confirmo que revisei e aceito as condições atualizadas desta oferta.
-          </label>
-          <button className="button button-primary" type="submit">
-            Salvar alterações
-          </button>
-        </form>
-      </section>
-    </main>
+    <EditShiftForm
+      action={updateOfferAction.bind(null, id)}
+      commandId={randomUUID()}
+      offerId={id}
+      minDate={dayKey(new Date())}
+      initial={{
+        groupId: offer.group_id ?? "",
+        sector: offer.sector,
+        date: start.date,
+        start: start.time,
+        end: end.time,
+        value: (offer.value_cents / 100).toFixed(2).replace(".", ","),
+        paymentTerms: offer.payment_terms,
+        notes: offer.notes ?? "",
+      }}
+    />
   );
 }

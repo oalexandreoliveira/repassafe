@@ -201,8 +201,10 @@ test("retoma rascunho, envia cadastro e responde a correção em nova versão", 
   expect(approvalError).toBeNull();
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto("/painel", { waitUntil: "domcontentloaded" });
+  // Médico aprovado com verificação vigente começa no mural (S02).
+  await expect(page).toHaveURL(/\/plantoes$/, { timeout: 30000 });
   await expect(
-    page.getByRole("link", { name: "Publicar plantão", exact: true }),
+    page.getByRole("link", { name: "Publicar plantão", exact: true }).first(),
   ).toBeVisible({ timeout: 30000 });
   await page.screenshot({
     path: ".impeccable/review/painel-desktop.png",

@@ -1,13 +1,19 @@
 "use client";
 
+import { Download } from "lucide-react";
+import { Button } from "@/components/ui/button";
+
+/** Abre a impressão do navegador, onde o acordo pode ser salvo em PDF. */
 export function PrintDocumentButton() {
   return (
-    <button
-      className="button button-primary no-print"
-      onClick={() => window.print()}
+    <Button
       type="button"
+      block
+      className="no-print"
+      icon={<Download size={20} />}
+      onClick={() => window.print()}
     >
-      Imprimir ou salvar como PDF
-    </button>
+      Baixar acordo em PDF
+    </Button>
   );
 }

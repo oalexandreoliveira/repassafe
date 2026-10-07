@@ -82,7 +82,8 @@ export async function publishOfferAction(formData: FormData) {
     },
   });
   revalidatePath("/plantoes");
-  redirect(`/plantoes/${offerId}`);
+  // S07 · Meus plantões publicados, com o aviso "Plantão publicado".
+  redirect(`/plantoes/publicados?publicado=${offerId}`);
 }
 
 export async function updateOfferAction(offerId: string, formData: FormData) {
@@ -113,18 +114,21 @@ async function simpleTargetCommand(command: string, formData: FormData) {
     targetId: parsed.targetId,
   });
   revalidatePath("/plantoes");
+  return parsed.targetId;
 }
 
 export async function applyToOfferAction(formData: FormData) {
-  return simpleTargetCommand("apply_to_offer", formData);
+  const offerId = await simpleTargetCommand("apply_to_offer", formData);
+  // S04 · Candidatura enviada.
+  redirect(`/plantoes/${offerId}/candidatura`);
 }
 
 export async function withdrawApplicationAction(formData: FormData) {
-  return simpleTargetCommand("withdraw_application", formData);
+  await simpleTargetCommand("withdraw_application", formData);
 }
 
 export async function cancelOfferAction(formData: FormData) {
-  return simpleTargetCommand("cancel_offer", formData);
+  await simpleTargetCommand("cancel_offer", formData);
 }
 
 export async function selectCandidateAction(formData: FormData) {

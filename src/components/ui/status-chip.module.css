@@ -1,0 +1,56 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  gap: 6px;
+  width: fit-content;
+  max-width: 100%;
+  padding: 5px 10px;
+  border-radius: var(--rs-radius-pill);
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  font: var(--rs-type-micro);
+}
+.chip::before {
+  content: "";
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border-radius: var(--rs-radius-pill);
+  background: var(--chip-dot);
+}
+.open {
+  --chip-bg: var(--rs-status-open-bg);
+  --chip-fg: var(--rs-status-open-fg);
+  --chip-dot: var(--rs-status-open-dot);
+}
+.pending {
+  --chip-bg: var(--rs-status-pending-bg);
+  --chip-fg: var(--rs-status-pending-fg);
+  --chip-dot: var(--rs-status-pending-dot);
+}
+.institutional {
+  --chip-bg: var(--rs-status-institutional-bg);
+  --chip-fg: var(--rs-status-institutional-fg);
+  --chip-dot: var(--rs-status-institutional-dot);
+}
+.confirmed {
+  --chip-bg: var(--rs-status-confirmed-bg);
+  --chip-fg: var(--rs-status-confirmed-fg);
+  --chip-dot: var(--rs-status-confirmed-dot);
+}
+.registered {
+  --chip-bg: var(--rs-status-registered-bg);
+  --chip-fg: var(--rs-status-registered-fg);
+  --chip-dot: var(--rs-status-registered-dot);
+}
+.cancelled {
+  --chip-bg: var(--rs-status-cancelled-bg);
+  --chip-fg: var(--rs-status-cancelled-fg);
+  --chip-dot: var(--rs-status-cancelled-dot);
+}
+.empty {
+  --chip-bg: var(--rs-status-empty-bg);
+  --chip-fg: var(--rs-status-empty-fg);
+  --chip-dot: var(--rs-status-empty-dot);
+}

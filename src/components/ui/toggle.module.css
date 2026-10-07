@@ -1,0 +1,56 @@
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: var(--rs-touch-min);
+  cursor: pointer;
+}
+.label {
+  color: var(--rs-text-muted);
+  font-size: 14px;
+  line-height: 20px;
+}
+/* Seletor reforçado para vencer a base global de input/checkbox. */
+.row input.switch {
+  position: relative;
+  flex: none;
+  width: 46px;
+  min-width: 46px;
+  height: 28px;
+  min-height: 28px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: var(--rs-radius-md);
+  background: var(--rs-disabled);
+  appearance: none;
+  cursor: pointer;
+  transition: background-color var(--rs-duration) var(--rs-ease);
+}
+.row input.switch::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--rs-radius-pill);
+  background: var(--rs-white);
+  transition: transform var(--rs-duration) var(--rs-ease);
+}
+.row input.switch:checked {
+  background: var(--rs-teal);
+}
+.row input.switch:checked::before {
+  transform: translateX(18px);
+}
+.row input.switch:focus-visible {
+  box-shadow: none;
+  outline: 3px solid var(--rs-teal);
+  outline-offset: 3px;
+}
+.row input.switch:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}

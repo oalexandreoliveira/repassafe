@@ -1,0 +1,87 @@
+.progress {
+  display: grid;
+  gap: 10px;
+}
+.bar {
+  display: flex;
+  gap: 6px;
+}
+.segment {
+  flex: 1 1 0;
+  height: 6px;
+  border-radius: var(--rs-radius-pill);
+  background: var(--rs-border);
+}
+.done {
+  background: var(--rs-teal);
+}
+.current {
+  background: var(--rs-mint);
+}
+.caption {
+  margin: 0;
+  color: var(--rs-text-muted);
+  font-size: 13px;
+  line-height: 18px;
+}
+.steps {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 18px;
+  border-radius: var(--rs-radius-xl);
+  background: var(--rs-white);
+}
+.stepsTitle {
+  margin: 0;
+  font: 600 15px/20px var(--rs-font-display);
+}
+.list {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.marker {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--rs-radius-pill);
+  background: var(--rs-track);
+  color: var(--rs-white);
+}
+.step[data-state="done"] .marker {
+  background: var(--rs-teal);
+}
+.step[data-state="current"] .marker {
+  background: var(--rs-status-pending-bg);
+}
+.stepText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+}
+.stepTitle {
+  color: var(--rs-ink);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 21px;
+}
+.step[data-state="upcoming"] .stepTitle {
+  color: var(--rs-text-muted);
+}
+.stepDescription {
+  color: var(--rs-text-muted);
+  font-size: 13px;
+  line-height: 18px;
+}

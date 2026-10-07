@@ -15,7 +15,11 @@ export const metadata: Metadata = {
   description:
     "Uma rede privada para profissionais e instituições organizarem substituições de plantões com acesso controlado e etapas registradas.",
 };
-export const viewport: Viewport = { themeColor: colors.base };
+export const viewport: Viewport = {
+  themeColor: colors.base,
+  // Libera env(safe-area-inset-*) para tab bar, rodapé e top bar.
+  viewportFit: "cover",
+};
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {

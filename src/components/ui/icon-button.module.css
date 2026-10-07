@@ -1,0 +1,28 @@
+.iconButton {
+  position: relative;
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--rs-icon-btn);
+  height: var(--rs-icon-btn);
+  border: 0;
+  border-radius: var(--rs-radius-pill);
+  background: var(--rs-white);
+  color: var(--rs-ink);
+  cursor: pointer;
+  transition: background-color var(--rs-duration) var(--rs-ease);
+}
+.iconButton:hover {
+  background: var(--rs-neutral-100);
+}
+.badge {
+  position: absolute;
+  top: 10px;
+  right: 11px;
+  width: 9px;
+  height: 9px;
+  border-radius: var(--rs-radius-pill);
+  background: var(--rs-status-pending-dot);
+  box-shadow: 0 0 0 2px var(--rs-white);
+}

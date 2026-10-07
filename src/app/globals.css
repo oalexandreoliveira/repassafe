@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../styles/tokens.css";
+@import "../styles/button.css";
 :root {
   color-scheme: light;
 }
@@ -131,16 +132,6 @@ textarea {
 a {
   text-underline-offset: 0.2em;
 }
-/* DESIGN.md §6: hover −6% e pressed −10% de luminância sobre o token da variante. */
-.button-primary:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--rs-teal), black 6%);
-}
-.button-primary:active:not(:disabled) {
-  background: color-mix(in srgb, var(--rs-teal), black 10%);
-}
-.button-secondary:hover:not(:disabled) {
-  background: var(--rs-neutral-100);
-}
 .mobile-navigation {
   display: none;
   position: relative;
@@ -187,7 +178,7 @@ a {
 .admin-shell {
   max-width: 100rem;
   margin-inline: auto;
-  padding: 0 clamp(1rem, 3vw, 3rem) 3rem;
+  padding: env(safe-area-inset-top) clamp(1rem, 3vw, 3rem) 3rem;
 }
 .admin-header {
   display: flex;
@@ -468,7 +459,8 @@ a {
 }
 .shell {
   min-height: 100vh;
-  padding: 1.25rem clamp(1rem, 5vw, 5rem);
+  padding: max(1.25rem, env(safe-area-inset-top)) clamp(1rem, 5vw, 5rem)
+    max(1.25rem, env(safe-area-inset-bottom));
 }
 .brand {
   display: flex;
@@ -510,36 +502,6 @@ a {
   flex-wrap: wrap;
   gap: 0.75rem;
   margin-top: 2rem;
-}
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--rs-space-2);
-  border: 1.5px solid transparent;
-  border-radius: var(--rs-radius-md);
-  min-height: var(--rs-button-h);
-  padding: 0.7rem 1.5rem;
-  font: var(--rs-type-button);
-  text-align: center;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background-color var(--rs-duration) var(--rs-ease);
-}
-.button:disabled {
-  cursor: not-allowed;
-  background: var(--rs-disabled);
-  border-color: var(--rs-disabled);
-  color: var(--rs-white);
-}
-.button-primary {
-  background: var(--rs-teal);
-  color: var(--rs-text-on-teal);
-}
-.button-secondary {
-  background: transparent;
-  border-color: var(--rs-ink);
-  color: var(--rs-ink);
 }
 a:focus-visible,
 button:focus-visible,
@@ -586,7 +548,8 @@ summary:focus-visible {
   display: grid;
   align-content: start;
   gap: clamp(2rem, 7vw, 5rem);
-  padding: 1.25rem clamp(1rem, 5vw, 5rem);
+  padding: max(1.25rem, env(safe-area-inset-top)) clamp(1rem, 5vw, 5rem)
+    max(1.25rem, env(safe-area-inset-bottom));
 }
 .auth-card {
   width: min(100%, 34rem);
@@ -647,6 +610,7 @@ input,
 select,
 textarea {
   width: 100%;
+  min-width: 0;
   min-height: var(--rs-input-h);
   border: 1.5px solid var(--rs-border);
   border-radius: var(--rs-radius-md);

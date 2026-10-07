@@ -1,0 +1,51 @@
+.list {
+  display: flex;
+  gap: var(--rs-space-2);
+  margin: 0;
+  /* Rolagem horizontal até a borda da tela, mantendo o gutter no início. */
+  margin-inline: calc(var(--rs-screen-gutter) * -1);
+  padding: 3px var(--rs-screen-gutter);
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+.list::-webkit-scrollbar {
+  display: none;
+}
+.list > li {
+  flex: none;
+}
+.chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  height: 38px;
+  padding: 0 14px;
+  border: 1.5px solid var(--rs-border);
+  border-radius: var(--rs-radius-pill);
+  background: var(--rs-white);
+  color: var(--rs-ink);
+  font: var(--rs-type-label);
+  font-size: 14px;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color var(--rs-duration) var(--rs-ease),
+    border-color var(--rs-duration) var(--rs-ease);
+}
+/* Área de toque de 44px sem alterar a altura visual de 38px. */
+.chip::after {
+  content: "";
+  position: absolute;
+  inset: -3px 0;
+}
+.chip:hover {
+  border-color: var(--rs-ink);
+}
+.selected {
+  border-color: var(--rs-ink);
+  background: var(--rs-ink);
+  color: var(--rs-white);
+}

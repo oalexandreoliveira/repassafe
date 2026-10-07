@@ -48,10 +48,12 @@ describe("design tokens", () => {
   });
 
   it("keeps color and radius literals out of application styles", () => {
+    const tokenSources = [
+      path.join("src", "styles", "tokens.css"),
+      path.join("src", "styles", "theme.ts"),
+    ];
     const styles = filesUnder("src").filter(
-      (file) =>
-        /\.(css|tsx)$/.test(file) &&
-        !file.startsWith(path.join("src", "styles")),
+      (file) => /\.(css|tsx)$/.test(file) && !tokenSources.includes(file),
     );
     const offenders = styles.flatMap((file) =>
       read(file)

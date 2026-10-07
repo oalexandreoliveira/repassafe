@@ -1,0 +1,37 @@
+.track {
+  display: flex;
+  gap: 0;
+  margin: 0;
+  padding: 4px;
+  border-radius: var(--rs-radius-md);
+  background: var(--rs-track);
+  list-style: none;
+}
+.track > li {
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+}
+.item {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-height: var(--rs-touch-min);
+  padding: 0 8px;
+  border-radius: var(--rs-radius-sm);
+  color: var(--rs-text-secondary);
+  font: var(--rs-type-label);
+  font-size: 14px;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color var(--rs-duration) var(--rs-ease);
+}
+.item:hover {
+  color: var(--rs-ink);
+}
+.active {
+  background: var(--rs-white);
+  color: var(--rs-ink);
+}

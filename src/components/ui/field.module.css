@@ -1,0 +1,93 @@
+/* Base de input/select/textarea (altura 50, contorno 1.5, raio 14, foco) vem de globals.css. */
+.field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.label {
+  color: var(--rs-text-secondary);
+  font: var(--rs-type-label);
+}
+.hint {
+  margin: 0;
+  color: var(--rs-text-muted);
+  font: var(--rs-type-caption);
+  font-weight: 400;
+}
+.error {
+  margin: 0;
+  color: var(--rs-status-cancelled-fg);
+  font: var(--rs-type-caption);
+  font-weight: 400;
+}
+.control {
+  position: relative;
+  display: grid;
+}
+.select {
+  appearance: none;
+  padding-right: 42px;
+}
+.chevron {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  color: var(--rs-ink);
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+.textarea {
+  padding: 12px 14px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+.checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: var(--rs-touch-min);
+  padding: 4px 2px;
+  color: var(--rs-text-body);
+  font-size: 14px;
+  line-height: 1.45;
+  cursor: pointer;
+}
+.checkbox input {
+  width: 22px;
+  min-width: 22px;
+  height: 22px;
+  min-height: 22px;
+  margin: 0;
+  accent-color: var(--rs-teal);
+}
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 46px;
+  padding: 0 14px;
+  border: 1.5px solid var(--rs-border);
+  border-radius: var(--rs-radius-md);
+  background: var(--rs-white);
+  color: var(--rs-text-muted);
+}
+.search:focus-within {
+  border-color: var(--rs-teal);
+  box-shadow: var(--rs-focus-ring);
+}
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  font-size: 15px;
+}
+.searchInput::placeholder {
+  color: var(--rs-text-muted);
+}
+.searchInput:focus-visible {
+  box-shadow: none;
+}

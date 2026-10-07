@@ -1,0 +1,102 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--rs-space-2);
+  padding: var(--rs-card-padding);
+  border-radius: var(--rs-radius-xl);
+  background: var(--rs-white);
+}
+.selected {
+  box-shadow: var(--rs-ring-selected);
+}
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rs-space-2);
+}
+.group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  color: var(--rs-text-muted);
+  font-size: 12px;
+  line-height: 16px;
+}
+.title {
+  margin: 0;
+  font: var(--rs-type-card-title);
+  color: var(--rs-ink);
+  overflow-wrap: anywhere;
+}
+.link {
+  color: inherit;
+  text-decoration: none;
+}
+/* O título é o link; o pseudo-elemento torna o cartão inteiro tocável. */
+.link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+.link:focus-visible {
+  outline: none;
+}
+.card:has(.link:focus-visible) {
+  outline: 3px solid var(--rs-teal);
+  outline-offset: 3px;
+}
+.card:has(.link:hover) .title {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.when {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  margin: 0;
+  color: var(--rs-text-secondary);
+  font-size: 14px;
+  line-height: 20px;
+}
+.when span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.when svg {
+  color: var(--rs-teal);
+}
+.meta {
+  margin: 0;
+  color: var(--rs-text-muted);
+  font: var(--rs-type-caption);
+  font-weight: 400;
+}
+.action {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  margin-top: 4px;
+}
+.skeleton {
+  display: block;
+  max-width: 100%;
+  border-radius: var(--rs-radius-sm);
+  background: var(--rs-neutral-100);
+  animation: rs-skeleton-pulse 1.4s var(--rs-ease) infinite alternate;
+}
+@keyframes rs-skeleton-pulse {
+  to {
+    background: var(--rs-neutral-200);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}

@@ -46,7 +46,12 @@
   gap: 24px;
 }
 .navLinks a,
+/* Links do rodapé com área de toque de 44px (a altura da linha absorve o antigo espaçamento). */
 .footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--rs-touch-min);
+  min-width: var(--rs-touch-min);
   color: var(--rs-text-muted);
   text-decoration: none;
   font-size: 0.875rem;
@@ -461,7 +466,7 @@
 .footerColumn {
   display: grid;
   align-content: start;
-  gap: 13px;
+  justify-items: start;
 }
 .footerColumn > span {
   margin-bottom: 8px;
@@ -469,6 +474,7 @@
 }
 .footerBottom {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: 24px;
   margin-top: 60px;
@@ -479,7 +485,8 @@
 }
 .footerBottom div {
   display: flex;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 0 24px;
 }
 .footerBottom a {
   font-size: 0.78rem;

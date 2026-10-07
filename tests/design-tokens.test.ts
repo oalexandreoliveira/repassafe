@@ -70,4 +70,55 @@ describe("design tokens", () => {
     );
     expect(offenders).toEqual([]);
   });
+
+  it("keeps text pairs used by the screens at WCAG AA contrast", () => {
+    const tokens = Object.fromEntries(
+      declarations(read("src/styles/tokens.css")),
+    );
+    const luminance = (hex: string) => {
+      const [r, g, b] = [1, 3, 5]
+        .map((index) => parseInt(hex.slice(index, index + 2), 16) / 255)
+        .map((value) =>
+          value <= 0.03928 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4,
+        );
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    };
+    const contrast = (foreground: string, background: string) => {
+      const [light, dark] = [
+        luminance(tokens[`--rs-${foreground}`]),
+        luminance(tokens[`--rs-${background}`]),
+      ].sort((a, b) => b - a);
+      return (light + 0.05) / (dark + 0.05);
+    };
+    const textPairs = [
+      ["ink", "base"],
+      ["text-body", "white"],
+      ["text-secondary", "base"],
+      ["text-muted", "white"],
+      ["text-muted", "base"],
+      ["text-muted", "track"],
+      ["teal-dark", "white"],
+      ["teal-dark", "base"],
+      ["teal-dark", "mist"],
+      ["white", "teal"],
+      ["white", "ink"],
+      ["text-on-dark-muted", "ink"],
+      ...[
+        "open",
+        "pending",
+        "institutional",
+        "confirmed",
+        "registered",
+        "cancelled",
+        "empty",
+      ].map((status) => [`status-${status}-fg`, `status-${status}-bg`]),
+    ];
+    const failing = textPairs
+      .map(([foreground, background]) => ({
+        pair: `${foreground} on ${background}`,
+        ratio: contrast(foreground, background),
+      }))
+      .filter(({ ratio }) => ratio < 4.5);
+    expect(failing).toEqual([]);
+  });
 });

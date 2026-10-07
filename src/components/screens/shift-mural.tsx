@@ -106,7 +106,8 @@ export function ShiftMural({
           defaultValue={query}
           placeholder="Buscar setor ou hospital"
         />
-        <button type="submit" className="sr-only">
+        {/* Enter no campo envia a busca; o botão oculto não recebe foco invisível. */}
+        <button type="submit" className="sr-only" tabIndex={-1}>
           Buscar
         </button>
       </form>

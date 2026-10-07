@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { updateOfferAction } from "@/app/plantoes/actions";
 import { getShiftDetails } from "@/lib/shifts/data";
+import { Logo } from "@/components/ui/logo";
 
 function localInputValue(value: string) {
   const parts = new Intl.DateTimeFormat("en-CA", {
@@ -41,7 +42,7 @@ export default async function EditShiftPage({
     <main className="shell dashboard">
       <header className="dashboard-header">
         <Link href={`/plantoes/${id}`} className="brand">
-          <span aria-hidden="true">R</span> Repassafe
+          <Logo priority />
         </Link>
       </header>
       <section className="dashboard-title">

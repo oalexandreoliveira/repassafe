@@ -6,6 +6,7 @@ import {
 } from "@/lib/auth/session";
 import { logoutAction, markNotificationsReadAction } from "@/app/auth/actions";
 import { groupRoleLabel, profileStatusLabel } from "@/features/admin/labels";
+import { Logo } from "@/components/ui/logo";
 
 export default async function DashboardPage() {
   const identity = await getVerifiedIdentity();
@@ -48,7 +49,7 @@ export default async function DashboardPage() {
     <main className="shell dashboard">
       <header className="dashboard-header">
         <Link href="/" className="brand">
-          <span aria-hidden="true">R</span> Repassafe
+          <Logo priority />
         </Link>
         <form action={logoutAction}>
           <button className="button button-secondary">Sair</button>

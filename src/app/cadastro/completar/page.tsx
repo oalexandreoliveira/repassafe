@@ -16,6 +16,7 @@ import {
   registrationReviewOrder,
   registrationValueLabel,
 } from "@/features/registration/labels";
+import { Logo } from "@/components/ui/logo";
 
 export default async function CompleteRegistrationPage() {
   const { registration, user } = await readRegistration();
@@ -34,7 +35,7 @@ export default async function CompleteRegistrationPage() {
     <main className="shell registration-shell">
       <header className="dashboard-header">
         <Link href="/" className="brand">
-          <span aria-hidden="true">R</span> Repassafe
+          <Logo priority />
         </Link>
         <nav aria-label="Navegação do cadastro">
           <Link href="/painel">Painel</Link> ·{" "}

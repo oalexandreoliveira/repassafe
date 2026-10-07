@@ -1,17 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import "@fontsource-variable/urbanist";
-import "@fontsource-variable/plus-jakarta-sans";
+import "@fontsource/sora/600.css";
+import "@fontsource/sora/700.css";
+import "@fontsource/figtree/400.css";
+import "@fontsource/figtree/500.css";
+import "@fontsource/figtree/600.css";
+import "@fontsource/figtree/700.css";
+import "@fontsource/jetbrains-mono/400.css";
 import "./globals.css";
 import { PwaRegistration } from "@/components/pwa-registration";
+import { colors } from "@/styles/theme";
 
 export const metadata: Metadata = {
   title: "Repassafe | Repasse de plantões com clareza e segurança",
   description:
     "Uma rede privada para profissionais e instituições organizarem substituições de plantões com acesso controlado e etapas registradas.",
-  manifest: "/manifest.webmanifest",
-  icons: { icon: "/favicon.svg" },
 };
-export const viewport: Viewport = { themeColor: "#14403F" };
+export const viewport: Viewport = { themeColor: colors.base };
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {

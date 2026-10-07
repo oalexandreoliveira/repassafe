@@ -9,6 +9,7 @@ import {
   requireAdminIdentity,
 } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { Logo } from "@/components/ui/logo";
 
 type AgreementContent = {
   document_type: string;
@@ -136,7 +137,7 @@ export default async function AgreementDocumentPage({
     <main className="shell dashboard agreement-document">
       <header className="dashboard-header no-print">
         <Link href={`/plantoes/${content.offer_id}`} className="brand">
-          <span aria-hidden="true">R</span> Repassafe
+          <Logo priority />
         </Link>
         <PrintDocumentButton />
       </header>

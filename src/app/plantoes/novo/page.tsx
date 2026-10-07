@@ -3,6 +3,7 @@ import Link from "next/link";
 import { PublishShiftFields } from "@/components/publish-shift-fields";
 import { publishOfferAction } from "@/app/plantoes/actions";
 import { requireApprovedProfessional } from "@/lib/shifts/data";
+import { Logo } from "@/components/ui/logo";
 
 export default async function NewShiftPage() {
   const identity = await requireApprovedProfessional();
@@ -16,7 +17,7 @@ export default async function NewShiftPage() {
     <main className="shell dashboard">
       <header className="dashboard-header">
         <Link href="/plantoes" className="brand">
-          <span aria-hidden="true">R</span> Repassafe
+          <Logo priority />
         </Link>
       </header>
       <section className="dashboard-title">

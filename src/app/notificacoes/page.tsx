@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { markNotificationsReadAction } from "@/app/auth/actions";
 import { getVerifiedIdentity } from "@/lib/auth/session";
+import { Logo } from "@/components/ui/logo";
 
 export default async function NotificationsPage({
   searchParams,
@@ -26,7 +27,7 @@ export default async function NotificationsPage({
     <main className="shell dashboard">
       <header className="dashboard-header">
         <Link href="/painel" className="brand">
-          <span aria-hidden="true">R</span> Repassafe
+          <Logo priority />
         </Link>
         <Link href="/historico" className="button button-secondary">
           Meu histórico

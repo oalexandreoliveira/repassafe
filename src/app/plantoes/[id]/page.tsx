@@ -24,6 +24,7 @@ import {
   substitutionStatusLabels,
 } from "@/features/shifts/schemas";
 import { getShiftDetails } from "@/lib/shifts/data";
+import { Logo } from "@/components/ui/logo";
 
 export default async function ShiftDetailsPage({
   params,
@@ -65,7 +66,7 @@ export default async function ShiftDetailsPage({
     <main className="shell dashboard">
       <header className="dashboard-header">
         <Link href="/plantoes" className="brand">
-          <span aria-hidden="true">R</span> Repassafe
+          <Logo priority />
         </Link>
         <span className={`status status-${offer.status}`}>
           {offerStatusLabels[offer.status] ?? offer.status}

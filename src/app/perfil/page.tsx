@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getVerifiedIdentity } from "@/lib/auth/session";
 import { groupRoleLabel, profileStatusLabel } from "@/features/admin/labels";
+import { Logo } from "@/components/ui/logo";
 
 export default async function ProfilePage() {
   const identity = await getVerifiedIdentity();
@@ -28,7 +29,7 @@ export default async function ProfilePage() {
     <main className="shell dashboard">
       <header className="dashboard-header">
         <Link href="/painel" className="brand">
-          <span aria-hidden="true">R</span> Repassafe
+          <Logo priority />
         </Link>
         <nav className="actions" aria-label="Navegação do perfil">
           <p>

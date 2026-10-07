@@ -9,6 +9,7 @@ import {
   isWorkflowFeedbackCode,
   workflowFeedback,
 } from "@/features/shifts/feedback";
+import { Logo } from "@/components/ui/logo";
 
 export default async function ShiftsPage({
   searchParams,
@@ -31,7 +32,7 @@ export default async function ShiftsPage({
     <main className="shell dashboard">
       <header className="dashboard-header">
         <Link href="/painel" className="brand">
-          <span aria-hidden="true">R</span> Repassafe
+          <Logo priority />
         </Link>
         <Link className="button button-primary" href="/plantoes/novo">
           Publicar plantão

@@ -8,6 +8,7 @@ import {
 } from "@/components/publish-shift-fields";
 import { ShiftOfferCard } from "@/components/shift-offer-card";
 import styles from "./repasse-preview.module.css";
+import { Logo } from "@/components/ui/logo";
 
 const duration = 13000;
 const example: ShiftFormExample = {
@@ -146,7 +147,7 @@ export function RepassePreview() {
       <div className={styles.window}>
         <div className={styles.header}>
           <span className="brand">
-            <span aria-hidden="true">R</span> Repassafe
+            <Logo />
           </span>
           <span>Demonstração</span>
         </div>

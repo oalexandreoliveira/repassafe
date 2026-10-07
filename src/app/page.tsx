@@ -1,6 +1,7 @@
 import { MobileNavigation } from "@/components/mobile-navigation";
 import { LandingSignupLink } from "@/components/landing-signup-link";
 import { RepassePreview } from "@/components/repasse-preview";
+import { Logo } from "@/components/ui/logo";
 import { repasseSteps } from "@/features/marketing/repasse-steps";
 import Link from "next/link";
 import {
@@ -34,24 +35,13 @@ const recordFields = [
   ["Data da confirmação", "16 set 2026 · 14h32"],
 ];
 
-function Brand() {
-  return (
-    <span className={styles.brand} aria-label="Repassafe">
-      <span className={styles.brandMark} aria-hidden="true">
-        R
-      </span>
-      Repassafe
-    </span>
-  );
-}
-
 export default function Home() {
   return (
     <main className={styles.page}>
       <header className={styles.navWrap}>
         <nav className={styles.nav} aria-label="Navegação principal">
           <Link href="/" className={styles.brandLink}>
-            <Brand />
+            <Logo priority />
           </Link>
           <MobileNavigation />
           <div className={styles.navLinks}>
@@ -116,7 +106,6 @@ export default function Home() {
       </section>
 
       <section className={styles.recordSection} id="acordo">
-        <div className={styles.rings} aria-hidden="true" />
         <div className={styles.recordIntro}>
           <h2>Clareza de responsabilidades em cada etapa</h2>
           <p>
@@ -180,7 +169,6 @@ export default function Home() {
       </section>
 
       <section className={styles.safetySection} id="seguranca">
-        <div className={styles.grain} aria-hidden="true" />
         <div className={styles.container}>
           <div className={styles.safetyGrid}>
             <div className={styles.safetyCopy}>
@@ -206,7 +194,6 @@ export default function Home() {
 
       <section className={styles.finalWrap}>
         <div className={styles.finalCta}>
-          <span className={styles.finalGlow} aria-hidden="true" />
           <h2>Repasse seu plantão com clareza e segurança.</h2>
           <p>
             Uma rede privada para profissionais e instituições participantes.
@@ -223,7 +210,7 @@ export default function Home() {
       <footer className={styles.footer}>
         <div className={styles.footerGrid}>
           <div className={styles.footerBrand}>
-            <Brand />
+            <Logo />
             <p>
               Substituições de plantões com acesso controlado e etapas
               registradas.

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { legalDocuments } from "@/features/registration/legal";
+import { Logo } from "@/components/ui/logo";
 
 export function LegalDocument({
   document,
@@ -10,7 +11,7 @@ export function LegalDocument({
   return (
     <main className="shell legal-document">
       <Link href="/" className="brand">
-        <span aria-hidden="true">R</span> Repassafe
+        <Logo priority />
       </Link>
       <h1>{content.title}</h1>
       <p>Versão {content.version} · Responsável: Alexandre Oliveira</p>

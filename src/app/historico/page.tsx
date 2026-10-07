@@ -8,6 +8,7 @@ import {
   substitutionStatusLabels,
 } from "@/features/shifts/schemas";
 import { getVerifiedIdentity } from "@/lib/auth/session";
+import { Logo } from "@/components/ui/logo";
 
 function currentFortalezaMonth() {
   const parts = new Intl.DateTimeFormat("en-CA", {
@@ -188,7 +189,7 @@ export default async function PersonalHistoryPage({
     <main className="shell dashboard">
       <header className="dashboard-header">
         <Link href="/painel" className="brand">
-          <span aria-hidden="true">R</span> Repassafe
+          <Logo priority />
         </Link>
         <Link href="/notificacoes" className="button button-secondary">
           Notificações

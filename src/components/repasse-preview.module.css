@@ -3,11 +3,10 @@
   width: 100%;
 }
 .window {
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  background: var(--surface);
+  border: 1px solid var(--rs-border);
+  border-radius: var(--rs-radius-xl);
+  background: var(--rs-base);
   overflow: hidden;
-  box-shadow: 0 20px 48px #14201f12;
 }
 .header {
   display: flex;
@@ -15,16 +14,16 @@
   align-items: center;
   gap: 12px;
   padding: 16px 20px;
-  border-bottom: 1px solid var(--border);
-  background: white;
+  border-bottom: 1px solid var(--rs-border);
+  background: var(--rs-white);
 }
 .header > span:last-child {
-  color: var(--muted);
+  color: var(--rs-text-muted);
   font-size: 0.875rem;
 }
 .header :global(.brand) {
   font-size: 1.2rem;
-  font-weight: 650;
+  font-weight: 600;
 }
 .viewport {
   height: 450px;
@@ -49,17 +48,17 @@
   max-width: 100%;
 }
 .screen [data-confirming="true"] > button {
-  outline: 3px solid var(--focus);
+  outline: 3px solid var(--rs-teal);
   outline-offset: 3px;
 }
 .progress {
   height: 3px;
-  background: var(--border);
+  background: var(--rs-border);
 }
 .progress span {
   display: block;
   height: 100%;
-  background: var(--brand);
+  background: var(--rs-teal);
   transform-origin: left;
 }
 .controls {
@@ -79,30 +78,30 @@
   min-height: 44px;
   border: 1px solid transparent;
   background: transparent;
-  color: var(--muted);
-  border-radius: 999px;
+  color: var(--rs-text-muted);
+  border-radius: var(--rs-radius-pill);
   cursor: pointer;
-  font: 600 0.875rem var(--font-body);
+  font: 600 0.875rem var(--rs-font-body);
 }
 .tabs button {
   padding: 0 12px;
 }
 .tabs button[aria-selected="true"] {
-  color: var(--brand);
-  background: var(--surface);
-  border-color: var(--border);
+  color: var(--rs-teal-dark);
+  background: var(--rs-base);
+  border-color: var(--rs-border);
 }
 .tabs button:hover,
 .playback:hover {
-  color: var(--brand);
-  background: var(--surface);
+  color: var(--rs-teal-dark);
+  background: var(--rs-base);
 }
 .playback {
   display: grid;
   place-items: center;
   width: 44px;
   flex: 0 0 44px;
-  border-color: var(--border);
+  border-color: var(--rs-border);
 }
 .description {
   min-height: 76px;
@@ -110,19 +109,19 @@
 }
 .description p {
   margin: 0;
-  color: var(--text);
+  color: var(--rs-text);
   font-size: 0.9375rem;
   line-height: 1.55;
 }
 .disclosure {
   margin: 8px 0 0;
   font-size: 0.75rem;
-  color: var(--muted);
+  color: var(--rs-text-muted);
   line-height: 1.5;
 }
 .transcript {
   margin-top: 8px;
-  color: var(--muted);
+  color: var(--rs-text-muted);
   font-size: 0.875rem;
   line-height: 1.6;
 }

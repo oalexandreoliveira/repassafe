@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { NewPasswordForm } from "@/components/email-action-form";
 import { getVerifiedIdentity } from "@/lib/auth/session";
+import { Logo } from "@/components/ui/logo";
 
 export default async function NewPasswordPage() {
   const identity = await getVerifiedIdentity();
   return (
     <main className="auth-shell">
       <Link href="/" className="brand">
-        <span aria-hidden="true">R</span> Repassafe
+        <Logo priority />
       </Link>
       <section className="auth-card">
         <p className="eyebrow">Recuperação de acesso</p>

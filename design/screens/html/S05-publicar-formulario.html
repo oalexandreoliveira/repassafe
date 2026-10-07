@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Repassafe · Publicar plantão (referência estática)</title>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+input,select,textarea{font-family:Figtree,sans-serif}
+</style>
+</head>
+<body>
+<!-- Referência visual estática gerada a partir do canvas de design. NÃO é código de produção: use como fonte de medidas, cores e textos. -->
+
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F8F7; font-family: Figtree, sans-serif; color: #0E2A3B; display: flex; flex-direction: column">
+
+  <div style="padding: 20px 20px 12px; display: flex; align-items: center; gap: 12px">
+    <button type="button" aria-label="Voltar" style="width: 44px; height: 44px; border: none; border-radius: 22px; background: #FFFFFF; display: flex; align-items: center; justify-content: center">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0E2A3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>
+    </button>
+    <h1 style="margin: 0; font-family: Sora, sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.02em">Publicar plantão</h1>
+  </div>
+
+  <div style="padding: 4px 20px 0; display: flex; flex-direction: column; gap: 14px; flex-grow: 1">
+
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <label for="grupo" style="font-size: 13px; font-weight: 600; color: #33454F">Grupo</label>
+      <select id="grupo" style="height: 50px; border: 1.5px solid #DCE3E1; border-radius: 14px; background: #FFFFFF; padding: 0 14px; font-size: 16px; color: #0E2A3B"><option>Plantonistas UTI · [HOSPITAL]</option></select>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <label for="setor" style="font-size: 13px; font-weight: 600; color: #33454F">Setor</label>
+      <input id="setor" type="text" value="UTI Adulto" style="height: 50px; box-sizing: border-box; border: 1.5px solid #DCE3E1; border-radius: 14px; background: #FFFFFF; padding: 0 14px; font-size: 16px; color: #0E2A3B">
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <label for="data" style="font-size: 13px; font-weight: 600; color: #33454F">Data</label>
+        <input id="data" type="text" value="12/10" style="height: 50px; box-sizing: border-box; border: 1.5px solid #DCE3E1; border-radius: 14px; background: #FFFFFF; padding: 0 12px; font-size: 16px; color: #0E2A3B; min-width: 0">
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <label for="ini" style="font-size: 13px; font-weight: 600; color: #33454F">Início</label>
+        <input id="ini" type="text" value="19:00" style="height: 50px; box-sizing: border-box; border: 1.5px solid #DCE3E1; border-radius: 14px; background: #FFFFFF; padding: 0 12px; font-size: 16px; color: #0E2A3B; min-width: 0">
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 6px">
+        <label for="fim" style="font-size: 13px; font-weight: 600; color: #33454F">Fim</label>
+        <input id="fim" type="text" value="07:00" style="height: 50px; box-sizing: border-box; border: 1.5px solid #DCE3E1; border-radius: 14px; background: #FFFFFF; padding: 0 12px; font-size: 16px; color: #0E2A3B; min-width: 0">
+      </div>
+    </div>
+
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <label for="obs" style="font-size: 13px; font-weight: 600; color: #33454F">Observações operacionais</label>
+      <textarea id="obs" rows="3" placeholder="Ex.: passagem de plantão presencial às 18h45 com a equipe de enfermagem." style="border: 1.5px solid #DCE3E1; border-radius: 14px; background: #FFFFFF; padding: 12px 14px; font-size: 15px; line-height: 1.4; color: #0E2A3B; resize: none"></textarea>
+      <div style="display: flex; gap: 8px; align-items: flex-start; font-size: 13px; line-height: 1.4; color: #6E4300; background: #FCEBC7; border-radius: 12px; padding: 10px 12px">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#6E4300" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16h.01"></path></svg>
+        <span>Não inclua nomes, leitos ou qualquer dado de pacientes.</span>
+      </div>
+    </div>
+
+    <div style="background: #FFFFFF; border-radius: 16px; padding: 14px; display: flex; gap: 12px; align-items: center">
+      <div style="width: 40px; height: 40px; border-radius: 12px; background: #E3E9EE; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#33454F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V8l7-4 7 4v13M9 21v-5h6v5"></path></svg>
+      </div>
+      <div style="font-size: 14px; line-height: 1.4; color: #33454F">Este grupo exige <strong style="color: #0E2A3B">aprovação da coordenação</strong> antes do acordo ser registrado.</div>
+    </div>
+  </div>
+
+  <div style="padding: 16px 20px 28px; background: #F6F8F7">
+    <button type="button" style="width: 100%; height: 54px; border: none; border-radius: 14px; background: #0F7C78; color: #FFFFFF; font-family: Figtree, sans-serif; font-weight: 600; font-size: 16px">Publicar no grupo</button>
+  </div>
+</div>
+
+</body>
+</html>

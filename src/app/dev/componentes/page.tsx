@@ -1,6 +1,4 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { connection } from "next/server";
 import {
   Bell,
   Calendar,
@@ -69,19 +67,13 @@ import {
 } from "@/features/shifts/format";
 import { offerStatusLabels } from "@/features/shifts/schemas";
 import type { ShiftStatus } from "@/styles/theme";
+import { requireDevPages } from "../enabled";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "Catálogo de componentes | Repassafe",
   robots: { index: false, follow: false },
 };
-
-/** Disponível em desenvolvimento e staging; produção responde 404. */
-function catalogEnabled() {
-  return (
-    process.env.NODE_ENV !== "production" || process.env.APP_ENV === "staging"
-  );
-}
 
 // Dados fictícios: sábado, 10/10/2026, 19:00 → domingo, 11/10, 07:00 (Fortaleza).
 const start = "2026-10-10T22:00:00.000Z";
@@ -167,8 +159,7 @@ function Section({
 }
 
 export default async function ComponentCatalogPage() {
-  await connection();
-  if (!catalogEnabled()) notFound();
+  await requireDevPages();
 
   const shiftDay = formatShiftDay(start);
   const shortHours = formatHourRangeShort(start, end);

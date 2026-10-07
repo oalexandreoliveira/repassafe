@@ -5,6 +5,14 @@ import { NotificationsList } from "@/components/screens/notifications-list";
 import { PublishShiftForm } from "@/components/screens/publish-shift-form";
 import { ShiftDetail } from "@/components/screens/shift-detail";
 import { ShiftMural } from "@/components/screens/shift-mural";
+import { AgreementsList } from "@/components/screens/agreements-list";
+import { ApplicationSent } from "@/components/screens/application-sent";
+import { ChooseSubstitute } from "@/components/screens/choose-substitute";
+import {
+  OwnerConditionsReview,
+  SubstituteConditions,
+} from "@/components/screens/conditions-confirmation";
+import { MyPublished } from "@/components/screens/my-published";
 import { offerPresentation } from "@/features/shifts/presentation";
 import { requireDevPages } from "../../enabled";
 import {
@@ -34,8 +42,6 @@ const detailActions = {
   apply: noop,
   withdrawApplication: noop,
   cancelOffer: noop,
-  selectCandidate: noop,
-  confirmSubstitution: noop,
   decideSubstitution: noop,
   reportCompletion: noop,
   confirmCompletion: noop,
@@ -195,6 +201,89 @@ const screens: Record<string, () => React.ReactNode> = {
       hasUnread
       markAllRead={noop}
       now={now}
+    />
+  ),
+  s04: () => (
+    <ApplicationSent
+      offer={uti}
+      applicationId="30000000-0000-4000-8000-000000000001"
+      withdraw={noop}
+    />
+  ),
+  s07: () => (
+    <MyPublished
+      tab="abertos"
+      counts={{ abertos: 2, andamento: 1, registrados: 4 }}
+      items={[
+        {
+          offer: prontoSocorro,
+          activeApplications: 3,
+          status: offerPresentation({
+            offerStatus: "open_normal",
+            view: "owner",
+            activeApplications: 3,
+          }),
+        },
+        {
+          offer: enfermaria,
+          activeApplications: 0,
+          status: offerPresentation({
+            offerStatus: "open_normal",
+            view: "owner",
+          }),
+        },
+      ]}
+      unread
+      published
+      canPublish
+      now={now}
+    />
+  ),
+  s08: () => (
+    <ChooseSubstitute offer={uti} applications={applications} now={now} />
+  ),
+  "s09-titular": () => (
+    <OwnerConditionsReview
+      offer={uti}
+      applicationId={applications[0].id}
+      candidateName={applications[0].candidate_display_name}
+      select={noop}
+    />
+  ),
+  "s09-substituto": () => (
+    <SubstituteConditions
+      offer={uti}
+      substitutionId="40000000-0000-4000-8000-000000000001"
+      confirm={noop}
+    />
+  ),
+  acordos: () => (
+    <AgreementsList
+      unread={false}
+      canPublish
+      agreements={[
+        {
+          id: agreementContent.agreement_id,
+          offerId: uti.id,
+          role: "owner",
+          confirmedAt: agreementContent.agreement_confirmed_at,
+          sector: "UTI Adulto",
+          startsAt: uti.startsAt,
+          endsAt: uti.endsAt,
+          groupName: "Plantonistas UTI",
+          hasDocument: true,
+        },
+        {
+          id: "7d1c2e9a-5b3f-4c8d-9e0a-1b2c3d4e5f61",
+          offerId: enfermaria.id,
+          role: "substitute",
+          confirmedAt: "2026-10-08T15:00:00.000Z",
+          sector: "Enfermaria",
+          startsAt: enfermaria.startsAt,
+          endsAt: enfermaria.endsAt,
+          hasDocument: true,
+        },
+      ]}
     />
   ),
 };

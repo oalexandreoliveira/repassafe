@@ -15,10 +15,16 @@ const previews = [
   ["s02-erro", "S02 · Erro de rede"],
   ["s03", "S03 · Detalhe do plantão"],
   ["s03-titular", "S03 · Titular com candidaturas"],
-  ["s03-substituto", "S03 · Substituto confirmando condições"],
+  ["s03-substituto", "S03 · Substituto selecionado"],
+  ["s04", "S04 · Candidatura enviada"],
   ["s05", "S05 · Publicar plantão"],
   ["s06", "S06 · Revisar e publicar"],
+  ["s07", "S07 · Meus plantões publicados"],
+  ["s08", "S08 · Escolher substituto"],
+  ["s09-titular", "S09 · Confirmar condições (titular)"],
+  ["s09-substituto", "S09 · Confirmar condições (substituto)"],
   ["s10", "S10 · Acordo registrado"],
+  ["acordos", "Acordos · lista (derivada)"],
   ["s11", "S11 · Notificações"],
 ] as const;
 

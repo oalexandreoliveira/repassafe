@@ -474,27 +474,10 @@ a {
 .brand img {
   display: block;
 }
-.hero {
-  max-width: 760px;
-  padding: clamp(4rem, 12vw, 8rem) 0 3rem;
-}
 .eyebrow {
   font: var(--rs-type-eyebrow);
   letter-spacing: var(--rs-track-eyebrow);
   text-transform: uppercase;
-  color: var(--rs-text-muted);
-}
-.hero h1 {
-  font-family: var(--rs-font-display);
-  font-size: clamp(2.5rem, 7vw, 5.5rem);
-  line-height: 1.03;
-  letter-spacing: -0.04em;
-  margin: 0.5rem 0 1rem;
-}
-.lede {
-  max-width: 650px;
-  font-size: clamp(1.05rem, 2vw, 1.3rem);
-  line-height: 1.6;
   color: var(--rs-text-muted);
 }
 .actions {
@@ -509,11 +492,6 @@ summary:focus-visible {
   outline: 3px solid var(--rs-teal);
   outline-offset: 3px;
 }
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-}
 /* Cartões brancos sem borda e sem sombra: a separação é pela cor (DESIGN.md §5). */
 .card {
   background: var(--rs-white);
@@ -527,9 +505,6 @@ summary:focus-visible {
 .card p {
   line-height: 1.55;
   color: var(--rs-text-muted);
-}
-.numeric-data {
-  font-variant-numeric: tabular-nums;
 }
 .update-notice {
   position: fixed;
@@ -640,10 +615,6 @@ textarea:focus-visible {
   color: var(--rs-status-cancelled-fg);
   background: var(--rs-status-cancelled-bg);
 }
-.form-message-success {
-  color: var(--rs-status-confirmed-fg);
-  background: var(--rs-status-confirmed-bg);
-}
 .form-help {
   color: var(--rs-text-muted);
 }
@@ -664,25 +635,15 @@ textarea:focus-visible {
   max-width: 84rem;
   margin: auto;
 }
-.dashboard-header,
-.dashboard-title {
+.dashboard-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
   flex-wrap: wrap;
 }
-.dashboard-title {
-  margin: clamp(2rem, 7vw, 5rem) 0 2rem;
-}
-.dashboard-title h1,
 .dashboard-header h1 {
   margin: 0.35rem 0;
-}
-.dashboard-title h1 {
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
-  font-weight: 700;
-  line-height: 1.15;
 }
 .clean-list li > a {
   display: grid;
@@ -719,33 +680,19 @@ textarea:focus-visible {
   border-radius: var(--rs-radius-pill);
   background: var(--status-dot);
 }
-.status-open_normal {
-  --status-bg: var(--rs-status-open-bg);
-  --status-fg: var(--rs-status-open-fg);
-  --status-dot: var(--rs-status-open-dot);
-}
 .status-approved {
   --status-bg: var(--rs-status-confirmed-bg);
   --status-fg: var(--rs-status-confirmed-fg);
   --status-dot: var(--rs-status-confirmed-dot);
 }
 .status-pending,
-.status-changes_requested,
-.status-open_emergency,
-.status-selection_in_progress {
+.status-changes_requested {
   --status-bg: var(--rs-status-pending-bg);
   --status-fg: var(--rs-status-pending-fg);
   --status-dot: var(--rs-status-pending-dot);
 }
-.status-closed_confirmed {
-  --status-bg: var(--rs-status-registered-bg);
-  --status-fg: var(--rs-status-registered-fg);
-  --status-dot: var(--rs-status-registered-dot);
-}
 .status-rejected,
-.status-suspended,
-.status-cancelled_by_owner,
-.status-cancelled_admin {
+.status-suspended {
   --status-bg: var(--rs-status-cancelled-bg);
   --status-fg: var(--rs-status-cancelled-fg);
   --status-dot: var(--rs-status-cancelled-dot);
@@ -762,7 +709,6 @@ textarea:focus-visible {
   border-bottom: 1px solid var(--rs-border);
   padding: 0.8rem 0;
 }
-.inline-action,
 .admin-section {
   margin-top: 2rem;
 }
@@ -842,64 +788,6 @@ textarea:focus-visible {
 .form-grid {
   align-items: end;
 }
-.shift-list {
-  display: grid;
-  gap: 1rem;
-}
-.shift-card-heading {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
-  gap: 1rem;
-}
-.shift-card-heading h2 {
-  margin-bottom: 0;
-}
-.facts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-  gap: 1rem;
-  margin: 1.25rem 0;
-}
-.facts div {
-  display: grid;
-  gap: 0.25rem;
-}
-.facts dt {
-  color: var(--rs-text-muted);
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-.facts dd {
-  margin: 0;
-  font-weight: 600;
-}
-.form-card {
-  max-width: 48rem;
-}
-.candidate-list {
-  list-style: none;
-  padding: 0;
-}
-.candidate-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  border-bottom: 1px solid var(--rs-border);
-  padding: 1rem 0;
-}
-.candidate-list li div {
-  display: grid;
-  gap: 0.25rem;
-}
-.candidate-list span {
-  color: var(--rs-text-muted);
-}
-.agreement-card {
-  border-color: var(--rs-status-confirmed-fg);
-}
 .audit-table {
   overflow-x: auto;
 }
@@ -932,32 +820,6 @@ textarea:focus-visible {
 .operation-history li {
   overflow-wrap: anywhere;
 }
-.agreement-document {
-  max-width: 900px;
-}
-.agreement-paper h1 {
-  margin-bottom: 0.75rem;
-}
-.agreement-paper h2 {
-  margin-top: 2rem;
-}
-.agreement-evidence-list {
-  display: grid;
-  gap: 1rem;
-  padding-left: 1.5rem;
-}
-.agreement-evidence-list li {
-  display: grid;
-  gap: 0.35rem;
-  overflow-wrap: anywhere;
-}
-.agreement-hash {
-  display: block;
-  padding: 0.75rem;
-  border: 1px solid var(--rs-border);
-  border-radius: var(--rs-radius-md);
-  overflow-wrap: anywhere;
-}
 code {
   overflow-wrap: anywhere;
 }
@@ -969,20 +831,6 @@ code {
   .no-print,
   .dashboard-header {
     display: none !important;
-  }
-  .agreement-document {
-    width: 100%;
-    max-width: none;
-    padding: 0;
-  }
-  .agreement-paper {
-    border: 0;
-    box-shadow: none;
-    padding: 0;
-  }
-  .agreement-evidence-list li,
-  .facts > div {
-    break-inside: avoid;
   }
 }
 @media (max-width: 640px) {

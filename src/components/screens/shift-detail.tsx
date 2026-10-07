@@ -32,12 +32,9 @@ import {
   formatCurrency,
   formatDateTime,
 } from "@/features/shifts/schemas";
-import {
-  CandidateSelection,
-  type ApplicationItem,
-} from "./candidate-selection";
+import type { ApplicationItem } from "./candidate-selection";
 import { CommandFields, type FormAction } from "./command-fields";
-import { ConditionsConfirmation } from "./conditions-confirmation";
+import { ConfirmSubmit } from "@/components/ui/confirm-submit";
 import { PATIENT_DATA_NOTICE, PAYMENT_NOTICE } from "@/features/shifts/copy";
 import styles from "./screens.module.css";
 
@@ -45,8 +42,6 @@ export type ShiftDetailActions = {
   apply: FormAction;
   withdrawApplication: FormAction;
   cancelOffer: FormAction;
-  selectCandidate: FormAction;
-  confirmSubstitution: FormAction;
   decideSubstitution: FormAction;
   reportCompletion: FormAction;
   confirmCompletion: FormAction;
@@ -171,9 +166,14 @@ export function ShiftDetail({
   ) : ownApplication?.status === "active" ? (
     <form action={actions.withdrawApplication}>
       <CommandFields targetId={ownApplication.id} />
-      <SubmitButton variant="secondary" block>
+      <ConfirmSubmit
+        variant="secondary"
+        question="Cancelar sua candidatura a este plantão?"
+        confirmLabel="Sim, cancelar candidatura"
+        keepLabel="Manter candidatura"
+      >
         Cancelar candidatura
-      </SubmitButton>
+      </ConfirmSubmit>
     </form>
   ) : applicationsClosed ? (
     <>
@@ -271,12 +271,9 @@ export function ShiftDetail({
             </InfoBanner>
           ) : null}
           {isOpen && ownerTermsAcknowledged && activeApplications.length ? (
-            <CandidateSelection
-              applications={activeApplications}
-              action={actions.selectCandidate}
-              submitLabel="Selecionar"
-              now={now}
-            />
+            <ButtonLink href={`/plantoes/${offer.id}/candidaturas`} block>
+              Ver candidaturas
+            </ButtonLink>
           ) : null}
           {applications.some(
             (application) =>
@@ -366,32 +363,16 @@ export function ShiftDetail({
 
           {isSubstitute &&
           substitution.status === "pending_substitute_confirmation" ? (
-            <ConditionsConfirmation
-              substitutionId={substitution.id}
-              requiresApproval={offer.requiresApproval}
-              action={actions.confirmSubstitution}
-              conditions={[
-                { label: "Plantão", value: offerTitle(offer) },
-                {
-                  label: "Período",
-                  value: formatPeriod(offer.startsAt, offer.endsAt),
-                },
-                { label: "Assume", value: "Você" },
-                ...(offer.valueCents !== undefined
-                  ? [
-                      {
-                        label: "Valor",
-                        value: formatCurrency(offer.valueCents),
-                      },
-                      {
-                        label: "Condições de pagamento",
-                        value: offer.paymentTerms ?? "",
-                        stacked: true,
-                      },
-                    ]
-                  : []),
-              ]}
-            />
+            <div className={styles.panel}>
+              <h3 className={styles.panelTitle}>Você foi selecionado</h3>
+              <p className={styles.panelText}>
+                Revise e aceite as condições até o prazo para seguir com o
+                repasse.
+              </p>
+              <ButtonLink href={`/plantoes/${offer.id}/condicoes`} block>
+                Confirmar condições
+              </ButtonLink>
+            </div>
           ) : null}
 
           {isApprover &&

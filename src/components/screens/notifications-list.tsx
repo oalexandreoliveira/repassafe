@@ -35,13 +35,31 @@ export type NotificationRow = {
   read_at: string | null;
 };
 
-type Presentation = { tone: NotificationTone; icon: LucideIcon; cta?: string };
+type Presentation = {
+  tone: NotificationTone;
+  icon: LucideIcon;
+  cta?: string;
+  /** Sub-rota do plantão para onde o CTA leva (ex.: S09). */
+  ctaPath?: string;
+};
+
+/** Leva o CTA para a etapa certa quando o link aponta para um plantão. */
+export function ctaHref(href: string, ctaPath?: string) {
+  return ctaPath && /^\/plantoes\/[^/?#]+$/.test(href)
+    ? `${href}/${ctaPath}`
+    : href;
+}
 
 /** Apresentação por tipo de evento (o texto vem do domínio e não muda). */
 export function notificationPresentation(eventType: string): Presentation {
   switch (eventType) {
     case "substitution.selected":
-      return { tone: "action", icon: Check, cta: "Confirmar condições" };
+      return {
+        tone: "action",
+        icon: Check,
+        cta: "Confirmar condições",
+        ctaPath: "condicoes",
+      };
     case "approval.pending":
       return { tone: "action", icon: ClipboardCheck };
     case "completion.pending":
@@ -104,7 +122,7 @@ export function NotificationsList({
       {notifications.length ? (
         <ul className={styles.list}>
           {notifications.map((notification) => {
-            const { tone, icon, cta } = notificationPresentation(
+            const { tone, icon, cta, ctaPath } = notificationPresentation(
               notification.event_type,
             );
             return (
@@ -120,7 +138,11 @@ export function NotificationsList({
                   unread={!notification.read_at}
                   action={
                     cta ? (
-                      <ButtonLink href={notification.href} size="sm" block>
+                      <ButtonLink
+                        href={ctaHref(notification.href, ctaPath)}
+                        size="sm"
+                        block
+                      >
                         {cta}
                       </ButtonLink>
                     ) : undefined

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { LoaderCircle } from "lucide-react";
-import type { ButtonHTMLAttributes, ComponentProps, ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 export type ButtonVariant = "primary" | "secondary" | "ghost" | "dark";
 export type ButtonSize = "md" | "sm";
@@ -66,7 +66,7 @@ export function Button({
   children,
   ...props
 }: Appearance &
-  ButtonHTMLAttributes<HTMLButtonElement> & {
+  ComponentProps<"button"> & {
     /** Mantém as cores da variante, desabilita o botão e mostra o spinner. */
     loading?: boolean;
   }) {

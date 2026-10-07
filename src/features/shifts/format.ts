@@ -73,6 +73,12 @@ export function formatShiftDay(value: string | Date) {
   return `${weekdaysShort[zoned(value).weekday]}, ${formatShortDate(value)}`;
 }
 
+/** "Sáb, 12 out" */
+export function formatDayShort(value: string | Date) {
+  const date = zoned(value);
+  return `${weekdaysShort[date.weekday]}, ${date.day} ${months[date.month - 1]}`;
+}
+
 /** "Sábado, 12 out" (shown in uppercase by the day-group heading). */
 export function formatDayHeading(value: string | Date) {
   const date = zoned(value);

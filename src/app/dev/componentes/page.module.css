@@ -1,0 +1,128 @@
+.page {
+  width: 100%;
+  max-width: 480px;
+  min-height: 100dvh;
+  margin-inline: auto;
+  padding: calc(24px + env(safe-area-inset-top)) var(--rs-screen-gutter) 64px;
+}
+.intro {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+.intro h1 {
+  margin: 0;
+  font: var(--rs-type-h1);
+  letter-spacing: var(--rs-track-h1);
+}
+.intro p {
+  margin: 0;
+  color: var(--rs-text-secondary);
+  font: var(--rs-type-body-sm);
+}
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+}
+.toc a {
+  color: var(--rs-teal-dark);
+}
+.section {
+  display: grid;
+  gap: var(--rs-stack-gap);
+  padding-block: 28px;
+  border-top: 1px solid var(--rs-border);
+  scroll-margin-top: 16px;
+}
+.sectionTitle {
+  margin: 0;
+  font: var(--rs-type-h2);
+  letter-spacing: var(--rs-track-h2);
+}
+.note {
+  margin: 0;
+  color: var(--rs-text-muted);
+  font: var(--rs-type-caption);
+  font-weight: 400;
+}
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.stack {
+  display: grid;
+  gap: 10px;
+}
+.dateGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+.swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.swatch {
+  display: grid;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 16px;
+}
+.swatch span:first-child {
+  height: 48px;
+  border: 1px solid var(--rs-border);
+  border-radius: var(--rs-radius-md);
+}
+.swatch code {
+  color: var(--rs-text-muted);
+  overflow-wrap: anywhere;
+}
+.typeSample {
+  display: grid;
+  gap: 2px;
+}
+.typeSample small {
+  color: var(--rs-text-muted);
+  font: var(--rs-type-mono);
+}
+.darkSurface {
+  padding: 20px;
+  border-radius: var(--rs-radius-xl);
+  background: var(--rs-ink);
+}
+.mapping {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.mapping th,
+.mapping td {
+  padding: 8px 6px 8px 0;
+  border-bottom: 1px solid var(--rs-divider);
+  text-align: left;
+  vertical-align: middle;
+}
+.mapping th {
+  color: var(--rs-text-muted);
+  font-weight: 600;
+}
+.mapping code {
+  font-size: 12px;
+}
+.frame {
+  overflow: hidden;
+  border: 1px solid var(--rs-border);
+  border-radius: var(--rs-radius-xl);
+  background: var(--rs-base);
+}

@@ -153,3 +153,27 @@
     display: none;
   }
 }
+.brandLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--rs-touch-min);
+}
+.brandLink img {
+  display: block;
+}
+.brandNav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px 12px;
+}
+.brandNav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--rs-touch-min);
+  min-height: var(--rs-touch-min);
+  color: var(--rs-teal-dark);
+  font: var(--rs-type-label);
+  font-size: 14px;
+}

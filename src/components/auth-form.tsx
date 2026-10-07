@@ -3,6 +3,10 @@
 import { useActionState, useState } from "react";
 import Link from "next/link";
 import { loginAction, signupAction } from "@/app/auth/actions";
+import { ActionFeedback } from "@/components/screens/auth-screen";
+import styles from "@/components/screens/screens.module.css";
+import { Button, ButtonLink } from "@/components/ui/button";
+import { CheckboxField, TextField } from "@/components/ui/field";
 import { initialActionState } from "@/features/auth/schemas";
 
 export function AuthForm({ mode }: { mode: "login" | "signup" }) {
@@ -15,94 +19,88 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
   );
 
   return (
-    <form action={formAction} className="form-stack">
-      <label>
-        {mode === "login" ? "E-mail ou celular confirmado" : "E-mail"}
-        <input
-          name="email"
-          type={mode === "login" ? "text" : "email"}
-          autoComplete="username"
-          aria-invalid={!!state.fieldErrors?.email}
-          aria-describedby={
-            state.fieldErrors?.email ? "auth-email-error" : undefined
-          }
-          value={email}
-          onChange={(event) => setEmail(event.target.value)}
-          required
-        />
-      </label>
-      {state.fieldErrors?.email ? (
-        <p id="auth-email-error" className="field-error">
-          {state.fieldErrors.email}
-        </p>
-      ) : null}
+    <form action={formAction} className={styles.form}>
+      <TextField
+        label={mode === "login" ? "E-mail ou celular confirmado" : "E-mail"}
+        id="auth-email"
+        name="email"
+        type={mode === "login" ? "text" : "email"}
+        autoComplete="username"
+        hint={
+          mode === "login"
+            ? "Telefone no formato +55DDDNúmero, após confirmação por SMS."
+            : undefined
+        }
+        error={state.fieldErrors?.email}
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+        required
+      />
+      <TextField
+        label="Senha"
+        id="auth-password"
+        name="password"
+        type="password"
+        error={state.fieldErrors?.password}
+        value={password}
+        onChange={(event) => setPassword(event.target.value)}
+        minLength={8}
+        autoComplete={mode === "login" ? "current-password" : "new-password"}
+        required
+      />
       {mode === "signup" ? (
         <>
-          <label className="checkbox-label">
-            <input name="terms" type="checkbox" required />
-            Aceito os{" "}
-            <Link href="/termos" target="_blank">
-              Termos de uso
-            </Link>
-            .
-          </label>
-          <label className="checkbox-label">
-            <input name="privacy" type="checkbox" required />
-            Li a{" "}
-            <Link href="/privacidade" target="_blank">
-              Política de privacidade
-            </Link>
-            .
-          </label>
+          <CheckboxField
+            name="terms"
+            required
+            label={
+              <>
+                Aceito os{" "}
+                <Link href="/termos" target="_blank">
+                  Termos de uso
+                </Link>
+                .
+              </>
+            }
+          />
+          <CheckboxField
+            name="privacy"
+            required
+            label={
+              <>
+                Li a{" "}
+                <Link href="/privacidade" target="_blank">
+                  Política de privacidade
+                </Link>
+                .
+              </>
+            }
+          />
         </>
-      ) : (
-        <p className="form-help">
-          Telefone no formato +55DDDNúmero, após confirmação por SMS.
-        </p>
-      )}
-      <label>
-        Senha
-        <input
-          name="password"
-          type="password"
-          aria-invalid={!!state.fieldErrors?.password}
-          aria-describedby={
-            state.fieldErrors?.password ? "auth-password-error" : undefined
-          }
-          value={password}
-          onChange={(event) => setPassword(event.target.value)}
-          minLength={8}
-          autoComplete={mode === "login" ? "current-password" : "new-password"}
-          required
-        />
-      </label>
-      <button className="button button-primary" disabled={pending}>
-        {pending ? "Processando…" : mode === "login" ? "Entrar" : "Criar conta"}
-      </button>
-      {state.fieldErrors?.password ? (
-        <p id="auth-password-error" className="field-error">
-          {state.fieldErrors.password}
-        </p>
       ) : null}
-      {state.message ? (
-        <p
-          className={`form-message form-message-${state.status}`}
-          role={state.status === "error" ? "alert" : "status"}
-        >
-          {state.message}
-        </p>
-      ) : null}
-      <p className="form-help">
+      <ActionFeedback state={state} />
+      <Button type="submit" block loading={pending}>
+        {mode === "login" ? "Entrar" : "Criar conta"}
+      </Button>
+      <p className={styles.inlineLinks}>
         {mode === "login" ? "Ainda não possui acesso? " : "Já possui acesso? "}
         <Link href={mode === "login" ? "/cadastro" : "/entrar"}>
           {mode === "login" ? "Criar conta" : "Entrar"}
         </Link>
       </p>
       {mode === "login" ? (
-        <p className="form-help">
-          <Link href="/senha/esqueci">Esqueci minha senha</Link> ·{" "}
-          <Link href="/confirmar-email">Reenviar confirmação do e-mail</Link>
-        </p>
+        <ul className={styles.links}>
+          <li>
+            <ButtonLink href="/senha/esqueci" variant="ghost" size="sm" block>
+              Esqueci minha senha
+            </ButtonLink>
+          </li>
+          <li>
+            <ButtonLink href="/confirmar-email" variant="ghost" size="sm" block>
+              Reenviar confirmação do e-mail
+            </ButtonLink>
+          </li>
+        </ul>
       ) : null}
     </form>
   );

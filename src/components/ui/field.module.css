@@ -53,6 +53,12 @@
   line-height: 1.45;
   cursor: pointer;
 }
+/* Links no rótulo (termos, privacidade) precisam se distinguir do texto sem depender só da cor. */
+.checkbox a {
+  color: var(--rs-teal-dark);
+  font-weight: 600;
+  text-decoration: underline;
+}
 .checkbox input {
   width: 22px;
   min-width: 22px;

@@ -91,6 +91,24 @@ export function RootTopBar({
   );
 }
 
+/** Barra com o logo (link para o início) e ações opcionais à direita. */
+export function BrandTopBar({
+  href = "/",
+  children,
+}: {
+  href?: string;
+  children?: ReactNode;
+}) {
+  return (
+    <header className={`${styles.topBar} ${styles.rootBar}`}>
+      <Link href={href} className={styles.brandLink}>
+        <Logo priority />
+      </Link>
+      {children ? <nav className={styles.brandNav}>{children}</nav> : null}
+    </header>
+  );
+}
+
 /** Título de tela raiz (Sora 26) com linha de apoio. */
 export function ScreenHeading({
   title,

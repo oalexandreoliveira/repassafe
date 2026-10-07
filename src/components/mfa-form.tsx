@@ -2,7 +2,13 @@
 
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ShieldCheck } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import styles from "@/components/screens/screens.module.css";
+import { Button } from "@/components/ui/button";
+import { TextField } from "@/components/ui/field";
+import { InfoBanner } from "@/components/ui/info-banner";
+import { RegistryBlock } from "@/components/ui/registry";
 
 type Enrollment = {
   factorId: string;
@@ -89,45 +95,45 @@ export function MfaForm({
   }
 
   return (
-    <div className="form-stack">
+    <div className={styles.form}>
       {enrollment ? (
-        <div className="mfa-enrollment">
+        <div className={styles.panel}>
           {/* QR TOTP é fornecido pelo Supabase como data URL SVG. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={enrollment.qrCode} alt="QR code para configurar o MFA" />
-          <p className="form-help">
-            Entrada manual: <code>{enrollment.secret}</code>
-          </p>
+          <img
+            className={styles.qrCode}
+            src={enrollment.qrCode}
+            alt="QR code para configurar o MFA"
+          />
+          <p className={styles.help}>Entrada manual:</p>
+          <RegistryBlock lines={[enrollment.secret]} />
         </div>
       ) : null}
-      <form className="form-stack" onSubmit={verify}>
-        <label>
-          Código do autenticador
-          <input
-            autoComplete="one-time-code"
-            inputMode="numeric"
-            maxLength={6}
-            name="code"
-            onChange={(event) => setCode(event.target.value.replace(/\D/g, ""))}
-            pattern="[0-9]{6}"
-            required
-            value={code}
-          />
-        </label>
-        <button
-          className="button button-primary"
-          disabled={pending || (!factorId && !enrollment)}
+      <form className={styles.form} onSubmit={verify}>
+        <TextField
+          label="Código do autenticador"
+          id="code"
+          autoComplete="one-time-code"
+          inputMode="numeric"
+          maxLength={6}
+          name="code"
+          onChange={(event) => setCode(event.target.value.replace(/\D/g, ""))}
+          pattern="[0-9]{6}"
+          required
+          value={code}
+        />
+        <Button
+          type="submit"
+          block
+          loading={pending}
+          disabled={!factorId && !enrollment}
         >
-          {pending
-            ? "Verificando…"
-            : factorId
-              ? "Validar acesso"
-              : "Ativar MFA"}
-        </button>
+          {factorId ? "Validar acesso" : "Ativar MFA"}
+        </Button>
       </form>
-      <p className="form-message" role="status">
+      <InfoBanner variant="neutral" role="status" icon={ShieldCheck}>
         {message}
-      </p>
+      </InfoBanner>
     </div>
   );
 }

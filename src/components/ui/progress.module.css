@@ -44,6 +44,7 @@
   list-style: none;
 }
 .step {
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: 14px;
@@ -84,4 +85,19 @@
   color: var(--rs-text-muted);
   font-size: 13px;
   line-height: 18px;
+}
+.stepLink {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--rs-border);
+  text-underline-offset: 0.2em;
+}
+/* A linha inteira da etapa vira alvo de toque (>= 44px), sem invadir o espaçamento de 16px. */
+.stepLink::after {
+  position: absolute;
+  inset: -6px 0;
+  content: "";
+}
+.stepLink:hover {
+  text-decoration-color: currentColor;
 }

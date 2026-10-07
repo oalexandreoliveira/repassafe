@@ -34,7 +34,13 @@ export function ProgressSteps({
 
 export type StepState = "done" | "current" | "upcoming";
 
-export type Step = { title: string; description?: ReactNode; state: StepState };
+export type Step = {
+  title: string;
+  description?: ReactNode;
+  state: StepState;
+  /** Âncora ou rota da etapa (ex.: seções de um formulário longo). */
+  href?: string;
+};
 
 const stateText: Record<StepState, string> = {
   done: "Concluída",
@@ -63,7 +69,13 @@ export function StepList({ title, steps }: { title?: string; steps: Step[] }) {
             <p className={styles.stepText}>
               <span className={styles.stepTitle}>
                 <span className="sr-only">{stateText[step.state]}: </span>
-                {step.title}
+                {step.href ? (
+                  <a href={step.href} className={styles.stepLink}>
+                    {step.title}
+                  </a>
+                ) : (
+                  step.title
+                )}
               </span>
               {step.description ? (
                 <span className={styles.stepDescription}>

@@ -47,6 +47,7 @@ export function RegistrationForm({
     label: string,
     type = "text",
     autoComplete?: string,
+    help?: string,
   ) => (
     <div key={name} className="form-field">
       <label htmlFor={name}>{label}</label>
@@ -55,17 +56,28 @@ export function RegistrationForm({
         name={name}
         type={type}
         autoComplete={autoComplete}
+        inputMode={
+          name === "cpf" ? "numeric" : name === "phone" ? "tel" : undefined
+        }
+        maxLength={name === "cpf" ? 14 : name === "phone" ? 20 : undefined}
         value={values[name] ?? ""}
         onChange={(event) => change(name, event.target.value)}
         aria-invalid={!!state.fieldErrors?.[name] || !!correctionFields[name]}
         aria-describedby={
-          state.fieldErrors?.[name] || correctionFields[name]
+          state.fieldErrors?.[name] || correctionFields[name] || help
             ? `${name}-help`
             : undefined
         }
       />
-      <span id={`${name}-help`} className="field-error">
-        {state.fieldErrors?.[name] || correctionFields[name]}
+      <span
+        id={`${name}-help`}
+        className={
+          state.fieldErrors?.[name] || correctionFields[name]
+            ? "field-error"
+            : "form-help"
+        }
+      >
+        {state.fieldErrors?.[name] || correctionFields[name] || help}
       </span>
     </div>
   );
@@ -84,10 +96,22 @@ export function RegistrationForm({
         {field("civilName", "Nome civil completo", "text", "name")}
         {field("displayName", "Nome de apresentação")}
         <div className="form-row">
-          {field("cpf", "CPF")}
+          {field(
+            "cpf",
+            "CPF",
+            "text",
+            "off",
+            "Digite os 11 números, com ou sem pontuação. Ex.: 529.982.247-25.",
+          )}
           {field("birthDate", "Nascimento", "date", "bday")}
         </div>
-        {field("phone", "Celular com DDD", "tel", "tel")}
+        {field(
+          "phone",
+          "Celular com DDD",
+          "tel",
+          "tel",
+          "Informe um celular brasileiro com DDD. Ex.: (11) 98765-4321 ou +55 11 98765-4321.",
+        )}
       </fieldset>
       <fieldset>
         <legend>Atuação profissional</legend>

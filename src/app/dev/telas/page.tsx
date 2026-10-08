@@ -29,6 +29,16 @@ const previews = [
   ["cadastro-completar", "Cadastro · completar (derivada)"],
   ["senha-nova", "Senha · nova senha (derivada)"],
   ["mfa", "MFA · verificação (derivada)"],
+  ["grupos", "Grupos · meus grupos (derivada)"],
+  ["grupos-vazio", "Grupos · sem grupos (derivada)"],
+  ["grupo-novo", "Grupos · criar grupo (derivada)"],
+  ["grupo-gestor", "Grupos · detalhe do gestor (derivada)"],
+  ["grupo-membro", "Grupos · detalhe do membro (derivada)"],
+  ["grupo-institucional", "Grupos · grupo institucional (derivada)"],
+  ["convite", "Grupos · convite (derivada)"],
+  ["convite-pendente", "Grupos · convite com cadastro pendente (derivada)"],
+  ["convite-indisponivel", "Grupos · convite indisponível (derivada)"],
+  ["convite-sem-login", "Grupos · convite sem login (derivada)"],
 ] as const;
 
 export default async function ScreenPreviewIndex() {

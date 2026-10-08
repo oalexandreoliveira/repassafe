@@ -17,6 +17,13 @@ import { AuthScreen } from "@/components/screens/auth-screen";
 import { RegistrationOverview } from "@/components/screens/registration-overview";
 import { NewPasswordForm } from "@/components/email-action-form";
 import { MfaForm } from "@/components/mfa-form";
+import {
+  GroupCreateScreen,
+  GroupDetailScreen,
+  GroupInviteScreen,
+  GroupsScreen,
+} from "@/components/screens/groups";
+import type { GroupDetail } from "@/features/groups/types";
 import { offerPresentation } from "@/features/shifts/presentation";
 import { requireDevPages } from "../../enabled";
 import {
@@ -82,7 +89,200 @@ const draft = {
   notes: "Passagem presencial às 18h45 com a equipe de enfermagem.",
 };
 
+const previewRequestId = "00000000-0000-4000-8000-000000000000";
+const previewToken = "Q2xpcXVlLWFxdWktcGFyYS1lbnRyYXItbm8tZ3J1cG8";
+const peerGroup: GroupDetail = {
+  eligible: true,
+  role: "manager",
+  group: {
+    id: "7f6c3b1e-0000-4000-8000-000000000001",
+    name: "Plantonistas UTI Adulto",
+    kind: "peer",
+    active: true,
+    requires_approval: false,
+    created_at: "2026-10-01T12:00:00.000Z",
+    institution_name: null,
+  },
+  members: [
+    {
+      profile_id: "1",
+      display_name: "Ana Moreira",
+      role: "manager",
+      verified: true,
+      is_self: true,
+      joined_at: "2026-10-01T12:00:00.000Z",
+    },
+    {
+      profile_id: "2",
+      display_name: "Bruno Lima",
+      role: "doctor",
+      verified: true,
+      is_self: false,
+      joined_at: "2026-10-03T12:00:00.000Z",
+    },
+    {
+      profile_id: "3",
+      display_name: "Carla Souza",
+      role: "doctor",
+      verified: false,
+      is_self: false,
+      joined_at: "2026-10-05T12:00:00.000Z",
+    },
+  ],
+  invites: [
+    {
+      id: "inv-1",
+      created_at: "2026-10-06T12:00:00.000Z",
+      expires_at: "2026-10-13T12:00:00.000Z",
+      use_count: 2,
+      max_uses: 500,
+    },
+  ],
+  open_offers: 0,
+};
+
 const screens: Record<string, () => React.ReactNode> = {
+  grupos: () => (
+    <GroupsScreen
+      approved
+      canPublish
+      overview={{
+        eligible: true,
+        groups: [
+          {
+            id: peerGroup.group.id,
+            name: peerGroup.group.name,
+            kind: "peer",
+            active: true,
+            role: "manager",
+            requires_approval: false,
+            institution_name: null,
+            member_count: 3,
+          },
+          {
+            id: "7f6c3b1e-0000-4000-8000-000000000002",
+            name: "Clínica médica — noturno",
+            kind: "peer",
+            active: false,
+            role: "doctor",
+            requires_approval: false,
+            institution_name: null,
+            member_count: 8,
+          },
+          {
+            id: "7f6c3b1e-0000-4000-8000-000000000003",
+            name: "Plantonistas UTI",
+            kind: "institutional",
+            active: true,
+            role: "doctor",
+            requires_approval: true,
+            institution_name: "Hospital Exemplo",
+            member_count: null,
+          },
+        ],
+      }}
+    />
+  ),
+  "grupos-vazio": () => (
+    <GroupsScreen
+      approved
+      canPublish
+      overview={{ eligible: true, groups: [] }}
+    />
+  ),
+  "grupo-novo": () => (
+    <GroupCreateScreen eligible requestId={previewRequestId} preview />
+  ),
+  "grupo-gestor": () => (
+    <GroupDetailScreen
+      detail={peerGroup}
+      approved
+      canPublish
+      preview
+      previewInvitePath={`/grupos/convite/${previewToken}`}
+    />
+  ),
+  "grupo-membro": () => (
+    <GroupDetailScreen
+      detail={{
+        ...peerGroup,
+        role: "doctor",
+        invites: undefined,
+        open_offers: undefined,
+        members: peerGroup.members?.map((member) => ({
+          ...member,
+          is_self: member.profile_id === "2",
+        })),
+      }}
+      approved
+      canPublish
+      preview
+    />
+  ),
+  "grupo-institucional": () => (
+    <GroupDetailScreen
+      detail={{
+        eligible: true,
+        role: "doctor",
+        group: {
+          id: "7f6c3b1e-0000-4000-8000-000000000003",
+          name: "Plantonistas UTI",
+          kind: "institutional",
+          active: true,
+          requires_approval: true,
+          created_at: "2026-09-01T12:00:00.000Z",
+          institution_name: "Hospital Exemplo",
+        },
+      }}
+      approved
+      canPublish
+      preview
+    />
+  ),
+  convite: () => (
+    <GroupInviteScreen
+      token={previewToken}
+      requestId={previewRequestId}
+      previewMode
+      preview={{
+        status: "open",
+        group_name: peerGroup.group.name,
+        manager_name: "Ana Moreira",
+        member_count: 3,
+        expires_at: "2026-10-13T12:00:00.000Z",
+      }}
+    />
+  ),
+  "convite-pendente": () => (
+    <GroupInviteScreen
+      token={previewToken}
+      requestId={previewRequestId}
+      previewMode
+      preview={{
+        status: "ineligible",
+        group_name: peerGroup.group.name,
+        manager_name: "Ana Moreira",
+        member_count: 3,
+        expires_at: "2026-10-13T12:00:00.000Z",
+      }}
+    />
+  ),
+  "convite-indisponivel": () => (
+    <GroupInviteScreen
+      token={previewToken}
+      requestId={previewRequestId}
+      previewMode
+      preview={{ status: "unavailable" }}
+    />
+  ),
+  "convite-sem-login": () => (
+    <GroupInviteScreen
+      token={previewToken}
+      requestId={previewRequestId}
+      previewMode
+      preview={null}
+    />
+  ),
   s02: () => (
     <ShiftMural
       items={mural}

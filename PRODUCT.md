@@ -57,6 +57,9 @@ e trilha de auditoria.
 - CRM e RQE têm verificações profissionais próprias. Declarações de instituição
   e setor não concedem acesso; vínculos, permissões por grupo e acesso
   administrativo são autorizações separadas.
+- Médicos aprovados criam grupos de colegas e convidam por link, sem
+  instituição nem aprovação da coordenação; esses grupos nunca concedem
+  autorização institucional. Grupos institucionais seguem com a administração.
 - Ofertas normais ou emergenciais podem receber candidaturas, seleção,
   confirmação, aprovação institucional configurável, registro de acordo,
   conclusão, cancelamento e ocorrência.

@@ -81,15 +81,13 @@ foram atualizados para a nova estrutura.
 
 ## 5. Pendências e decisões
 
-1. **Contorno dos campos abaixo de 3:1 (WCAG 1.4.11).** O token `border`
-   (#DCE3E1) tem 1,30:1 sobre branco e 1,22:1 sobre Base, e nenhum token
-   existente fica entre 3:1 e o tom de texto. Corrigir exige um token novo de
-   contorno, ou seja, mudar a especificação.
-2. **Escala de fonte do sistema.** Os tokens de tipografia estão em px, então a
-   preferência de tamanho de fonte do navegador não escala o texto (o zoom
-   funciona). Passar a escala para rem também muda o pacote de tokens.
-3. **Criação de grupos pelo usuário.** Decidida pelo produto e ainda não
-   implementada. A proposta está na seção 6.
+1. **Contorno dos campos (resolvido na v2.2).** O token novo
+   `--rs-field-border` (#7A8C96) dá 3,49:1 sobre branco e 3,27:1 sobre Base
+   em campos, busca e toggle desligado.
+2. **Escala de fonte do sistema (resolvido na v2.2).** A tipografia passou para
+   rem: a preferência de fonte do navegador aumenta o texto. A 130%, as telas
+   não rolam na horizontal.
+3. **Criação de grupos pelo usuário (implementada).** Veja a seção 7.
 4. **Dados ausentes no domínio**, que explicam os desvios da seção 2:
    - prazo de candidatura e de escolha;
    - aviso aos candidatos não escolhidos;
@@ -144,3 +142,30 @@ foram atualizados para a nova estrutura.
   - Perfil → "Meus grupos" → "Criar grupo";
   - página do grupo com membros e "Compartilhar convite";
   - seletor de grupo da S05 com os dois tipos e rótulo distinto.
+
+## 7. Fase 6 — grupos de colegas (implementado em 2026-10-08)
+
+Especificação em `docs/product/peer-groups.md`. Decisões: entrada direta pelo
+link (sem aprovação do gestor) e retorno ao convite depois do login.
+
+| Camada | O que entrou |
+|---|---|
+| Banco | `groups.kind` e `created_by`, papel `manager`, `group_invites` (só hash do token), `group_command`, `group_context`, `group_invite_preview`; acordos externos e dossiê aceitam grupo sem instituição |
+| Login | `/entrar?proximo=` aceita só `/grupos/convite/<token>` como destino |
+| Telas | `/grupos`, `/grupos/novo`, `/grupos/[id]` (gestor, membro, institucional), `/grupos/convite/[token]` (aberto, cadastro pendente, indisponível, sem login) |
+| Integrações | Perfil → "Meus grupos"; publicação com "Grupo de colegas" no seletor, grupos arquivados fora e grupo pré-selecionado; três notificações novas; administração rotula grupos de colegas e esconde opções que o banco recusa |
+
+**Verificação.**
+
+- **Banco:** as 24 migrations aplicam do zero num Postgres descartável, com a
+  mesma imagem do Supabase local. Todos os testes pgTAP passam, incluindo os
+  52 de `peer_groups.sql`.
+- **Aplicação:** `format:check`, `typecheck`, `lint`, os 126 testes
+  unitários, as checagens de segurança, segredos e escopo e o
+  `next build --webpack` passam.
+- **Prévias a 390×844:** sem rolagem horizontal, controles com nome acessível,
+  alvos de pelo menos 44 px e um `h1` por tela.
+
+**Não verificado aqui.** O fluxo real com sessão e o e2e, porque o worktree não
+tem `.env.local` com Supabase. A migration também não foi aplicada no seu banco
+local nem em staging.

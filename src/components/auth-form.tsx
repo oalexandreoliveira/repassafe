@@ -9,7 +9,14 @@ import { Button, ButtonLink } from "@/components/ui/button";
 import { CheckboxField, TextField } from "@/components/ui/field";
 import { initialActionState } from "@/features/auth/schemas";
 
-export function AuthForm({ mode }: { mode: "login" | "signup" }) {
+export function AuthForm({
+  mode,
+  next,
+}: {
+  mode: "login" | "signup";
+  /** Destino após o login (apenas convite de grupo, validado no servidor). */
+  next?: string;
+}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const action = mode === "login" ? loginAction : signupAction;
@@ -20,6 +27,9 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
 
   return (
     <form action={formAction} className={styles.form}>
+      {mode === "login" && next ? (
+        <input type="hidden" name="next" value={next} />
+      ) : null}
       <TextField
         label={mode === "login" ? "E-mail ou celular confirmado" : "E-mail"}
         id="auth-email"

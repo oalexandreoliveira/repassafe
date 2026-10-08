@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createHash } from "node:crypto";
+import { safeReturnPath } from "@/features/groups/invite-path";
 import { legalDocuments } from "@/features/registration/legal";
 import { legalVersion } from "@/features/registration/schemas";
 import { revalidatePath } from "next/cache";
@@ -40,6 +41,8 @@ export async function loginAction(
 ): Promise<ActionState> {
   const parsed = loginSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return invalidCredentials;
+  // Só convites de grupo podem ser destino após o login (sem redirecionamento aberto).
+  const returnPath = safeReturnPath(formData.get("next"));
 
   try {
     const ip = await getRequestIp();
@@ -86,7 +89,7 @@ export async function loginAction(
   if (identity && (await getAdministrativeAccess(identity))) {
     redirect("/mfa");
   }
-  redirect("/painel");
+  redirect(returnPath ?? "/painel");
 }
 
 export async function signupAction(

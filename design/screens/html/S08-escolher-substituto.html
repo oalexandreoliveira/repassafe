@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Repassafe · Escolher substituto (referência estática)</title>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+</style>
+</head>
+<body>
+<!-- Referência visual estática gerada a partir do canvas de design. NÃO é código de produção: use como fonte de medidas, cores e textos. -->
+
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F6F8F7; font-family: Figtree, sans-serif; color: #0E2A3B; display: flex; flex-direction: column">
+
+  <div style="padding: 20px 20px 12px; display: flex; align-items: center; gap: 12px">
+    <button type="button" aria-label="Voltar" style="width: 44px; height: 44px; border: none; border-radius: 22px; background: #FFFFFF; display: flex; align-items: center; justify-content: center">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0E2A3B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg>
+    </button>
+    <h1 style="margin: 0; font-family: Sora, sans-serif; font-weight: 700; font-size: 22px; letter-spacing: -0.02em">Escolher substituto</h1>
+  </div>
+
+  <div style="padding: 4px 20px 0; display: flex; flex-direction: column; gap: 14px; flex-grow: 1">
+
+    <div style="background: #0E2A3B; color: #FFFFFF; border-radius: 20px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px">
+      <div style="font-size: 13px; color: #B9C7CF">Seu plantão</div>
+      <div style="font-family: Sora, sans-serif; font-weight: 600; font-size: 18px">UTI Adulto · [HOSPITAL]</div>
+      <div style="font-size: 14px; color: #D9F1EC">Sáb, 12 out · 19h – 07h</div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: baseline">
+      <h2 style="margin: 0; font-family: Sora, sans-serif; font-weight: 600; font-size: 17px">3 candidaturas</h2>
+      <span style="font-size: 13px; color: #4A5B66">Todos com CRM verificado</span>
+    </div>
+
+    <label style="background: #FFFFFF; border-radius: 18px; padding: 14px; display: flex; gap: 12px; align-items: center; box-shadow: 0 0 0 2px #0F7C78">
+      <div style="width: 46px; height: 46px; border-radius: 14px; background: #D9F1EC; color: #0B5E5B; display: flex; align-items: center; justify-content: center; font-family: Sora, sans-serif; font-weight: 700; font-size: 16px; flex-shrink: 0">AM</div>
+      <div style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1; min-width: 0">
+        <div style="font-weight: 600; font-size: 16px">Dra. [NOME]</div>
+        <div style="font-size: 13px; color: #4A5B66">Intensivista · CRM-[UF] [Nº]</div>
+        <div style="font-size: 12px; color: #4A5B66">Candidatou-se hoje, 14:32</div>
+      </div>
+      <input type="radio" name="subst" checked style="width: 22px; height: 22px; accent-color: #0F7C78; flex-shrink: 0">
+    </label>
+
+    <label style="background: #FFFFFF; border-radius: 18px; padding: 14px; display: flex; gap: 12px; align-items: center">
+      <div style="width: 46px; height: 46px; border-radius: 14px; background: #E3E9EE; color: #33454F; display: flex; align-items: center; justify-content: center; font-family: Sora, sans-serif; font-weight: 700; font-size: 16px; flex-shrink: 0">RS</div>
+      <div style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1; min-width: 0">
+        <div style="font-weight: 600; font-size: 16px">Dr. [NOME]</div>
+        <div style="font-size: 13px; color: #4A5B66">Clínica médica · CRM-[UF] [Nº]</div>
+        <div style="font-size: 12px; color: #4A5B66">Candidatou-se hoje, 15:05</div>
+      </div>
+      <input type="radio" name="subst" style="width: 22px; height: 22px; accent-color: #0F7C78; flex-shrink: 0">
+    </label>
+
+    <label style="background: #FFFFFF; border-radius: 18px; padding: 14px; display: flex; gap: 12px; align-items: center">
+      <div style="width: 46px; height: 46px; border-radius: 14px; background: #E3E9EE; color: #33454F; display: flex; align-items: center; justify-content: center; font-family: Sora, sans-serif; font-weight: 700; font-size: 16px; flex-shrink: 0">LC</div>
+      <div style="display: flex; flex-direction: column; gap: 2px; flex-grow: 1; min-width: 0">
+        <div style="font-weight: 600; font-size: 16px">Dra. [NOME]</div>
+        <div style="font-size: 13px; color: #4A5B66">Intensivista · CRM-[UF] [Nº]</div>
+        <div style="font-size: 12px; color: #4A5B66">Candidatou-se ontem, 21:48</div>
+      </div>
+      <input type="radio" name="subst" style="width: 22px; height: 22px; accent-color: #0F7C78; flex-shrink: 0">
+    </label>
+
+    <p style="margin: 0; font-size: 13px; line-height: 1.45; color: #4A5B66">Os demais candidatos serão avisados quando você confirmar a escolha.</p>
+  </div>
+
+  <div style="padding: 16px 20px 28px">
+    <button type="button" style="width: 100%; height: 54px; border: none; border-radius: 14px; background: #0F7C78; color: #FFFFFF; font-family: Figtree, sans-serif; font-weight: 600; font-size: 16px">Selecionar e revisar condições</button>
+  </div>
+</div>
+
+</body>
+</html>

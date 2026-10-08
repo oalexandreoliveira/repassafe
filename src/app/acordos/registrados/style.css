@@ -1,49 +1,69 @@
+/* Acordos combinados fora do app — apenas tokens da identidade v2.1. */
+.external-agreement-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: calc(20px + env(safe-area-inset-top)) var(--rs-screen-gutter) 10px;
+}
+.external-agreement-bar nav {
+  margin-left: auto;
+}
+.external-agreement-bar nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--rs-touch-min);
+  color: var(--rs-teal-dark);
+  font: var(--rs-type-label);
+}
 .external-agreement {
-  max-width: 980px;
+  display: grid;
+  gap: var(--rs-stack-gap);
+  min-width: 0;
 }
 .external-agreement h1 {
-  margin-block: 2rem 0.75rem;
+  margin: 0;
+  font: var(--rs-type-h1-sm);
+  letter-spacing: var(--rs-track-h1-sm);
 }
 .external-agreement h2 {
-  font-size: 1.4rem;
-  font-weight: 700;
-  margin-block: 1.5rem 0.75rem;
+  margin: 8px 0 0;
+  font: var(--rs-type-h2);
+  letter-spacing: var(--rs-track-h2);
 }
 .external-agreement p {
   max-width: 72ch;
+  margin: 0;
+  color: var(--rs-text-secondary);
+  line-height: 1.5;
 }
 .external-agreement fieldset {
-  border-radius: 0;
-  border: 0;
-  border-bottom: 1px solid var(--border);
-  margin: 0 0 2rem;
-  padding: 1.5rem 0;
-  min-width: 0;
   display: grid;
   gap: 1rem;
+  min-width: 0;
+  margin: 0 0 1rem;
+  padding: 1.25rem 0;
+  border: 0;
+  border-bottom: 1px solid var(--rs-divider);
+  border-radius: 0;
 }
 .agreement-form {
-  margin-top: 2rem;
+  display: grid;
+  gap: var(--rs-stack-gap);
 }
 .agreement-commitment {
-  font-size: clamp(1.15rem, 2.4vw, 1.4rem);
-  line-height: 1.45;
-  color: var(--brand-dark);
-  margin-block: 1rem;
+  margin-block: 0.5rem;
+  color: var(--rs-ink);
+  font: var(--rs-type-card-title);
   overflow-wrap: anywhere;
 }
-.agreement-summary dl {
-  margin-top: 1.5rem;
-}
 .external-agreement legend {
-  font-size: 1.4rem;
-  font-weight: 700;
+  font: var(--rs-type-h2);
 }
 .external-agreement input,
 .external-agreement select,
 .external-agreement textarea {
-  min-width: 0;
   width: 100%;
+  min-width: 0;
 }
 .external-agreement [hidden] {
   display: none;
@@ -51,81 +71,95 @@
 .external-agreement .agreement-checkbox {
   display: flex;
   align-items: flex-start;
-  gap: 0.75rem;
+  gap: 12px;
+  min-height: var(--rs-touch-min);
+  color: var(--rs-text-body);
   font-weight: 500;
-  margin-block: 1rem;
 }
 .external-agreement .agreement-checkbox input {
-  width: 1.25rem;
-  min-height: 1.25rem;
   flex-shrink: 0;
-  margin-top: 0.3rem;
-  accent-color: var(--brand);
+  width: 22px;
+  min-height: 22px;
+  margin-top: 2px;
+  accent-color: var(--rs-teal);
 }
+/* Cartões brancos sem borda nem sombra, como no restante do app. */
 .agreement-review,
 .agreement-summary {
-  padding: clamp(1rem, 3vw, 2rem);
-  background: white;
-  border: 1px solid var(--border);
-  border-radius: 1.25rem;
-  margin-block: 1.5rem;
+  padding: var(--rs-card-padding);
+  border-radius: var(--rs-radius-xl);
+  background: var(--rs-white);
 }
 .external-agreement dl {
   display: grid;
-  grid-template-columns: minmax(8rem, 1fr) 2fr;
-  column-gap: 1.5rem;
-  row-gap: 0.75rem;
+  grid-template-columns: minmax(7rem, 1fr) 2fr;
+  gap: 0.75rem 1rem;
+  margin: 0;
 }
 .external-agreement dt {
-  font-weight: 700;
+  color: var(--rs-text-muted);
+  font-size: 0.875rem;
 }
 .external-agreement dd {
   margin: 0;
+  color: var(--rs-ink);
+  font-size: 0.875rem;
+  font-weight: 600;
   overflow-wrap: anywhere;
   white-space: pre-wrap;
 }
-.agreement-action {
-  margin-block: 1.5rem;
-}
+.agreement-action,
 .agreement-share {
   display: grid;
-  gap: 0.75rem;
-  margin-block: 1.5rem;
+  gap: 10px;
 }
 .agreement-list,
 .agreement-events {
-  list-style: none;
+  display: grid;
+  gap: 10px;
+  margin: 0;
   padding: 0;
+  list-style: none;
 }
 .agreement-list li,
 .agreement-events li {
-  border-bottom: 1px solid var(--border);
-  padding-block: 1.25rem;
+  display: grid;
+  gap: 6px;
+  padding: var(--rs-card-padding);
+  border-radius: var(--rs-radius-xl);
+  background: var(--rs-white);
   overflow-wrap: anywhere;
 }
 .agreement-list h2 {
-  margin-top: 0;
+  margin: 0;
+  font: var(--rs-type-card-title);
+}
+.agreement-list h2 a {
+  color: inherit;
 }
 .agreement-events p {
   white-space: pre-wrap;
 }
 .agreement-record-id {
+  color: var(--rs-text-muted);
+  font: var(--rs-type-mono);
   overflow-wrap: anywhere;
-  font-variant-numeric: tabular-nums;
-  color: var(--muted);
 }
 .external-agreement summary {
+  display: flex;
+  align-items: center;
+  min-height: var(--rs-touch-min);
+  font-weight: 600;
   cursor: pointer;
-  min-height: 44px;
-  padding-block: 0.5rem;
-  font-weight: 650;
 }
 .external-agreement .actions {
-  flex-wrap: wrap;
+  display: grid;
+  gap: 10px;
+  margin: 0;
 }
 .external-agreement .button {
+  width: 100%;
   white-space: normal;
-  text-align: center;
 }
 @media (max-width: 600px) {
   .external-agreement dl {
@@ -135,26 +169,15 @@
   .external-agreement dd {
     margin-bottom: 0.75rem;
   }
-  .external-agreement .actions {
-    align-items: stretch;
-  }
-  .external-agreement .actions .button {
-    width: 100%;
-  }
 }
 @media print {
-  .external-agreement header,
+  .external-agreement-bar,
   .external-agreement form,
   .agreement-share,
   .external-agreement .button {
     display: none;
   }
-  .external-agreement {
-    max-width: none;
-    padding: 0;
-  }
   .agreement-summary {
-    border: 0;
     padding: 0;
   }
   .external-agreement details > * {

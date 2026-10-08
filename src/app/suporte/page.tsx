@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SupportForm } from "@/components/support-form";
 import { getVerifiedIdentity } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { Logo } from "@/components/ui/logo";
 type Request = {
   id: string;
   message: string;
@@ -22,7 +23,7 @@ export default async function SupportPage() {
   return (
     <main className="shell legal-document">
       <Link href="/" className="brand">
-        <span aria-hidden="true">R</span> Repassafe
+        <Logo priority />
       </Link>
       <h1>Suporte e privacidade</h1>
       <p>

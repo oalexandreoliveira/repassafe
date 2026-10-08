@@ -1,12 +1,31 @@
 import { redirect } from "next/navigation";
-import Link from "next/link";
+import { LogOut } from "lucide-react";
 import {
   getAdministrativeAccess,
   getVerifiedIdentity,
 } from "@/lib/auth/session";
 import { logoutAction, markNotificationsReadAction } from "@/app/auth/actions";
-import { groupRoleLabel, profileStatusLabel } from "@/features/admin/labels";
+import {
+  groupRoleLabel,
+  profileStatusPresentation,
+} from "@/features/admin/labels";
+import { formatNotificationTime } from "@/features/shifts/format";
+import { notificationPresentation } from "@/components/screens/notifications-list";
+import styles from "@/components/screens/screens.module.css";
+import {
+  AppScreen,
+  RootTopBar,
+  ScreenHeading,
+} from "@/components/ui/app-shell";
+import { ButtonLink } from "@/components/ui/button";
+import { InfoBanner } from "@/components/ui/info-banner";
+import { KeyValueList } from "@/components/ui/key-value-list";
+import { NotificationItem } from "@/components/ui/notification-item";
+import { StatusChip } from "@/components/ui/status-chip";
+import { SubmitButton } from "@/components/ui/submit-button";
+import { TabBar } from "@/components/ui/tab-bar";
 
+/** Portão de status (derivado): cadastro pendente, aprovador ou verificação vencida. */
 export default async function DashboardPage() {
   const identity = await getVerifiedIdentity();
   if (!identity) redirect("/entrar");
@@ -43,221 +62,194 @@ export default async function DashboardPage() {
     !!profile.verification_valid_until &&
     // eslint-disable-next-line react-hooks/purity -- Server component checks validity once per authenticated request.
     Date.parse(profile.verification_valid_until) > Date.now();
+  // Médicos aprovados e com verificação vigente começam no mural (S02).
+  if (canPublish) redirect("/plantoes");
+
+  const status = profileStatusPresentation(profile.status);
+  const approver = profile.status === "approved" && profile.role === "approver";
+  const unread = notifications?.some((notification) => !notification.read_at);
+  const now = new Date();
 
   return (
-    <main className="shell dashboard">
-      <header className="dashboard-header">
-        <Link href="/" className="brand">
-          <span aria-hidden="true">R</span> Repassafe
-        </Link>
-        <form action={logoutAction}>
-          <button className="button button-secondary">Sair</button>
-        </form>
-      </header>
-      <section className="dashboard-title">
-        <div>
-          <h1>Olá, {profile.display_name}</h1>
-        </div>
-        <span className={`status status-${profile.status}`}>
-          {profileStatusLabel[profile.status] ?? profile.status}
-        </span>
-      </section>
-      {canPublish ? (
-        <section className="workspace-start" aria-labelledby="start-title">
-          <h2 id="start-title">Seu próximo repasse começa aqui</h2>
-          <p>
-            Publique um plantão, encontre uma oferta ou acompanhe seus acordos.
-          </p>
-          <nav className="actions" aria-label="Ações de plantão">
-            <Link
-              href="/plantoes/novo?modo=grupo"
-              className="button button-primary"
-            >
-              Publicar plantão em grupo
-            </Link>
-            <Link
-              href="/plantoes/novo?modo=livre"
-              className="button button-secondary"
-            >
-              Publicar plantão livre
-            </Link>
-            <Link
-              href="/acordos/registrados/novo"
-              className="button button-secondary"
-            >
-              Registrar acordo
-            </Link>
-            <Link href="/plantoes" className="button button-secondary">
-              Encontrar plantão
-            </Link>
-            <Link href="/historico" className="button button-secondary">
-              Acompanhar repasses
-            </Link>
-          </nav>
-        </section>
-      ) : profile.status === "approved" && profile.role === "approver" ? (
-        <section className="workspace-start">
-          <h2>Acompanhe os repasses dos seus grupos</h2>
-          <p>
+    <AppScreen
+      header={<RootTopBar unread={unread} />}
+      tabBar={
+        profile.status === "approved" ? (
+          <TabBar canPublish={false} />
+        ) : undefined
+      }
+    >
+      <ScreenHeading title={`Olá, ${profile.display_name}`} />
+      <StatusChip tone={status.tone}>{status.label}</StatusChip>
+
+      {approver ? (
+        <section className={styles.panel} aria-labelledby="start-heading">
+          <h2 id="start-heading" className={styles.panelTitle}>
+            Acompanhe os repasses dos seus grupos
+          </h2>
+          <p className={styles.panelText}>
             As decisões institucionais dependem do seu vínculo ativo como
             aprovador em cada grupo.
           </p>
-          <Link href="/plantoes" className="button button-primary">
+          <ButtonLink href="/plantoes" block>
             Abrir central de repasses
-          </Link>
+          </ButtonLink>
+          <ButtonLink href="/acordos/registrados" variant="secondary" block>
+            Aprovar acordos registrados dos meus grupos
+          </ButtonLink>
         </section>
       ) : (
-        <section className="workspace-start">
-          <h2>
+        <section className={styles.panel} aria-labelledby="start-heading">
+          <h2 id="start-heading" className={styles.panelTitle}>
             {profile.status === "approved"
               ? "Atualize sua verificação profissional"
               : "Continue seu cadastro"}
           </h2>
-          <p>
+          <p className={styles.panelText}>
             Acompanhe a análise e confira as orientações da equipe antes de
             realizar repasses.
           </p>
-          <Link href="/cadastro/completar" className="button button-primary">
+          <ButtonLink href="/cadastro/completar" block>
             Acompanhar cadastro
-          </Link>
+          </ButtonLink>
         </section>
       )}
-      {profile.role === "doctor" && (
-        <section
-          className="workspace-start"
-          aria-label="Acordos combinados fora do app"
-        >
-          <h2>Acordos combinados fora do app</h2>
-          <p>
+
+      {profile.role === "doctor" ? (
+        <section className={styles.panel} aria-labelledby="external-heading">
+          <h2 id="external-heading" className={styles.panelTitle}>
+            Acordos combinados fora do app
+          </h2>
+          <p className={styles.panelText}>
             Confira convites e acompanhe os pagamentos. Para registrar um
             acordo, complete seu cadastro; a análise pode estar pendente.
           </p>
-          <nav className="actions" aria-label="Registros de acordos">
-            {!canPublish && (
-              <Link
-                className="button button-primary"
-                href="/acordos/registrados/novo"
-              >
-                Registrar acordo
-              </Link>
-            )}
-            <Link
-              className="button button-secondary"
-              href="/acordos/registrados"
-            >
-              Acordos registrados
-            </Link>
-          </nav>
-        </section>
-      )}
-      {profile.role === "approver" && (
-        <p>
-          <Link href="/acordos/registrados">
-            Aprovar acordos registrados dos meus grupos
-          </Link>
-        </p>
-      )}
-      {profile.verification_notes ? (
-        <section className="card" aria-label="Orientação administrativa">
-          <h2>Orientação da equipe</h2>
-          <p>{profile.verification_notes}</p>
+          <ButtonLink href="/acordos/registrados/novo" block>
+            Registrar acordo
+          </ButtonLink>
+          <ButtonLink href="/acordos/registrados" variant="secondary" block>
+            Acordos registrados
+          </ButtonLink>
         </section>
       ) : null}
-      <div className="dashboard-grid">
-        <section className="card">
-          <h2>Dados profissionais</h2>
-          <p>
-            {profile.display_name} — CRM {profile.crm_number ?? "Não informado"}
-            /{profile.crm_state ?? "—"}
+
+      {profile.verification_notes ? (
+        <InfoBanner variant="neutral">
+          <strong>Orientação da equipe.</strong> {profile.verification_notes}
+        </InfoBanner>
+      ) : null}
+
+      <section className={styles.stack} aria-labelledby="professional-heading">
+        <h2 id="professional-heading" className={styles.sectionTitle}>
+          Dados profissionais
+        </h2>
+        <KeyValueList
+          items={[
+            { label: "Nome profissional", value: profile.display_name },
+            {
+              label: "CRM",
+              value: `${profile.crm_number ?? "Não informado"} / ${profile.crm_state ?? "—"}`,
+            },
+          ]}
+        />
+        <ButtonLink href="/cadastro/completar" variant="secondary" block>
+          Completar cadastro ou solicitar alteração
+        </ButtonLink>
+      </section>
+
+      <section className={styles.stack} aria-labelledby="groups-heading">
+        <h2 id="groups-heading" className={styles.sectionTitle}>
+          Grupos ativos
+        </h2>
+        {memberships?.length ? (
+          <KeyValueList
+            items={memberships.map((membership, index) => {
+              const group = Array.isArray(membership.groups)
+                ? membership.groups[0]
+                : membership.groups;
+              return {
+                label: group?.name ?? `Grupo ${index + 1}`,
+                value: groupRoleLabel[membership.role] ?? membership.role,
+              };
+            })}
+          />
+        ) : (
+          <p className={styles.help}>
+            Nenhum vínculo ativo. Você ainda pode publicar ofertas livres e
+            candidatar-se a elas após a aprovação do cadastro.
           </p>
-          <Link className="button button-secondary" href="/cadastro/completar">
-            Completar cadastro ou solicitar alteração
-          </Link>
-        </section>
-        <section className="card">
-          <h2>Grupos ativos</h2>
-          {memberships?.length ? (
-            <ul className="clean-list">
-              {memberships.map((membership, index) => {
-                const group = Array.isArray(membership.groups)
-                  ? membership.groups[0]
-                  : membership.groups;
-                return (
-                  <li key={index}>
-                    <strong>{group?.name ?? "Grupo"}</strong>
-                    <span>
-                      {groupRoleLabel[membership.role] ?? membership.role}
-                    </span>
-                  </li>
-                );
-              })}
-            </ul>
-          ) : (
-            <p>
-              Nenhum vínculo ativo. Você ainda pode publicar ofertas livres e
-              candidatar-se a elas após a aprovação do cadastro.
-            </p>
-          )}
-        </section>
-      </div>
-      <nav className="actions" aria-label="Área do profissional">
-        <Link className="button button-secondary" href="/perfil">
-          Meu perfil
-        </Link>
-        <Link className="button button-secondary" href="/historico">
-          Meu histórico
-        </Link>
-        <Link className="button button-secondary" href="/notificacoes">
-          Central de notificações
-        </Link>
-      </nav>
+        )}
+      </section>
+
       {notifications?.length ? (
         <section
-          className="card admin-section"
+          className={styles.stack}
           aria-labelledby="notifications-heading"
         >
-          <div className="section-heading">
-            <h2 id="notifications-heading">Notificações</h2>
-            <Link href="/notificacoes">Ver central completa</Link>
-            {notifications.some((notification) => !notification.read_at) ? (
-              <form action={markNotificationsReadAction}>
-                <button className="button button-secondary" type="submit">
-                  Marcar como lidas
-                </button>
-              </form>
-            ) : null}
+          <div className={styles.sectionHeader}>
+            <h2 id="notifications-heading" className={styles.sectionTitle}>
+              Notificações
+            </h2>
           </div>
-          <ul className="clean-list">
-            {notifications.map((notification) => (
-              <li key={notification.id}>
-                <Link href={notification.href}>
-                  <strong>{notification.title}</strong>
-                  <span>{notification.body}</span>
-                </Link>
-                <small>
-                  {new Date(notification.created_at).toLocaleString("pt-BR")}
-                  {notification.read_at ? " · Lida" : " · Não lida"}
-                </small>
-              </li>
-            ))}
+          <ul className={styles.list}>
+            {notifications.slice(0, 5).map((notification) => {
+              const { tone, icon } = notificationPresentation(
+                notification.event_type,
+              );
+              return (
+                <li key={notification.id}>
+                  <NotificationItem
+                    tone={tone}
+                    icon={icon}
+                    title={notification.title}
+                    body={notification.body}
+                    time={formatNotificationTime(notification.created_at, now)}
+                    dateTime={notification.created_at}
+                    href={notification.href}
+                    unread={!notification.read_at}
+                  />
+                </li>
+              );
+            })}
           </ul>
+          <ButtonLink href="/notificacoes" variant="secondary" block>
+            Ver central completa
+          </ButtonLink>
+          {unread ? (
+            <form action={markNotificationsReadAction}>
+              <SubmitButton variant="ghost" block>
+                Marcar como lidas
+              </SubmitButton>
+            </form>
+          ) : null}
         </section>
       ) : null}
-      {administrativeAccess ? (
-        <Link
-          className="button button-primary inline-action"
-          href={identity.claims.aal === "aal2" ? "/admin" : "/mfa"}
-        >
-          {identity.claims.aal === "aal2"
-            ? "Abrir administração"
-            : "Configurar MFA administrativo"}
-        </Link>
-      ) : null}
-      {profile.status === "approved" ? (
-        <Link className="button button-primary inline-action" href="/plantoes">
-          Abrir central de repasses
-        </Link>
-      ) : null}
-    </main>
+
+      <nav className={styles.actions} aria-label="Área do profissional">
+        <ButtonLink href="/perfil" variant="secondary" block>
+          Meu perfil
+        </ButtonLink>
+        <ButtonLink href="/historico" variant="secondary" block>
+          Meu histórico
+        </ButtonLink>
+        {administrativeAccess ? (
+          <ButtonLink
+            href={identity.claims.aal === "aal2" ? "/admin" : "/mfa"}
+            variant="secondary"
+            block
+          >
+            {identity.claims.aal === "aal2"
+              ? "Abrir administração"
+              : "Configurar MFA administrativo"}
+          </ButtonLink>
+        ) : null}
+      </nav>
+
+      <form action={logoutAction}>
+        <SubmitButton variant="ghost" block icon={<LogOut size={20} />}>
+          Sair
+        </SubmitButton>
+      </form>
+    </AppScreen>
   );
 }

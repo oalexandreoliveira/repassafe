@@ -1,30 +1,25 @@
-import Link from "next/link";
 import { NewPasswordForm } from "@/components/email-action-form";
+import { AuthScreen } from "@/components/screens/auth-screen";
+import { ButtonLink } from "@/components/ui/button";
+import { InfoBanner } from "@/components/ui/info-banner";
 import { getVerifiedIdentity } from "@/lib/auth/session";
 
 export default async function NewPasswordPage() {
   const identity = await getVerifiedIdentity();
   return (
-    <main className="auth-shell">
-      <Link href="/" className="brand">
-        <span aria-hidden="true">R</span> Repassafe
-      </Link>
-      <section className="auth-card">
-        <p className="eyebrow">Recuperação de acesso</p>
-        <h1>Defina uma nova senha</h1>
-        {identity ? (
-          <NewPasswordForm />
-        ) : (
-          <>
-            <p>
-              O link expirou ou não é válido. Solicite uma nova recuperação.
-            </p>
-            <Link className="button button-primary" href="/senha/esqueci">
-              Solicitar novo link
-            </Link>
-          </>
-        )}
-      </section>
-    </main>
+    <AuthScreen title="Defina uma nova senha">
+      {identity ? (
+        <NewPasswordForm />
+      ) : (
+        <>
+          <InfoBanner variant="warning" role="status">
+            O link expirou ou não é válido. Solicite uma nova recuperação.
+          </InfoBanner>
+          <ButtonLink href="/senha/esqueci" block>
+            Solicitar novo link
+          </ButtonLink>
+        </>
+      )}
+    </AuthScreen>
   );
 }

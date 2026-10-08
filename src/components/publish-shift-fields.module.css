@@ -1,3 +1,16 @@
+.fields {
+  display: grid;
+  gap: var(--rs-stack-gap);
+}
+.timeRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.notes {
+  display: grid;
+  gap: 8px;
+}
 .dateInput {
   width: 100%;
   min-width: 0;

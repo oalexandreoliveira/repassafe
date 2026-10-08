@@ -1,0 +1,179 @@
+/* Estrutura de tela (design/DESIGN.md §5): coluna de 390 (360–430), no desktop até 480. */
+.screen {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 480px;
+  min-height: 100dvh;
+  margin-inline: auto;
+  background: var(--rs-base);
+}
+.content {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--rs-stack-gap);
+  padding: 4px var(--rs-screen-gutter) 24px;
+}
+/* Espaço para a tab bar e o FAB não cobrirem o fim da lista. */
+.withTabBar .content {
+  padding-bottom: calc(var(--rs-tabbar-h) + env(safe-area-inset-bottom) + 96px);
+}
+.footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  display: grid;
+  gap: 10px;
+  padding: 16px var(--rs-screen-gutter)
+    calc(var(--rs-space-7) + env(safe-area-inset-bottom));
+  background: var(--rs-base);
+}
+.topBar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: calc(20px + env(safe-area-inset-top)) var(--rs-screen-gutter) 10px;
+}
+.rootBar {
+  justify-content: space-between;
+  padding: calc(24px + env(safe-area-inset-top)) var(--rs-screen-gutter) 6px;
+}
+.topTitle {
+  margin: 0;
+  font: var(--rs-type-h1-sm);
+  letter-spacing: var(--rs-track-h1-sm);
+}
+.heading {
+  display: grid;
+  gap: 2px;
+}
+.headingTitle {
+  margin: 0;
+  font: var(--rs-type-h1);
+  letter-spacing: var(--rs-track-h1);
+}
+.headingSubtitle {
+  margin: 0;
+  color: var(--rs-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+.groupLabel {
+  margin: 2px 0 0;
+  color: var(--rs-text-muted);
+  font: var(--rs-type-eyebrow);
+  letter-spacing: var(--rs-track-eyebrow);
+  text-transform: uppercase;
+}
+.tabBar {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  max-width: 480px;
+  margin-inline: auto;
+  border-top: 1px solid var(--rs-track);
+  background: var(--rs-white);
+}
+.tabBarStatic {
+  position: static;
+}
+.tabs {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: calc(var(--rs-tabbar-h) + env(safe-area-inset-bottom));
+  margin: 0;
+  padding: 0 0 calc(10px + env(safe-area-inset-bottom));
+  list-style: none;
+}
+.tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  min-width: 64px;
+  min-height: var(--rs-touch-min);
+  padding: 4px 6px;
+  border-radius: var(--rs-radius-md);
+  color: var(--rs-text-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1rem;
+  text-decoration: none;
+}
+.tab[aria-current="page"] {
+  color: var(--rs-teal-dark);
+  font-weight: 600;
+}
+.tab[aria-current="page"] svg {
+  color: var(--rs-teal);
+}
+.fab {
+  position: fixed;
+  right: max(
+    var(--rs-screen-gutter),
+    calc((100vw - 480px) / 2 + var(--rs-screen-gutter))
+  );
+  bottom: calc(var(--rs-tabbar-h) + env(safe-area-inset-bottom) + 20px);
+  z-index: 11;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 56px;
+  padding: 0 20px;
+  border-radius: var(--rs-radius-xl);
+  background: var(--rs-ink);
+  color: var(--rs-white);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: var(--rs-shadow-fab);
+}
+.fab svg {
+  color: var(--rs-mint);
+}
+.fab:hover {
+  background: color-mix(in srgb, var(--rs-ink), black 6%);
+}
+.fabStatic {
+  position: static;
+  align-self: flex-end;
+  justify-self: end;
+  width: fit-content;
+}
+@media print {
+  .footer,
+  .tabBar,
+  .fab {
+    display: none;
+  }
+}
+.brandLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--rs-touch-min);
+}
+.brandLink img {
+  display: block;
+}
+.brandNav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px 12px;
+}
+.brandNav a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--rs-touch-min);
+  min-height: var(--rs-touch-min);
+  color: var(--rs-teal-dark);
+  font: var(--rs-type-label);
+  font-size: 0.875rem;
+}

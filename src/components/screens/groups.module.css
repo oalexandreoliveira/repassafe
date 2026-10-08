@@ -1,0 +1,110 @@
+/* Telas de grupos: derivadas dos cartões, linhas e tiles do design system. */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  padding: 14px var(--rs-card-padding);
+  border-radius: var(--rs-radius-xl);
+  background: var(--rs-white);
+  color: var(--rs-ink);
+  text-decoration: none;
+}
+.row:hover .rowName {
+  color: var(--rs-teal-dark);
+}
+.rowIcon {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--rs-radius-icon);
+  background: var(--rs-mist);
+  color: var(--rs-teal-dark);
+}
+.rowIcon[data-kind="institutional"] {
+  background: var(--rs-status-institutional-bg);
+  color: var(--rs-status-institutional-fg);
+}
+.rowText {
+  display: grid;
+  flex: 1;
+  gap: 2px;
+  min-width: 0;
+}
+.rowName {
+  font: var(--rs-type-card-title);
+  overflow-wrap: anywhere;
+  transition: color var(--rs-duration-fast) var(--rs-ease);
+}
+.rowMeta {
+  color: var(--rs-text-muted);
+  font: var(--rs-type-caption);
+}
+.chevron {
+  flex: none;
+  color: var(--rs-text-muted);
+}
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin: 0;
+  color: var(--rs-text-secondary);
+  font: var(--rs-type-body-sm);
+}
+.subTitle {
+  margin: 0;
+  color: var(--rs-ink);
+  font: var(--rs-type-label);
+}
+.inviteList {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.inviteList > li {
+  display: grid;
+  gap: 8px;
+  padding: 12px 0;
+  border-top: 1px solid var(--rs-divider);
+}
+.inviteText {
+  margin: 0;
+  color: var(--rs-text-body);
+  font: var(--rs-type-body-sm);
+}
+.inviteMeta {
+  display: block;
+  color: var(--rs-text-muted);
+  font: var(--rs-type-caption);
+}
+.linkBox {
+  display: grid;
+  gap: 10px;
+}
+.manage {
+  display: grid;
+  gap: 10px;
+  padding: 12px 0;
+  border-top: 1px solid var(--rs-divider);
+}
+.manage:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.manageName {
+  margin: 0;
+  color: var(--rs-ink);
+  font-weight: 600;
+}
+.groupName {
+  margin: 0;
+  font: var(--rs-type-h2);
+  letter-spacing: var(--rs-track-h2);
+  overflow-wrap: anywhere;
+}

@@ -1,0 +1,106 @@
+/* Repassafe — design tokens (v2.2)
+   Fonte única de verdade para cores, tipografia, raios, espaçamentos e sombras.
+   Nunca use hex soltos no código: referencie sempre estas variáveis (ou o preset Tailwind / theme.ts equivalentes). */
+
+@import url("https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Sora:wght@500;600;700;800&display=swap");
+
+:root {
+  /* ---------- Cores de marca ---------- */
+  --rs-ink: #0E2A3B;          /* Tinta: texto principal, títulos, fundos escuros */
+  --rs-ink-2: #173B50;        /* Tinta 2: cartões sobre fundo Tinta */
+  --rs-teal: #0F7C78;         /* Verde-repasse: primária, ações, confirmado */
+  --rs-teal-dark: #0B5E5B;    /* Texto verde sobre Névoa/branco (contraste AA) */
+  --rs-mint: #8EE0CC;         /* Menta: área de repasse do símbolo, destaques sobre escuro */
+  --rs-mist: #D9F1EC;         /* Névoa: superfícies suaves, chips positivos */
+  --rs-base: #F6F8F7;         /* Base: fundo das telas */
+  --rs-white: #FFFFFF;        /* Cartões */
+  --rs-light: #E9F5F2;        /* Bloco claro do símbolo em versão negativa */
+  --rs-amber: #F2B544;        /* Âmbar plantão: atenção, pendência (nunca como cor de texto) */
+
+  /* ---------- Texto ---------- */
+  --rs-text: var(--rs-ink);
+  --rs-text-body: #1E3A47;
+  --rs-text-secondary: #33454F;
+  --rs-text-muted: #4A5B66;   /* menor tom permitido para texto sobre branco/base */
+  --rs-text-on-dark: #FFFFFF;
+  --rs-text-on-dark-muted: #B9C7CF;
+  --rs-text-on-teal: #FFFFFF;
+
+  /* ---------- Linhas e superfícies neutras ---------- */
+  --rs-border: #DCE3E1;       /* linhas, chips e botões secundários claros */
+  --rs-field-border: #7A8C96; /* contorno de campos e controles de formulário (>= 3:1 sobre branco e Base) */
+  --rs-divider: #EDF1F0;      /* separador de linhas dentro de cartões */
+  --rs-track: #E3EAE8;        /* fundo de segmented control, barra inferior */
+  --rs-neutral-100: #F1F4F3;
+  --rs-neutral-200: #E3E9EE;
+  --rs-disabled: #C9D4D1;
+  --rs-placeholder-border: #9AAAB3;
+
+  /* ---------- Status (fundo / texto / ponto) ---------- */
+  --rs-status-open-bg: #D9F1EC;          --rs-status-open-fg: #0B5E5B;          --rs-status-open-dot: #0F7C78;
+  --rs-status-pending-bg: #FCEBC7;       --rs-status-pending-fg: #6E4300;       --rs-status-pending-dot: #D99A1E;
+  --rs-status-institutional-bg: #E3E9EE; --rs-status-institutional-fg: #33454F; --rs-status-institutional-dot: #5E7383;
+  --rs-status-confirmed-bg: #D9F1EC;     --rs-status-confirmed-fg: #0B5E5B;     --rs-status-confirmed-dot: #0F7C78;
+  --rs-status-registered-bg: #0E2A3B;    --rs-status-registered-fg: #FFFFFF;    --rs-status-registered-dot: #8EE0CC;
+  --rs-status-cancelled-bg: #FBE3E1;     --rs-status-cancelled-fg: #8E2A22;     --rs-status-cancelled-dot: #C2453A;
+  --rs-status-empty-bg: #F1F4F3;         --rs-status-empty-fg: #4A5B66;         --rs-status-empty-dot: #9AAAB3;
+
+  /* ---------- Tipografia ---------- */
+  --rs-font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
+  --rs-font-body: "Figtree", ui-sans-serif, system-ui, sans-serif;
+  --rs-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  /* escala: peso / tamanho / altura de linha (rem = px/16, acompanha a fonte do sistema) / tracking */
+  --rs-type-display: 700 2.75rem/3.25rem var(--rs-font-display);   --rs-track-display: -0.03em;
+  --rs-type-h1: 700 1.625rem/1.9375rem var(--rs-font-display);        --rs-track-h1: -0.02em;   /* título de tela principal */
+  --rs-type-h1-sm: 700 1.375rem/1.75rem var(--rs-font-display);     --rs-track-h1-sm: -0.02em; /* título com botão voltar */
+  --rs-type-h2: 600 1.125rem/1.5rem var(--rs-font-display);        --rs-track-h2: -0.01em;
+  --rs-type-card-title: 600 1.0625rem/1.375rem var(--rs-font-display);
+  --rs-type-body: 400 1rem/1.5rem var(--rs-font-body);
+  --rs-type-body-sm: 400 0.9375rem/1.3125rem var(--rs-font-body);
+  --rs-type-label: 600 0.8125rem/1.125rem var(--rs-font-body);
+  --rs-type-caption: 500 0.8125rem/1.125rem var(--rs-font-body);
+  --rs-type-micro: 600 0.75rem/1rem var(--rs-font-body);        /* chips, legendas da tab bar */
+  --rs-type-button: 600 1rem/1.25rem var(--rs-font-body);
+  --rs-type-mono: 400 0.75rem/1.25rem var(--rs-font-mono);
+  --rs-type-eyebrow: 400 0.75rem/1rem var(--rs-font-mono);      --rs-track-eyebrow: 0.06em; /* MAIÚSCULAS */
+
+  /* ---------- Raios ---------- */
+  --rs-radius-xs: 7px;     /* ponto de status (círculo 7–8px) */
+  --rs-radius-sm: 11px;    /* item interno do segmented control */
+  --rs-radius-md: 14px;    /* botões, inputs, segmented control, banners */
+  --rs-radius-lg: 16px;    /* banners informativos, blocos menores */
+  --rs-radius-xl: 20px;    /* cartões */
+  --rs-radius-2xl: 28px;   /* cabeçalho escuro da tela de acordo (cantos inferiores 32px) */
+  --rs-radius-pill: 999px; /* chips de status e filtros */
+  --rs-radius-icon: 12px;  /* tiles de ícone 40px; 14px para tiles de 44–46px */
+
+  /* ---------- Espaçamento (base 4) ---------- */
+  --rs-space-1: 4px;  --rs-space-2: 8px;  --rs-space-3: 12px; --rs-space-3h: 14px;
+  --rs-space-4: 16px; --rs-space-5: 20px; --rs-space-6: 24px; --rs-space-7: 28px; --rs-space-8: 32px;
+  --rs-screen-gutter: 20px;   /* padding lateral das telas mobile */
+  --rs-card-padding: 16px;
+  --rs-stack-gap: 14px;       /* distância padrão entre blocos de uma tela */
+
+  /* ---------- Dimensões ---------- */
+  --rs-touch-min: 44px;
+  --rs-button-h: 52px;        /* botão primário de rodapé: 52–54px */
+  --rs-button-h-sm: 44px;     /* botão dentro de cartão */
+  --rs-input-h: 50px;
+  --rs-tabbar-h: 80px;
+  --rs-icon-btn: 44px;
+
+  /* ---------- Sombras (uso mínimo) ---------- */
+  --rs-shadow-fab: 0 8px 20px rgba(14, 42, 59, 0.25);
+  --rs-ring-selected: 0 0 0 2px var(--rs-teal);   /* cartão selecionado */
+  --rs-focus-ring: 0 0 0 3px rgba(15, 124, 120, 0.35);
+
+  /* ---------- Movimento ---------- */
+  --rs-ease: cubic-bezier(0.2, 0, 0, 1);
+  --rs-duration-fast: 120ms;
+  --rs-duration: 180ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --rs-duration-fast: 0ms; --rs-duration: 0ms; }
+}

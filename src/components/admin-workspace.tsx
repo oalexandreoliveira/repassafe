@@ -54,7 +54,7 @@ export async function AdminWorkspace({
       .order("name"),
     admin
       .from("groups")
-      .select("id,name,institution_id,requires_approval")
+      .select("id,name,kind,institution_id,requires_approval")
       .eq("active", true)
       .order("name"),
     admin
@@ -423,11 +423,13 @@ export async function AdminWorkspace({
               <label>
                 Grupo
                 <select name="groupId" required>
-                  {groups?.map((group) => (
-                    <option key={group.id} value={group.id}>
-                      {group.name}
-                    </option>
-                  ))}
+                  {groups
+                    ?.filter((group) => group.kind === "institutional")
+                    .map((group) => (
+                      <option key={group.id} value={group.id}>
+                        {group.name}
+                      </option>
+                    ))}
                 </select>
               </label>
               <label>
@@ -454,15 +456,17 @@ export async function AdminWorkspace({
                   <summary>
                     <h3>{group.name}</h3>
                     <p>
-                      {
-                        institutions?.find(
-                          (item) => item.id === group.institution_id,
-                        )?.name
-                      }{" "}
-                      ·{" "}
-                      {group.requires_approval
-                        ? "Aprovação institucional obrigatória"
-                        : "Aprovação institucional dispensada"}
+                      {group.kind === "peer"
+                        ? "Grupo de colegas · criado e gerido por médico · sem aprovação institucional"
+                        : `${
+                            institutions?.find(
+                              (item) => item.id === group.institution_id,
+                            )?.name ?? "Instituição"
+                          } · ${
+                            group.requires_approval
+                              ? "Aprovação institucional obrigatória"
+                              : "Aprovação institucional dispensada"
+                          }`}
                     </p>
                   </summary>
                   <div className="record-detail">
@@ -475,16 +479,24 @@ export async function AdminWorkspace({
                         Nome do grupo
                         <input name="name" defaultValue={group.name} required />
                       </label>
-                      <label>
-                        Exige aprovação institucional
-                        <select
+                      {group.kind === "peer" ? (
+                        <input
+                          type="hidden"
                           name="requiresApproval"
-                          defaultValue={String(group.requires_approval)}
-                        >
-                          <option value="true">Sim</option>
-                          <option value="false">Não</option>
-                        </select>
-                      </label>
+                          value="false"
+                        />
+                      ) : (
+                        <label>
+                          Exige aprovação institucional
+                          <select
+                            name="requiresApproval"
+                            defaultValue={String(group.requires_approval)}
+                          >
+                            <option value="true">Sim</option>
+                            <option value="false">Não</option>
+                          </select>
+                        </label>
+                      )}
                       <button className="button button-secondary">
                         Salvar grupo
                       </button>
@@ -521,7 +533,15 @@ export async function AdminWorkspace({
                                     defaultValue={membership.role}
                                   >
                                     <option value="doctor">Médico</option>
-                                    <option value="approver">Aprovador</option>
+                                    {group.kind === "peer" ? (
+                                      <option value="manager">
+                                        Gestor do grupo
+                                      </option>
+                                    ) : (
+                                      <option value="approver">
+                                        Aprovador
+                                      </option>
+                                    )}
                                   </select>
                                 </label>
                                 <label>

@@ -1,0 +1,93 @@
+/* Button (design/DESIGN.md §6). Global classes because server-rendered forms
+   and links across the app share them; src/components/ui/button.tsx is the API. */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--rs-space-2);
+  border: 1.5px solid transparent;
+  border-radius: var(--rs-radius-md);
+  min-height: var(--rs-button-h);
+  padding: 0.7rem 1.5rem;
+  font: var(--rs-type-button);
+  text-align: center;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color var(--rs-duration) var(--rs-ease);
+}
+.button svg {
+  flex: none;
+}
+.button-sm {
+  min-height: var(--rs-button-h-sm);
+  padding-block: 0.5rem;
+}
+.button-block {
+  width: 100%;
+}
+.button-primary {
+  background: var(--rs-teal);
+  color: var(--rs-text-on-teal);
+}
+.button-secondary {
+  background: transparent;
+  border-color: var(--rs-ink);
+  color: var(--rs-ink);
+}
+.button-ghost {
+  background: transparent;
+  color: var(--rs-teal-dark);
+}
+.button-dark {
+  background: var(--rs-ink);
+  color: var(--rs-white);
+}
+/* Hover −6% e pressed −10% de luminância sobre o token da variante. */
+.button-primary:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--rs-teal), black 6%);
+}
+.button-primary:active:not(:disabled) {
+  background: color-mix(in srgb, var(--rs-teal), black 10%);
+}
+.button-dark:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--rs-ink), black 6%);
+}
+.button-dark:active:not(:disabled) {
+  background: color-mix(in srgb, var(--rs-ink), black 10%);
+}
+.button-secondary:hover:not(:disabled),
+.button-ghost:hover:not(:disabled) {
+  background: var(--rs-neutral-100);
+}
+.button-secondary:active:not(:disabled),
+.button-ghost:active:not(:disabled) {
+  background: var(--rs-neutral-200);
+}
+.button:disabled:not(.button-loading) {
+  cursor: not-allowed;
+  background: var(--rs-disabled);
+  border-color: var(--rs-disabled);
+  color: var(--rs-white);
+}
+.button-ghost:disabled:not(.button-loading) {
+  background: transparent;
+  border-color: transparent;
+  color: var(--rs-text-muted);
+}
+/* Loading keeps the variant colors; the spinner and aria-busy carry the state. */
+.button-loading {
+  cursor: progress;
+}
+.button-spinner {
+  animation: rs-button-spin 0.8s linear infinite;
+}
+@keyframes rs-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .button-spinner {
+    animation-duration: 2.4s;
+  }
+}

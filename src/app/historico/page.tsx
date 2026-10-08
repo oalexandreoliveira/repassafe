@@ -3,11 +3,20 @@ import { redirect } from "next/navigation";
 import {
   applicationStatusLabels,
   formatCurrency,
-  formatDateTime,
-  offerStatusLabels,
-  substitutionStatusLabels,
 } from "@/features/shifts/schemas";
 import { getVerifiedIdentity } from "@/lib/auth/session";
+import styles from "@/components/screens/screens.module.css";
+import { AppScreen, TopBar } from "@/components/ui/app-shell";
+import { Button, ButtonLink } from "@/components/ui/button";
+import { TextField } from "@/components/ui/field";
+import { ShiftCard } from "@/components/ui/shift-card";
+import { formatHourRangeShort, formatShiftDay } from "@/features/shifts/format";
+import { offerGroupLabel, toOfferSummary } from "@/features/shifts/offer-view";
+import {
+  applicationPresentation,
+  offerPresentation,
+  substitutionPresentation,
+} from "@/features/shifts/presentation";
 
 function currentFortalezaMonth() {
   const parts = new Intl.DateTimeFormat("en-CA", {
@@ -185,56 +194,41 @@ export default async function PersonalHistoryPage({
   }
 
   return (
-    <main className="shell dashboard">
-      <header className="dashboard-header">
-        <Link href="/painel" className="brand">
-          <span aria-hidden="true">R</span> Repassafe
-        </Link>
-        <Link href="/notificacoes" className="button button-secondary">
-          Notificações
-        </Link>
-      </header>
-      <section className="dashboard-title">
-        <div>
-          <p className="eyebrow">Área do profissional</p>
-          <h1>Meu histórico</h1>
-          <Link href="/acordos/registrados">
-            Acordos registrados e pagamentos
-          </Link>
-          <p className="form-help">
-            Ofertas, candidaturas e substituições ligadas à sua conta.
-          </p>
-        </div>
-      </section>
-      <section
-        className="card admin-section"
-        aria-labelledby="passed-shifts-heading"
-      >
-        <h2 id="passed-shifts-heading">Plantões que repassei</h2>
-        <p className="form-help">
-          Pesquise por mês e pelo nome de quem assumiu meus plantões.
-        </p>
-        <form method="get" className="form-grid compact-form">
-          <label>
-            Mês
-            <input type="month" name="shiftMonth" defaultValue={shiftMonth} />
-          </label>
-          <label>
-            Nome do substituto
-            <input
+    <AppScreen header={<TopBar title="Meu histórico" backHref="/perfil" />}>
+      <p className={styles.help}>
+        Ofertas, candidaturas e substituições ligadas à sua conta.
+      </p>
+      <ButtonLink href="/acordos/registrados" variant="secondary" block>
+        Acordos registrados e pagamentos
+      </ButtonLink>
+
+      <section className={styles.stack} aria-labelledby="passed-shifts-heading">
+        <h2 id="passed-shifts-heading" className={styles.sectionTitle}>
+          Plantões que repassei
+        </h2>
+        <form method="get" className={styles.stack}>
+          <div className={styles.formGrid2}>
+            <TextField
+              label="Mês"
+              type="month"
+              name="shiftMonth"
+              defaultValue={shiftMonth}
+            />
+            <TextField
+              label="Nome do substituto"
               type="search"
               name="substituteName"
               defaultValue={substituteName}
               maxLength={100}
               placeholder="Ex.: Davi"
             />
-          </label>
-          <button className="button button-primary" type="submit">
+          </div>
+          <Button type="submit" variant="secondary" size="sm" block>
             Pesquisar
-          </button>
+          </Button>
         </form>
         {passedShiftsFiltered.length ? (
-          <ul className="clean-list">
+          <ul className={styles.list}>
             {[
               ...new Set(passedShiftsFiltered.map((row) => row.substitute_id)),
             ].map((substituteId) => {
@@ -247,155 +241,179 @@ export default async function PersonalHistoryPage({
                   )
                 : undefined;
               return (
-                <li key={substituteId}>
-                  <strong>{displayName ?? "Médico substituto"}</strong>
-                  {doctorShifts.map((substitution) => (
-                    <Link
-                      key={substitution.id}
-                      href={`/plantoes/${substitution.offer_id}`}
-                    >
-                      <span>
-                        Dia{" "}
-                        {new Intl.DateTimeFormat("pt-BR", {
-                          day: "numeric",
-                          timeZone: "America/Fortaleza",
-                        }).format(new Date(substitution.offer.starts_at))}
-                        {" · "}
-                        {formatDateTime(substitution.offer.starts_at)} ·{" "}
-                        {substitution.offer.sector}
-                      </span>
-                    </Link>
-                  ))}
+                <li key={substituteId} className={styles.panel}>
+                  <h3 className={styles.panelTitle}>
+                    {displayName ?? "Médico substituto"}
+                  </h3>
+                  <div>
+                    {doctorShifts.map((substitution) => (
+                      <Link
+                        key={substitution.id}
+                        href={`/plantoes/${substitution.offer_id}`}
+                        className={styles.rowLink}
+                      >
+                        <span>
+                          {formatShiftDay(substitution.offer.starts_at)} ·{" "}
+                          {formatHourRangeShort(
+                            substitution.offer.starts_at,
+                            substitution.offer.ends_at,
+                          )}{" "}
+                          · {substitution.offer.sector}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
                 </li>
               );
             })}
           </ul>
         ) : (
-          <p>
+          <p className={styles.help}>
             {substituteName
               ? `Nenhum plantão encontrado para “${substituteName}” neste mês.`
               : "Nenhum plantão repassado neste mês."}
           </p>
         )}
       </section>
-      <section className="card admin-section">
-        <h2>Ofertas publicadas</h2>
+
+      <section className={styles.stack} aria-labelledby="offers-heading">
+        <h2 id="offers-heading" className={styles.sectionTitle}>
+          Ofertas publicadas
+        </h2>
         {myOffers?.length ? (
-          <ul className="clean-list">
-            {myOffers.map((offer) => {
-              const group = Array.isArray(offer.groups)
-                ? offer.groups[0]
-                : offer.groups;
+          <ul className={styles.list}>
+            {myOffers.map((row) => {
+              const offer = toOfferSummary(row);
               return (
                 <li key={offer.id}>
-                  <Link href={`/plantoes/${offer.id}`}>
-                    <strong>{offer.sector}</strong>
-                    <span>
-                      {group?.name ?? "Oferta livre"} ·{" "}
-                      {formatDateTime(offer.starts_at)} ·{" "}
-                      {formatCurrency(offer.value_cents)} ·{" "}
-                      {offerStatusLabels[offer.status] ?? offer.status}
-                    </span>
-                  </Link>
+                  <ShiftCard
+                    status={offerPresentation({
+                      offerStatus: offer.status,
+                      view: "mural",
+                    })}
+                    group={offerGroupLabel(offer)}
+                    title={offer.sector}
+                    date={formatShiftDay(offer.startsAt)}
+                    time={formatHourRangeShort(offer.startsAt, offer.endsAt)}
+                    meta={
+                      offer.valueCents !== undefined
+                        ? formatCurrency(offer.valueCents)
+                        : undefined
+                    }
+                    href={`/plantoes/${offer.id}`}
+                  />
                 </li>
               );
             })}
           </ul>
         ) : (
-          <p>Nenhuma oferta publicada.</p>
+          <p className={styles.help}>Nenhuma oferta publicada.</p>
         )}
       </section>
-      <section className="card admin-section">
-        <h2>Candidaturas</h2>
+
+      <section className={styles.stack} aria-labelledby="applications-heading">
+        <h2 id="applications-heading" className={styles.sectionTitle}>
+          Candidaturas
+        </h2>
         {myApplications?.length ? (
-          <ul className="clean-list">
+          <ul className={styles.list}>
             {myApplications.map((application) => {
-              const offer = offerById.get(application.offer_id);
-              const group = offer
-                ? Array.isArray(offer.groups)
-                  ? offer.groups[0]
-                  : offer.groups
-                : null;
+              const row = offerById.get(application.offer_id);
+              const offer = row ? toOfferSummary(row) : undefined;
+              const status = applicationPresentation(application.status);
               return (
                 <li key={application.id}>
-                  <Link href={`/plantoes/${application.offer_id}`}>
-                    <strong>{offer?.sector ?? "Plantão"}</strong>
-                    <span>
-                      {group?.name ?? "Oferta livre"} ·{" "}
-                      {offer
-                        ? `${formatDateTime(offer.starts_at)} · ${formatCurrency(offer.value_cents)} · `
-                        : ""}
-                      {applicationStatusLabels[application.status] ??
-                        application.status}
-                    </span>
-                  </Link>
+                  <ShiftCard
+                    status={{
+                      tone: status.tone,
+                      label:
+                        applicationStatusLabels[application.status] ??
+                        status.label,
+                    }}
+                    group={offer ? offerGroupLabel(offer) : undefined}
+                    title={offer?.sector ?? "Plantão"}
+                    date={offer ? formatShiftDay(offer.startsAt) : ""}
+                    time={
+                      offer
+                        ? formatHourRangeShort(offer.startsAt, offer.endsAt)
+                        : ""
+                    }
+                    meta={
+                      offer?.valueCents !== undefined
+                        ? formatCurrency(offer.valueCents)
+                        : undefined
+                    }
+                    href={`/plantoes/${application.offer_id}`}
+                  />
                 </li>
               );
             })}
           </ul>
         ) : (
-          <p>Nenhuma candidatura registrada.</p>
+          <p className={styles.help}>Nenhuma candidatura registrada.</p>
         )}
       </section>
-      <section className="card admin-section">
-        <h2>Substituições</h2>
+
+      <section className={styles.stack} aria-labelledby="substitutions-heading">
+        <h2 id="substitutions-heading" className={styles.sectionTitle}>
+          Substituições
+        </h2>
         {substitutions?.length ? (
-          <ul className="clean-list">
+          <ul className={styles.list}>
             {substitutions.map((substitution) => {
-              const offer = offerById.get(substitution.offer_id);
+              const row = offerById.get(substitution.offer_id);
+              const offer = row ? toOfferSummary(row) : undefined;
               const role =
                 substitution.owner_id === identity.userId
-                  ? "Titular"
-                  : "Substituto";
+                  ? "titular"
+                  : "substituto";
               const completion = completionBySubstitution.get(substitution.id);
+              const details = [
+                `Você como ${role}`,
+                completion
+                  ? `Realização: ${
+                      completion.status === "completed"
+                        ? "confirmada"
+                        : completion.status === "disputed"
+                          ? "com divergência"
+                          : "aguardando confirmação"
+                    }`
+                  : null,
+                substitution.cancellation_reason
+                  ? `Justificativa: ${substitution.cancellation_reason}`
+                  : null,
+                ...(occurrencesBySubstitution.get(substitution.id) ?? []).map(
+                  (occurrence) =>
+                    `Ocorrência ${occurrence.status === "open" ? "em análise" : "encerrada"}${
+                      occurrence.decision
+                        ? ` · Decisão: ${occurrence.decision}`
+                        : ""
+                    }`,
+                ),
+              ].filter(Boolean);
               return (
                 <li key={substitution.id}>
-                  <Link href={`/plantoes/${substitution.offer_id}`}>
-                    <strong>
-                      {offer?.sector ?? "Plantão"} · {role}
-                    </strong>
-                    <span>
-                      {offer ? formatDateTime(offer.starts_at) : ""} ·{" "}
-                      {substitutionStatusLabels[substitution.status] ??
-                        substitution.status}
-                    </span>
-                    {completion ? (
-                      <span>
-                        Realização:{" "}
-                        {completion.status === "completed"
-                          ? "confirmada"
-                          : completion.status === "disputed"
-                            ? "com divergência"
-                            : "aguardando confirmação"}
-                      </span>
-                    ) : null}
-                    {substitution.cancellation_reason ? (
-                      <span>
-                        Justificativa: {substitution.cancellation_reason}
-                      </span>
-                    ) : null}
-                    {occurrencesBySubstitution
-                      .get(substitution.id)
-                      ?.map((occurrence, index) => (
-                        <span key={`${substitution.id}-occurrence-${index}`}>
-                          Ocorrência{" "}
-                          {occurrence.status === "open"
-                            ? "em análise"
-                            : "encerrada"}
-                          {occurrence.decision
-                            ? ` · Decisão: ${occurrence.decision}`
-                            : ""}
-                        </span>
-                      ))}
-                  </Link>
+                  <ShiftCard
+                    status={substitutionPresentation(substitution.status)}
+                    group={offer ? offerGroupLabel(offer) : undefined}
+                    title={offer?.sector ?? "Plantão"}
+                    date={offer ? formatShiftDay(offer.startsAt) : ""}
+                    time={
+                      offer
+                        ? formatHourRangeShort(offer.startsAt, offer.endsAt)
+                        : ""
+                    }
+                    meta={details.join(" · ")}
+                    href={`/plantoes/${substitution.offer_id}`}
+                  />
                 </li>
               );
             })}
           </ul>
         ) : (
-          <p>Nenhuma substituição registrada.</p>
+          <p className={styles.help}>Nenhuma substituição registrada.</p>
         )}
       </section>
-    </main>
+    </AppScreen>
   );
 }

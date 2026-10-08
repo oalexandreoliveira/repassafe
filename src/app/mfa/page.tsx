@@ -1,10 +1,10 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { MfaForm } from "@/components/mfa-form";
 import {
   getAdministrativeAccess,
   getVerifiedIdentity,
 } from "@/lib/auth/session";
+import { AuthScreen } from "@/components/screens/auth-screen";
 
 export default async function MfaPage() {
   const identity = await getVerifiedIdentity();
@@ -25,23 +25,15 @@ export default async function MfaPage() {
       .map((factor) => factor.id) ?? [];
 
   return (
-    <main className="auth-shell">
-      <Link href="/" className="brand">
-        <span aria-hidden="true">R</span> Repassafe
-      </Link>
-      <section className="auth-card">
-        <p className="eyebrow">Administração protegida</p>
-        <h1>Verificação em duas etapas</h1>
-        <p>
-          {verifiedFactor
-            ? "Confirme sua identidade para abrir a administração."
-            : "Configure um aplicativo autenticador para proteger a administração."}
-        </p>
-        <MfaForm
-          factorId={verifiedFactor?.id}
-          staleFactorIds={staleFactorIds}
-        />
-      </section>
-    </main>
+    <AuthScreen
+      title="Verificação em duas etapas"
+      intro={
+        verifiedFactor
+          ? "Confirme sua identidade para abrir a administração."
+          : "Configure um aplicativo autenticador para proteger a administração."
+      }
+    >
+      <MfaForm factorId={verifiedFactor?.id} staleFactorIds={staleFactorIds} />
+    </AuthScreen>
   );
 }

@@ -2,23 +2,34 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Pause, Play, RotateCcw } from "lucide-react";
+import { PublishShiftFields } from "@/components/publish-shift-fields";
+import { PublishShiftReview } from "@/components/publish-shift-review";
+import { Button } from "@/components/ui/button";
+import { Logo } from "@/components/ui/logo";
+import { ShiftCard } from "@/components/ui/shift-card";
+import { formatHourRangeShort, formatShiftDay } from "@/features/shifts/format";
 import {
-  PublishShiftFields,
-  type ShiftFormExample,
-} from "@/components/publish-shift-fields";
-import { ShiftOfferCard } from "@/components/shift-offer-card";
+  composeRange,
+  fortalezaIso,
+  type ShiftFormValues,
+} from "@/features/shifts/form-values";
 import styles from "./repasse-preview.module.css";
 
 const duration = 13000;
-const example: ShiftFormExample = {
-  startsAt: "2026-10-15T07:00",
-  endsAt: "2026-10-15T19:00",
+/** Dados fictícios de uma oferta livre. */
+const example: ShiftFormValues = {
+  groupId: "",
   sector: "Clínica médica",
+  date: "2026-10-15",
+  start: "07:00",
+  end: "19:00",
   value: "1200,00",
   paymentTerms: "Pagamento em até 30 dias",
   notes: "",
-  ownerTermsAcknowledged: true,
 };
+const exampleRange = composeRange(example);
+const exampleStart = fortalezaIso(exampleRange.startsAt);
+const exampleEnd = fortalezaIso(exampleRange.endsAt);
 const scenes = [
   {
     name: "Preencher",
@@ -72,13 +83,15 @@ export function RepassePreview() {
   const scrollTarget =
     scene === 2
       ? "top"
-      : time >= 8000
+      : time >= 9000
         ? "ownerTermsAcknowledged"
-        : time >= 5400
-          ? "paymentTerms"
-          : time >= 3000
-            ? "sector"
-            : "top";
+        : scene === 1
+          ? "top"
+          : time >= 5400
+            ? "paymentTerms"
+            : time >= 3000
+              ? "sector"
+              : "top";
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -101,7 +114,7 @@ export function RepassePreview() {
     if (!container) return;
     const target = container
       .querySelector<HTMLElement>(`[name="${scrollTarget}"]`)
-      ?.closest("label");
+      ?.closest("[data-field], label");
     const top = target
       ? target.getBoundingClientRect().top -
         container.getBoundingClientRect().top +
@@ -121,17 +134,18 @@ export function RepassePreview() {
         value.length * Math.min(1, Math.max(0, (time - start) / length)),
       ),
     );
-  const values = reduced
+  const values: ShiftFormValues = reduced
     ? example
     : {
-        startsAt: time >= 900 ? example.startsAt : "",
-        endsAt: time >= 2000 ? example.endsAt : "",
+        ...example,
+        date: time >= 900 ? example.date : "",
+        start: time >= 900 ? example.start : "",
+        end: time >= 2000 ? example.end : "",
         sector: typed(example.sector, 3000, 1200),
         value: typed(example.value, 4400, 800),
         paymentTerms: typed(example.paymentTerms, 5400, 1800),
-        notes: "",
-        ownerTermsAcknowledged: time >= 9500,
       };
+  const acknowledged = reduced || time >= 9500;
   function selectScene(index: number) {
     setPlaying(false);
     setTime(scenes[index].time);
@@ -146,7 +160,7 @@ export function RepassePreview() {
       <div className={styles.window}>
         <div className={styles.header}>
           <span className="brand">
-            <span aria-hidden="true">R</span> Repassafe
+            <Logo />
           </span>
           <span>Demonstração</span>
         </div>
@@ -159,30 +173,36 @@ export function RepassePreview() {
           data-running={running}
         >
           <div className={styles.screen}>
-            <h2>{scene === 2 ? "Plantões disponíveis" : "Publicar plantão"}</h2>
+            <h2>
+              {scene === 2
+                ? "Plantões abertos"
+                : scene === 1
+                  ? "Revisar e publicar"
+                  : "Publicar plantão"}
+            </h2>
             {scene === 2 ? (
-              <ShiftOfferCard
-                offer={{
-                  id: "demonstracao",
-                  sector: example.sector,
-                  status: "open_normal",
-                  starts_at: "2026-10-15T10:00:00Z",
-                  ends_at: "2026-10-15T22:00:00Z",
-                  value_cents: 120000,
-                }}
-                isOwner
+              <ShiftCard
+                status={{ tone: "open", label: "Aberto" }}
+                group="Oferta livre"
+                title={example.sector}
+                date={formatShiftDay(exampleStart)}
+                time={formatHourRangeShort(exampleStart, exampleEnd)}
+                meta="Publicado agora · Seu plantão"
+                headingLevel="h3"
               />
+            ) : scene === 1 ? (
+              <div className={styles.stack} data-confirming={time >= 10500}>
+                <PublishShiftReview
+                  values={example}
+                  acknowledged={acknowledged}
+                  readOnly
+                />
+                <Button type="button" block tabIndex={-1}>
+                  Publicar plantão
+                </Button>
+              </div>
             ) : (
-              <section className="card form-card">
-                <p className="form-help">
-                  Você pode publicar para um dos seus grupos ou de forma livre
-                  para todos os profissionais aprovados. Datas e horários no
-                  fuso de Fortaleza.
-                </p>
-                <div className="form-stack" data-confirming={time >= 10500}>
-                  <PublishShiftFields example={values} />
-                </div>
-              </section>
+              <PublishShiftFields values={values} readOnly />
             )}
           </div>
         </div>

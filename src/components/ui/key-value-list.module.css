@@ -1,0 +1,41 @@
+.list {
+  margin: 0;
+  padding: 4px var(--rs-card-padding);
+  border-radius: var(--rs-radius-xl);
+  background: var(--rs-white);
+}
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--rs-divider);
+}
+.row:last-child {
+  border-bottom: 0;
+}
+.key {
+  color: var(--rs-text-muted);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+.value {
+  margin: 0;
+  min-width: 0;
+  color: var(--rs-ink);
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.25rem;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+.stacked {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+}
+.stacked .value {
+  line-height: 1.4;
+  text-align: left;
+}

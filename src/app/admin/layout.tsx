@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { requireAdminIdentity } from "@/lib/auth/session";
 import { logoutAction } from "@/app/auth/actions";
 import { AdminNavigation } from "@/components/admin-navigation";
+import { Logo } from "@/components/ui/logo";
 export default async function AdminLayout({
   children,
 }: {
@@ -20,8 +21,7 @@ export default async function AdminLayout({
       </a>
       <header className="admin-header">
         <Link href="/admin" className="brand">
-          <span aria-hidden="true">R</span> Repassafe{" "}
-          <strong>Administração</strong>
+          <Logo priority /> <strong>Administração</strong>
         </Link>
         <div className="admin-header-actions">
           <Link href="/">Ver site</Link>

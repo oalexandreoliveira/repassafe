@@ -78,6 +78,22 @@ O teste local transacional não aplica essa migração permanentemente.
 4. Apenas perfis `approved` podem receber vínculo ativo.
 5. O profissional vê somente o próprio perfil e seus vínculos ativos.
 
+## Grupos de colegas
+
+Médicos com cadastro aprovado e vigente criam grupos de colegas e convidam por
+link (`docs/product/peer-groups.md`). Esses grupos não têm instituição nem
+aprovadores e nunca concedem autorização institucional. Na área
+administrativa eles aparecem como "Grupo de colegas":
+
+- o formulário de novo vínculo lista só grupos institucionais;
+- é possível renomear o grupo, desativar vínculos e definir um novo gestor
+  (por exemplo, quando o gestor for suspenso);
+- o banco recusa aprovador em grupo de colegas, gestor em grupo institucional
+  e exigência de aprovação em grupo de colegas.
+
+Toda criação, convite, entrada, remoção, transferência e arquivamento fica em
+`audit_events` com o tipo `group.*`.
+
 ## Evidência da consulta manual do CRM
 
 Na fila administrativa, registre o nome encontrado, CRM e UF consultados,

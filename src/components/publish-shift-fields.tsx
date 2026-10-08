@@ -1,123 +1,178 @@
+"use client";
+
+import { SelectField, TextAreaField, TextField } from "@/components/ui/field";
+import { InfoBanner } from "@/components/ui/info-banner";
+import {
+  composeRange,
+  type ShiftFormErrors,
+  type ShiftFormField,
+  type ShiftFormValues,
+} from "@/features/shifts/form-values";
+import { PATIENT_DATA_NOTICE } from "@/features/shifts/copy";
 import styles from "./publish-shift-fields.module.css";
 
-export type ShiftFormExample = {
-  startsAt: string;
-  endsAt: string;
-  sector: string;
-  value: string;
-  paymentTerms: string;
-  notes: string;
-  ownerTermsAcknowledged: boolean;
+/** Modos de publicação: em grupo, livre (todos os aprovados) ou escolha no formulário. */
+export type PublishMode = "both" | "group" | "free";
+
+export type PublishGroup = {
+  id: string;
+  name: string;
+  kind?: "institutional" | "peer";
+  requiresApproval: boolean;
+  institutionName?: string;
 };
 
-/** Shared by the operational form and its inert, fictional landing demonstration. */
+/**
+ * Campos de S05 (publicar e editar). Compartilhado com a demonstração da
+ * landing, que passa valores fictícios em modo somente leitura.
+ */
 export function PublishShiftFields({
+  values,
+  onChange,
+  errors = {},
   groups = [],
-  example,
+  showGroup = true,
   mode = "both",
+  minDate,
+  readOnly = false,
 }: {
-  groups?: { id: string; name: string }[];
-  example?: ShiftFormExample;
-  mode?: "both" | "group" | "free";
+  values: ShiftFormValues;
+  onChange?: (field: ShiftFormField, value: string) => void;
+  errors?: ShiftFormErrors;
+  groups?: PublishGroup[];
+  /** Na edição o grupo não muda e segue como campo oculto. */
+  showGroup?: boolean;
+  /** "group" exige um grupo; "free" publica sem grupo; "both" deixa escolher. */
+  mode?: PublishMode;
+  /** Primeira data aceita (hoje, no fuso do produto). */
+  minDate?: string;
+  readOnly?: boolean;
 }) {
-  const preview = (
-    name: Exclude<keyof ShiftFormExample, "ownerTermsAcknowledged">,
-  ) => (example ? { value: example[name], readOnly: true } : {});
+  const { startsAt, endsAt } = composeRange(values);
+  const group = groups.find((item) => item.id === values.groupId);
+  const bind = (field: ShiftFormField) => ({
+    value: values[field],
+    readOnly,
+    onChange: (
+      event: React.ChangeEvent<
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      >,
+    ) => onChange?.(field, event.target.value),
+    error: errors[field],
+  });
+
   return (
-    <>
-      {mode === "free" ? (
-        <input type="hidden" name="groupId" value="" />
-      ) : (
-        <label>
-          {mode === "group" ? "Grupo" : "Grupo (opcional)"}
-          <select name="groupId" defaultValue="" required={mode === "group"}>
-            <option value="" disabled={mode === "group"}>
-              {mode === "group"
-                ? "Selecione seu grupo"
-                : "Oferta livre — sem grupo"}
+    <div className={styles.fields}>
+      <input type="hidden" name="startsAt" value={startsAt} />
+      <input type="hidden" name="endsAt" value={endsAt} />
+      {showGroup && mode !== "free" ? (
+        <SelectField
+          label="Grupo"
+          name="groupId"
+          required={mode === "group"}
+          {...bind("groupId")}
+          disabled={readOnly}
+        >
+          {mode === "group" ? (
+            <option value="" disabled>
+              Selecione seu grupo
             </option>
-            {groups.map((group) => (
-              <option value={group.id} key={group.id}>
-                {group.name}
-              </option>
-            ))}
-          </select>
-        </label>
+          ) : null}
+          {groups.map((item) => (
+            <option value={item.id} key={item.id}>
+              {item.kind === "peer"
+                ? `${item.name} · Grupo de colegas`
+                : item.institutionName
+                  ? `${item.name} · ${item.institutionName}`
+                  : item.name}
+            </option>
+          ))}
+          {mode === "both" ? (
+            <option value="">Oferta livre — sem grupo</option>
+          ) : null}
+        </SelectField>
+      ) : (
+        <input
+          type="hidden"
+          name="groupId"
+          value={mode === "free" ? "" : values.groupId}
+        />
       )}
-      <div className="form-row">
-        <label>
-          Início
-          <input
-            type="datetime-local"
-            className={styles.dateInput}
-            name="startsAt"
-            required
-            {...preview("startsAt")}
-          />
-        </label>
-        <label>
-          Término
-          <input
-            type="datetime-local"
-            className={styles.dateInput}
-            name="endsAt"
-            required
-            {...preview("endsAt")}
-          />
-        </label>
-      </div>
-      <div className="form-row">
-        <label>
-          Setor
-          <input
-            name="sector"
-            minLength={2}
-            maxLength={120}
-            required
-            {...preview("sector")}
-          />
-        </label>
-        <label>
-          Valor (R$)
-          <input
-            name="value"
-            inputMode="decimal"
-            placeholder="1200,00"
-            required
-            {...preview("value")}
-          />
-        </label>
-      </div>
-      <label>
-        Condições de pagamento
-        <input
-          name="paymentTerms"
-          maxLength={300}
+      <TextField
+        label="Setor"
+        name="sector"
+        minLength={2}
+        maxLength={120}
+        required
+        autoComplete="off"
+        {...bind("sector")}
+      />
+      <TextField
+        label="Data"
+        id="field-date"
+        name="date"
+        type="date"
+        min={minDate}
+        required
+        className={styles.dateInput}
+        {...bind("date")}
+      />
+      <div className={styles.timeRow}>
+        <TextField
+          label="Início"
+          id="field-start"
+          name="start"
+          type="time"
           required
-          {...preview("paymentTerms")}
+          className={styles.dateInput}
+          {...bind("start")}
         />
-      </label>
-      <label>
-        Observações operacionais (sem dados de pacientes)
-        <textarea name="notes" maxLength={1000} {...preview("notes")} />
-      </label>
-      <label className="checkbox-label">
-        <input
-          type="checkbox"
-          name="ownerTermsAcknowledged"
-          value="true"
+        <TextField
+          label="Fim"
+          id="field-end"
+          name="end"
+          type="time"
           required
-          {...(example
-            ? { checked: example.ownerTermsAcknowledged, readOnly: true }
-            : {})}
+          className={styles.dateInput}
+          hint={
+            values.start && values.end && values.end <= values.start
+              ? "Termina no dia seguinte."
+              : undefined
+          }
+          {...bind("end")}
         />
-        Confirmo que sou o responsável pela oferta e que os dados e as condições
-        informados estão corretos. Se um substituto as aceitar, esta proposta
-        será a base do registro do repasse.
-      </label>
-      <button className="button button-primary" type="submit">
-        Publicar plantão
-      </button>
-    </>
+      </div>
+      <TextField
+        label="Valor (R$)"
+        name="value"
+        inputMode="decimal"
+        placeholder="1200,00"
+        required
+        {...bind("value")}
+      />
+      <TextField
+        label="Condições de pagamento"
+        name="paymentTerms"
+        maxLength={300}
+        required
+        {...bind("paymentTerms")}
+      />
+      <div className={styles.notes}>
+        <TextAreaField
+          label="Observações operacionais"
+          name="notes"
+          maxLength={1000}
+          placeholder="Ex.: passagem de plantão presencial às 18h45 com a equipe de enfermagem."
+          {...bind("notes")}
+        />
+        <InfoBanner variant="warning">{PATIENT_DATA_NOTICE}</InfoBanner>
+      </div>
+      {group?.requiresApproval ? (
+        <InfoBanner variant="neutral">
+          Este grupo exige <strong>aprovação da coordenação</strong> antes do
+          acordo ser registrado.
+        </InfoBanner>
+      ) : null}
+    </div>
   );
 }

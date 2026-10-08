@@ -13,7 +13,7 @@ O usuário identificou uma quebra de confiança: a interface do telefone ilustra
 
 THESIS: o visitante entende a publicação de um plantão vendo os mesmos campos e o mesmo cartão usados no produto.
 
-OWN-WORLD: preservar verde profundo, fundo claro, Urbanist e Jakarta. A demonstração reutiliza PublishShiftFields e ShiftOfferCard, também usados em /plantoes/novo e /plantoes. Não inventar menus, estados, telas móveis ou funcionalidades.
+OWN-WORLD: identidade v2.1 de `design/` (Tinta, Verde-repasse, Base, Sora, Figtree e JetBrains Mono; logo oficial em SVG). A demonstração reutiliza PublishShiftFields e ShiftOfferCard, também usados em /plantoes/novo e /plantoes. Não inventar menus, estados, telas móveis ou funcionalidades.
 
 STORY: um profissional aprovado preenche uma oferta livre, confere e aceita as condições, publica e encontra o cartão em Plantões disponíveis com estado Aberto. Isso não equivale a acordo confirmado. Candidatura e demais confirmações seguem explicadas abaixo do hero.
 

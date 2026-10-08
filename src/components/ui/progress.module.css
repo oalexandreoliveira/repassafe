@@ -1,0 +1,103 @@
+.progress {
+  display: grid;
+  gap: 10px;
+}
+.bar {
+  display: flex;
+  gap: 6px;
+}
+.segment {
+  flex: 1 1 0;
+  height: 6px;
+  border-radius: var(--rs-radius-pill);
+  background: var(--rs-border);
+}
+.done {
+  background: var(--rs-teal);
+}
+.current {
+  background: var(--rs-mint);
+}
+.caption {
+  margin: 0;
+  color: var(--rs-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+}
+.steps {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 18px;
+  border-radius: var(--rs-radius-xl);
+  background: var(--rs-white);
+}
+.stepsTitle {
+  margin: 0;
+  font: 600 0.9375rem/1.25rem var(--rs-font-display);
+}
+.list {
+  display: grid;
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.step {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.marker {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--rs-radius-pill);
+  background: var(--rs-track);
+  color: var(--rs-white);
+}
+.step[data-state="done"] .marker {
+  background: var(--rs-teal);
+}
+.step[data-state="current"] .marker {
+  background: var(--rs-status-pending-bg);
+}
+.stepText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+}
+.stepTitle {
+  color: var(--rs-ink);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.3125rem;
+}
+.step[data-state="upcoming"] .stepTitle {
+  color: var(--rs-text-muted);
+}
+.stepDescription {
+  color: var(--rs-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+}
+.stepLink {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--rs-border);
+  text-underline-offset: 0.2em;
+}
+/* A linha inteira da etapa vira alvo de toque (>= 44px), sem invadir o espaçamento de 16px. */
+.stepLink::after {
+  position: absolute;
+  inset: -6px 0;
+  content: "";
+}
+.stepLink:hover {
+  text-decoration-color: currentColor;
+}

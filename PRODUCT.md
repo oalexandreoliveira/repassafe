@@ -57,6 +57,9 @@ e trilha de auditoria.
 - CRM e RQE têm verificações profissionais próprias. Declarações de instituição
   e setor não concedem acesso; vínculos, permissões por grupo e acesso
   administrativo são autorizações separadas.
+- Médicos aprovados criam grupos de colegas e convidam por link, sem
+  instituição nem aprovação da coordenação; esses grupos nunca concedem
+  autorização institucional. Grupos institucionais seguem com a administração.
 - Ofertas normais ou emergenciais podem receber candidaturas, seleção,
   confirmação, aprovação institucional configurável, registro de acordo,
   conclusão, cancelamento e ocorrência.
@@ -75,9 +78,11 @@ e trilha de auditoria.
 ## Brand Commitments
 
 O produto se chama Repassafe e atende em português do Brasil. A identidade
-existente deve ser preservada em evoluções; não há solicitação de rebranding.
-Termos, suporte e políticas devem usar apenas dados e canais confirmados, sem
-inventar CNPJ, endereço, contato ou prazo de atendimento.
+visual v2.1 (símbolo de dois blocos em diagonal, Tinta, Verde-repasse, Menta,
+Sora, Figtree e JetBrains Mono) foi aprovada e substitui a anterior; sua
+especificação está em `design/`. Evoluções devem preservá-la sem redesenhar a
+marca. Termos, suporte e políticas devem usar apenas dados e canais confirmados,
+sem inventar CNPJ, endereço, contato ou prazo de atendimento.
 
 ## Evidence on Hand
 

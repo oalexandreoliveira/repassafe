@@ -1,0 +1,10 @@
+.status {
+  margin: 0;
+  color: var(--rs-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+  text-align: center;
+}
+.status:empty {
+  display: none;
+}

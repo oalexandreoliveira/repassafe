@@ -225,10 +225,12 @@
   font-size: var(--landing-body-size);
   line-height: 1.6;
 }
+/* Colunas que quebram de linha quando não cabem (ex.: zoom de 200% no desktop),
+   sem cortar o conteúdo nem criar rolagem horizontal. */
 .recordSection {
   position: relative;
-  display: grid;
-  grid-template-columns: minmax(280px, 430px) minmax(500px, 750px);
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 72px;
@@ -239,6 +241,15 @@
 .recordCard {
   position: relative;
   z-index: 1;
+}
+.recordIntro {
+  flex: 1 1 280px;
+  max-width: 430px;
+}
+.recordCard {
+  flex: 1 1 500px;
+  min-width: 0;
+  max-width: 750px;
 }
 .darkEyebrow {
   color: var(--rs-mint);
@@ -374,7 +385,8 @@
 .safetyGrid {
   position: relative;
   display: grid;
-  grid-template-columns: 0.75fr 1.25fr;
+  /* minmax(0, …): os cartões encolhem em vez de empurrar a página (zoom de 200%). */
+  grid-template-columns: minmax(0, 0.75fr) minmax(0, 1.25fr);
   gap: 80px;
   align-items: center;
 }
@@ -385,7 +397,7 @@
 }
 .safeguards {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
 }
 .safeguardCard {
@@ -399,6 +411,8 @@
 }
 .safeguardCard h3 {
   max-width: 300px;
+  overflow-wrap: break-word;
+  hyphens: auto;
   margin: 32px 0 0;
   font-size: 1.12rem;
   font-weight: 600;
@@ -528,11 +542,17 @@
     max-width: 65ch;
   }
   .recordSection {
-    grid-template-columns: 1fr;
+    flex-direction: column;
+    align-items: stretch;
     padding: 100px max(20px, 8vw);
   }
   .recordIntro {
+    flex: none;
     max-width: 660px;
+  }
+  .recordCard {
+    flex: none;
+    max-width: none;
   }
   .safetyGrid {
     grid-template-columns: 1fr;

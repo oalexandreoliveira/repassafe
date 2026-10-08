@@ -9,6 +9,8 @@ import {
   CircleX,
   ClipboardCheck,
   FileText,
+  UserMinus,
+  UserPlus,
   UserRound,
   Users,
 } from "lucide-react";
@@ -87,6 +89,12 @@ export function notificationPresentation(eventType: string): Presentation {
     case "registration.reviewed":
     case "profile.reviewed":
       return { tone: "history", icon: UserRound };
+    case "group.member_joined":
+      return { tone: "info", icon: UserPlus };
+    case "group.manager_transferred":
+      return { tone: "action", icon: Users, cta: "Abrir grupo" };
+    case "group.member_removed":
+      return { tone: "history", icon: UserMinus };
     default:
       return { tone: "history", icon: Bell };
   }

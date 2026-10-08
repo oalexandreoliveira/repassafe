@@ -3,6 +3,7 @@ import type { ShiftStatus } from "@/styles/theme";
 export const groupRoleLabel: Record<string, string> = {
   doctor: "Médico",
   approver: "Aprovador",
+  manager: "Gestor do grupo",
 };
 
 export const profileStatusLabel: Record<string, string> = {

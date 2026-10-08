@@ -132,6 +132,9 @@ export default async function ProfilePage() {
             Você não possui vínculos ativos com grupos.
           </p>
         )}
+        <ButtonLink href="/grupos" variant="secondary" block>
+          Meus grupos
+        </ButtonLink>
       </section>
 
       <nav className={styles.actions} aria-label="Informações da conta">

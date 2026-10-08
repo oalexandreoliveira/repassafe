@@ -24,7 +24,7 @@ export function activeTab(pathname: string): TabId | null {
   if (/^\/plantoes\/(publicados|novo)(\/|$)/.test(pathname)) return "publicar";
   if (/^\/plantoes(\/|$)/.test(pathname)) return "plantoes";
   if (/^\/acordos(\/|$)/.test(pathname)) return "acordos";
-  if (/^\/(perfil|historico)(\/|$)/.test(pathname)) return "perfil";
+  if (/^\/(perfil|historico|grupos)(\/|$)/.test(pathname)) return "perfil";
   return null;
 }
 

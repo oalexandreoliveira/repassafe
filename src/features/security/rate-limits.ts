@@ -66,6 +66,11 @@ export const rateLimitPolicies = {
     maxRequests: 60,
     windowSeconds: 60,
   },
+  groups: {
+    namespace: "groups.command.user",
+    maxRequests: 30,
+    windowSeconds: 60,
+  },
   administration: {
     namespace: "administration.command.user",
     maxRequests: 30,

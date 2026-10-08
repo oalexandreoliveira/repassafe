@@ -122,6 +122,7 @@ export const membershipSchema = z.object({
 
 export const updateMembershipSchema = z.object({
   membershipId: z.uuid(),
-  role: z.enum(["doctor", "approver"]),
+  // Gestor existe só em grupos de colegas; o banco recusa combinações inválidas.
+  role: z.enum(["doctor", "approver", "manager"]),
   active: z.enum(["true", "false"]).transform((value) => value === "true"),
 });

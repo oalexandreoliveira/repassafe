@@ -167,6 +167,11 @@ export function PublishShiftForm({
             Publicar plantão livre
           </ButtonLink>
         ) : null}
+        {mode === "group" && groups.length === 0 ? (
+          <ButtonLink href="/grupos/novo" variant="ghost" block>
+            Criar grupo de colegas
+          </ButtonLink>
+        ) : null}
         <div hidden={step !== 1}>
           <PublishShiftFields
             values={form.values}

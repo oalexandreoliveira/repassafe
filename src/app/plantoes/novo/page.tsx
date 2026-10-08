@@ -6,6 +6,7 @@ import { requireApprovedProfessional } from "@/lib/shifts/data";
 
 type GroupRow = {
   name: string;
+  kind: "institutional" | "peer";
   requires_approval: boolean;
   institutions: { name: string } | { name: string }[] | null;
 };
@@ -13,16 +14,19 @@ type GroupRow = {
 export default async function NewShiftPage({
   searchParams,
 }: {
-  searchParams: Promise<{ modo?: string }>;
+  searchParams: Promise<{ modo?: string; grupo?: string }>;
 }) {
-  const { modo } = await searchParams;
+  const { modo, grupo } = await searchParams;
   const mode = modo === "grupo" ? "group" : modo === "livre" ? "free" : "both";
   const identity = await requireApprovedProfessional();
   const { data: memberships } = await identity.supabase
     .from("group_memberships")
-    .select("group_id,groups(name,requires_approval,institutions(name))")
+    .select(
+      "group_id,groups!inner(name,kind,active,requires_approval,institutions(name))",
+    )
     .eq("profile_id", identity.userId)
-    .eq("active", true);
+    .eq("active", true)
+    .eq("groups.active", true);
 
   const groups = (memberships ?? []).map((membership) => {
     const raw = membership.groups as GroupRow | GroupRow[] | null;
@@ -33,10 +37,13 @@ export default async function NewShiftPage({
     return {
       id: membership.group_id,
       name: group?.name ?? "Grupo",
+      kind: group?.kind,
       requiresApproval: Boolean(group?.requires_approval),
       institutionName: institution?.name,
     };
   });
+  // "Publicar plantão no grupo" chega com o grupo já escolhido.
+  const preselected = groups.find((group) => group.id === grupo)?.id;
 
   return (
     <PublishShiftForm
@@ -44,6 +51,7 @@ export default async function NewShiftPage({
       commandId={randomUUID()}
       groups={groups}
       mode={mode}
+      initialValues={preselected ? { groupId: preselected } : undefined}
       minDate={dayKey(new Date())}
     />
   );

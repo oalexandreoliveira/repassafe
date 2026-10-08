@@ -17,6 +17,7 @@ export type PublishMode = "both" | "group" | "free";
 export type PublishGroup = {
   id: string;
   name: string;
+  kind?: "institutional" | "peer";
   requiresApproval: boolean;
   institutionName?: string;
 };
@@ -79,9 +80,11 @@ export function PublishShiftFields({
           ) : null}
           {groups.map((item) => (
             <option value={item.id} key={item.id}>
-              {item.institutionName
-                ? `${item.name} · ${item.institutionName}`
-                : item.name}
+              {item.kind === "peer"
+                ? `${item.name} · Grupo de colegas`
+                : item.institutionName
+                  ? `${item.name} · ${item.institutionName}`
+                  : item.name}
             </option>
           ))}
           {mode === "both" ? (

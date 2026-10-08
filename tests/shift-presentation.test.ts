@@ -72,14 +72,14 @@ describe("offer status presentation", () => {
         substitutionStatus: "confirmed",
         view: "mural",
       }),
-    ).toEqual({ tone: "registered", label: "Acordo registrado" });
+    ).toEqual({ tone: "confirmed", label: "Repasse confirmado" });
   });
 
   it("maps closed offers without a readable substitution", () => {
     expect(
       offerPresentation({ offerStatus: "closed_confirmed", view: "mural" })
         .tone,
-    ).toBe("registered");
+    ).toBe("confirmed");
     expect(
       offerPresentation({ offerStatus: "cancelled_admin", view: "mural" }),
     ).toEqual({ tone: "cancelled", label: "Cancelado pela administração" });

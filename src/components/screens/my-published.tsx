@@ -35,7 +35,7 @@ export type OwnOfferItem = {
 const empty: Record<OwnOfferTab, { title: string; icon: typeof Calendar }> = {
   abertos: { title: "Nenhum plantão aberto", icon: Calendar },
   andamento: { title: "Nenhum repasse em andamento", icon: Hourglass },
-  registrados: { title: "Nenhum acordo registrado", icon: FileText },
+  registrados: { title: "Nenhum repasse confirmado", icon: FileText },
 };
 
 function action(tab: OwnOfferTab, item: OwnOfferItem) {
@@ -60,7 +60,7 @@ function action(tab: OwnOfferTab, item: OwnOfferItem) {
         size="sm"
         block
       >
-        Ver acordo
+        Ver comprovante do repasse
       </ButtonLink>
     );
   return (

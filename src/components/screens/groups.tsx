@@ -128,8 +128,8 @@ export function GroupsScreen({
       {left ? <Toast message="Você saiu do grupo." clearParam="saiu" /> : null}
       <p className={styles.intro}>
         Grupos de colegas reúnem médicos com CRM verificado para repassar
-        plantões entre vocês, com o acordo registrado. Grupos institucionais são
-        definidos pela administração.
+        plantões entre vocês, com comprovante do repasse confirmado. Grupos
+        institucionais são definidos pela administração.
       </p>
       {overview.eligible ? (
         <ButtonLink href="/grupos/novo" block icon={<Plus size={20} />}>

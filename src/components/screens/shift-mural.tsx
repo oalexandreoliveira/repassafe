@@ -6,9 +6,9 @@ import {
   RootTopBar,
   ScreenHeading,
 } from "@/components/ui/app-shell";
-import { ButtonLink } from "@/components/ui/button";
+import { Button, ButtonLink } from "@/components/ui/button";
 import { EmptyState } from "@/components/ui/empty-state";
-import { SearchField } from "@/components/ui/field";
+import { SearchField, SelectField } from "@/components/ui/field";
 import { FilterChipLink, FilterChipList } from "@/components/ui/filter-chip";
 import { InfoBanner } from "@/components/ui/info-banner";
 import { ShiftCard } from "@/components/ui/shift-card";
@@ -22,6 +22,8 @@ import {
 import {
   groupByDay,
   muralFilters,
+  muralHref,
+  type MuralGroup,
   type MuralFilter,
 } from "@/features/shifts/mural-filters";
 import {
@@ -38,18 +40,9 @@ export type MuralItem = {
   isOwner: boolean;
 };
 
-function muralHref(filter: MuralFilter, query?: string) {
-  const params = new URLSearchParams();
-  if (filter !== "semana") params.set("filtro", filter);
-  if (query) params.set("q", query);
-  const search = params.toString();
-  return search ? `/plantoes?${search}` : "/plantoes";
-}
-
 function subtitle(groupsCount: number) {
   if (groupsCount === 0) return "Ofertas livres para profissionais aprovados";
-  if (groupsCount === 1) return "Publicados no seu grupo";
-  return `Publicados nos seus ${groupsCount} grupos`;
+  return "Ofertas livres e dos grupos aos quais você tem acesso";
 }
 
 /** S02 · Mural de plantões. */
@@ -57,6 +50,8 @@ export function ShiftMural({
   items,
   totalCount,
   groupsCount,
+  groups = [],
+  group = "todos",
   unread,
   canPublish,
   filter,
@@ -70,6 +65,8 @@ export function ShiftMural({
   /** Total antes do filtro, para distinguir "vazio" de "sem resultado". */
   totalCount: number;
   groupsCount: number;
+  groups?: MuralGroup[];
+  group?: string;
   unread: boolean;
   canPublish: boolean;
   filter: MuralFilter;
@@ -96,32 +93,64 @@ export function ShiftMural({
           {feedback}
         </InfoBanner>
       ) : null}
-      <form role="search" method="get" action="/plantoes">
-        {filter !== "semana" ? (
+      <form
+        key={`${filter}:${query ?? ""}:${group}`}
+        role="search"
+        method="get"
+        action="/plantoes"
+        className={styles.stack}
+      >
+        {filter !== "todos" ? (
           <input type="hidden" name="filtro" value={filter} />
         ) : null}
         <SearchField
-          label="Buscar setor ou hospital"
+          label="Buscar setor, hospital ou grupo"
           name="q"
           defaultValue={query}
-          placeholder="Buscar setor ou hospital"
+          placeholder="Buscar setor, hospital ou grupo"
         />
-        {/* Enter no campo envia a busca; o botão oculto não recebe foco invisível. */}
-        <button type="submit" className="sr-only" tabIndex={-1}>
-          Buscar
-        </button>
+        <SelectField
+          label="Origem das ofertas"
+          name="grupo"
+          defaultValue={group}
+        >
+          <option value="todos">Todas as ofertas disponíveis</option>
+          <option value="livres">Somente ofertas livres</option>
+          <option value="grupos">Todos os meus grupos</option>
+          {groups.length ? (
+            <optgroup label="Um grupo específico">
+              {groups.map((item) => (
+                <option key={item.id} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+            </optgroup>
+          ) : null}
+        </SelectField>
+        <Button type="submit" variant="secondary" block>
+          Aplicar filtros
+        </Button>
       </form>
       <FilterChipList label="Filtrar plantões">
         {muralFilters.map((chip) => (
           <FilterChipLink
             key={chip.id}
             selected={filter === chip.id}
-            href={muralHref(filter === chip.id ? "todos" : chip.id, query)}
+            href={muralHref(
+              filter === chip.id ? "todos" : chip.id,
+              query,
+              group,
+            )}
           >
             {chip.label}
           </FilterChipLink>
         ))}
       </FilterChipList>
+      {filter !== "todos" || group !== "todos" || query ? (
+        <ButtonLink href="/plantoes" variant="ghost">
+          Limpar filtros
+        </ButtonLink>
+      ) : null}
 
       {failed ? (
         <div className={styles.stack}>
@@ -129,7 +158,11 @@ export function ShiftMural({
             Não foi possível carregar os plantões. Verifique sua conexão e tente
             de novo.
           </InfoBanner>
-          <ButtonLink href={muralHref(filter, query)} variant="secondary" block>
+          <ButtonLink
+            href={muralHref(filter, query, group)}
+            variant="secondary"
+            block
+          >
             Tentar de novo
           </ButtonLink>
         </div>
@@ -176,7 +209,7 @@ export function ShiftMural({
       ) : totalCount === 0 ? (
         <EmptyState
           icon={Calendar}
-          title="Nenhum plantão aberto nos seus grupos"
+          title="Nenhum plantão disponível agora"
           action={
             canPublish ? (
               <ButtonLink href="/plantoes/novo" block>

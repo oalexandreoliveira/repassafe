@@ -43,7 +43,7 @@ describe("flow helpers", () => {
       "Candidatura enviada",
       "Escolha de quem publicou",
       "Confirmação das condições",
-      "Acordo registrado",
+      "Repasse confirmado",
     ]);
     expect(applicationSteps(offer(true))).toHaveLength(5);
   });

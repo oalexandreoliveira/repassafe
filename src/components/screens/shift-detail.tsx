@@ -246,7 +246,7 @@ export function ShiftDetail({
       <InfoBanner>
         {isOwner
           ? PAYMENT_NOTICE
-          : "Você só assume o plantão depois que os dois confirmarem as condições e o acordo for registrado. Valores são combinados diretamente com quem publicou."}
+          : "Você só assume o plantão depois dos aceites necessários e da confirmação do repasse. Valores são combinados diretamente com quem publicou."}
       </InfoBanner>
 
       {isOwner ? (
@@ -559,11 +559,11 @@ export function ShiftDetail({
       {agreement ? (
         <section className={styles.stack} aria-labelledby="agreement-heading">
           <h2 id="agreement-heading" className="sr-only">
-            Acordo registrado
+            Repasse confirmado
           </h2>
           <RegistrySeal
-            title="Acordo registrado"
-            detail={`ACORDO ${agreement.id} · ${formatAuditTime(agreement.confirmed_at)}`}
+            title="Repasse confirmado"
+            detail={`REGISTRO ${agreement.id} · ${formatAuditTime(agreement.confirmed_at)}`}
           />
           {hasAgreementDocument ? (
             <ButtonLink
@@ -571,7 +571,7 @@ export function ShiftDetail({
               variant="secondary"
               block
             >
-              Ver acordo registrado
+              Ver comprovante do repasse
             </ButtonLink>
           ) : (
             <KeyValueList

@@ -36,8 +36,9 @@ export async function listShiftWorkspace() {
     identity.supabase
       .from("shift_offers")
       .select(
-        "id,owner_id,starts_at,ends_at,sector,value_cents,status,published_at,groups(name,institutions(name))",
+        "id,group_id,owner_id,starts_at,ends_at,sector,value_cents,status,published_at,groups(name,institutions(name))",
       )
+      .in("status", ["open_normal", "open_emergency"])
       .gt("starts_at", new Date().toISOString())
       .order("starts_at"),
     identity.supabase

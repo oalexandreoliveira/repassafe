@@ -27,9 +27,9 @@ export const repasseSteps = [
       "Quando o grupo exige, o responsável registra a decisão institucional.",
   },
   {
-    label: "Acordo",
-    title: "Acordo registrado",
-    text: "A substituição foi concluída e as condições foram registradas.",
+    label: "Comprovante",
+    title: "Repasse confirmado",
+    text: "O repasse foi confirmado e as condições foram registradas.",
     preview:
       "Após as confirmações e a aprovação exigida, as condições ficam registradas.",
   },

@@ -66,12 +66,31 @@ export async function saveRegistrationAction(
       draft_data: parsed.data,
       expected_revision: revision.data,
     });
-    if (error)
+    if (error) {
+      if (error.code === "40001")
+        return failure(
+          "Seu cadastro mudou em outra sessão. Recarregue para continuar.",
+        );
+      if (error.code === "23505") {
+        // Valor já vinculado a outro cadastro: não revelar de quem.
+        const text = `${error.message} ${error.details ?? ""}`;
+        const field = /phone/i.test(text) ? "phone" : "cpf";
+        const label = field === "phone" ? "celular" : "CPF";
+        return {
+          ...failure(`Não foi possível usar este ${label} no cadastro.`),
+          fieldErrors: {
+            [field]: `Este ${label} não pode ser usado neste cadastro. Confira os números digitados; se estiverem corretos, fale com o suporte.`,
+          },
+        };
+      }
+      console.error("registration_save failed", {
+        code: error.code,
+        message: error.message,
+      });
       return failure(
-        error.code === "40001"
-          ? "Seu cadastro mudou em outra sessão. Recarregue para continuar."
-          : "Não foi possível salvar agora. Confira os formatos de CPF e celular indicados no formulário e tente novamente; se persistir, fale com o suporte.",
+        "Não foi possível salvar agora. Tente novamente em instantes; se persistir, fale com o suporte.",
       );
+    }
     revalidatePath("/cadastro/completar");
     return {
       ...success("Progresso salvo. Você pode continuar depois."),

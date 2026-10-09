@@ -86,7 +86,7 @@ export function RegistrationForm({
           "CPF",
           "text",
           "off",
-          "Digite os 11 números, com ou sem pontuação. Ex.: 529.982.247-25.",
+          "Digite os 11 números, com ou sem pontuação, no formato 000.000.000-00.",
         )}
         {field("birthDate", "Nascimento", "date", "bday")}
         {field(
@@ -94,7 +94,7 @@ export function RegistrationForm({
           "Celular com DDD",
           "tel",
           "tel",
-          "Informe um celular brasileiro com DDD. Ex.: (11) 98765-4321 ou +55 11 98765-4321.",
+          "Informe um celular brasileiro com DDD. Formato: (DDD) 9XXXX-XXXX, com ou sem +55.",
         )}
       </fieldset>
       <fieldset className={styles.formSection}>

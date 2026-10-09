@@ -400,13 +400,13 @@ export function ShiftDetail({
 
           {substitution.status === "confirmed" &&
           shiftEnded &&
-          involved &&
+          isSubstitute &&
           !completion ? (
             <form action={actions.reportCompletion} className={styles.panel}>
               <CommandFields targetId={substitution.id} />
               <p className={styles.panelText}>
-                Informe que o plantão foi realizado para solicitar confirmação
-                da outra parte.
+                Informe que o plantão foi realizado para solicitar a confirmação
+                do titular.
               </p>
               <SubmitButton block>Registrar realização</SubmitButton>
             </form>

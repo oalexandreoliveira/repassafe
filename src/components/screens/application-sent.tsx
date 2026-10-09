@@ -36,7 +36,7 @@ export function applicationSteps(offer: OfferSummary): Step[] {
         ]
       : []),
     {
-      title: "Acordo registrado",
+      title: "Repasse confirmado",
       description: "Com data, hora e trilha de auditoria",
       state: "upcoming",
     },

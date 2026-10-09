@@ -49,7 +49,7 @@ const trailLabels: Record<string, string> = {
   owner_terms_published: "Plantão publicado",
   substitute_accepted: "Condições aceitas pelos dois",
   institution_approved: "Aprovado pela coordenação",
-  document_generated: "Acordo registrado",
+  document_generated: "Comprovante do repasse emitido",
 };
 
 const evidenceLabels: Record<string, string> = {
@@ -59,7 +59,7 @@ const evidenceLabels: Record<string, string> = {
   document_generated: "Documento eletrônico emitido",
 };
 
-/** S10 · Acordo registrado, com o documento completo para impressão. */
+/** Comprovante do repasse originado de uma oferta, com o documento imutável. */
 export function AgreementRegistered({
   content,
   schemaVersion,
@@ -116,8 +116,11 @@ export function AgreementRegistered({
         <h1 className={styles.successTitle}>{SUCCESS_TITLE}</h1>
         <p className={styles.successText}>
           {content.group
-            ? "O acordo foi registrado e os dois médicos e a coordenação podem consultá-lo a qualquer momento."
-            : "O acordo foi registrado e as duas partes podem consultá-lo a qualquer momento."}
+            ? "O repasse desta oferta foi confirmado. Os dois médicos e a coordenação podem consultar o comprovante a qualquer momento."
+            : "O repasse desta oferta foi confirmado. As duas partes podem consultar o comprovante a qualquer momento."}
+        </p>
+        <p className={styles.successText}>
+          Origem: oferta publicada no Repassafe.
         </p>
       </header>
 
@@ -129,7 +132,7 @@ export function AgreementRegistered({
       ) : null}
 
       <RegistryCard
-        title="Registro do acordo"
+        title="Comprovante do repasse"
         badge={
           intact ? (
             <StatusChip tone="registered">Imutável</StatusChip>
@@ -138,7 +141,7 @@ export function AgreementRegistered({
       >
         <RegistryBlock
           lines={[
-            `ACORDO ${content.agreement_id}`,
+            `REGISTRO ${content.agreement_id}`,
             `registrado ${formatAuditTime(generatedAt)}`,
             `sha256 ${documentSha256}`,
           ]}

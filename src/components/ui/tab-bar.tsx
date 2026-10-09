@@ -15,7 +15,7 @@ const tabs = [
     href: "/plantoes/publicados",
     icon: Plus,
   },
-  { id: "acordos", label: "Acordos", href: "/acordos", icon: FileText },
+  { id: "acordos", label: "Repasses", href: "/acordos", icon: FileText },
   { id: "perfil", label: "Perfil", href: "/perfil", icon: User },
 ] as const;
 

@@ -8,6 +8,7 @@ import {
 import {
   filterMuralOffers,
   parseMuralFilter,
+  parseMuralGroup,
 } from "@/features/shifts/mural-filters";
 import { toOfferSummary } from "@/features/shifts/offer-view";
 import {
@@ -31,14 +32,29 @@ export default async function ShiftsPage({
 
   const { identity, offers, applications, substitutions, failed } =
     await listShiftWorkspace();
-  const [{ count: groupsCount }, unread] = await Promise.all([
-    identity.supabase
-      .from("group_memberships")
-      .select("id", { count: "exact", head: true })
-      .eq("profile_id", identity.userId)
-      .eq("active", true),
-    hasUnreadNotifications(identity.supabase),
-  ]);
+  const [{ data: memberships, error: groupsError }, unread] = await Promise.all(
+    [
+      identity.supabase
+        .from("group_memberships")
+        .select("group_id,groups(name)")
+        .eq("profile_id", identity.userId)
+        .eq("active", true),
+      hasUnreadNotifications(identity.supabase),
+    ],
+  );
+  const groups = (memberships ?? [])
+    .map((membership) => {
+      const detail = Array.isArray(membership.groups)
+        ? membership.groups[0]
+        : membership.groups;
+      return { id: membership.group_id, name: detail?.name ?? "Grupo" };
+    })
+    .filter(
+      (group, index, all) =>
+        all.findIndex((item) => item.id === group.id) === index,
+    )
+    .sort((left, right) => left.name.localeCompare(right.name, "pt-BR"));
+  const group = parseMuralGroup(single(params.grupo), groups);
 
   const applicationByOffer = new Map(
     applications.map((application) => [application.offer_id, application]),
@@ -48,7 +64,7 @@ export default async function ShiftsPage({
   );
   const now = new Date();
   const summaries = offers.map(toOfferSummary);
-  const items = filterMuralOffers(summaries, { filter, query, now }).map(
+  const items = filterMuralOffers(summaries, { filter, query, group, now }).map(
     (offer) => {
       const application = applicationByOffer.get(offer.id);
       return {
@@ -70,12 +86,14 @@ export default async function ShiftsPage({
     <ShiftMural
       items={items}
       totalCount={summaries.length}
-      groupsCount={groupsCount ?? 0}
+      groupsCount={groups.length}
+      groups={groups}
+      group={group}
       unread={unread}
       canPublish={identity.profile.role === "doctor"}
       filter={filter}
       query={query}
-      failed={failed}
+      failed={failed || !!groupsError}
       feedback={
         isWorkflowFeedbackCode(feedbackCode)
           ? workflowFeedback[feedbackCode]

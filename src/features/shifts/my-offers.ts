@@ -4,7 +4,7 @@ export type OwnOfferTab = "abertos" | "andamento" | "registrados";
 export const ownOfferTabs: { id: OwnOfferTab; label: string }[] = [
   { id: "abertos", label: "Abertos" },
   { id: "andamento", label: "Andamento" },
-  { id: "registrados", label: "Registrados" },
+  { id: "registrados", label: "Confirmados" },
 ];
 
 export function ownOfferTab(status: string): OwnOfferTab | null {

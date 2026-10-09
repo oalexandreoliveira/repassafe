@@ -56,7 +56,7 @@ export function offerPresentation({
     case "selection_in_progress":
       return { tone: "pending", label: offerStatusLabels[offerStatus] };
     case "closed_confirmed":
-      return { tone: "registered", label: "Acordo registrado" };
+      return { tone: "confirmed", label: "Repasse confirmado" };
     case "cancelled_by_owner":
     case "cancelled_admin":
       return { tone: "cancelled", label: offerStatusLabels[offerStatus] };
@@ -78,7 +78,7 @@ export function substitutionPresentation(status: string): StatusPresentation {
     case "pending_institutional_approval":
       return { tone: "institutional", label: "Em aprovação institucional" };
     case "confirmed":
-      return { tone: "registered", label: "Acordo registrado" };
+      return { tone: "confirmed", label: "Repasse confirmado" };
     case "rejected_institutionally":
     case "cancelled":
       return { tone: "cancelled", label };

@@ -24,7 +24,7 @@ export function confirmationProgress(requiresApproval: boolean) {
         total: 5,
         caption: "Etapa 3 de 5 · depois: aprovação da coordenação e registro",
       }
-    : { total: 4, caption: "Etapa 3 de 4 · depois: registro do acordo" };
+    : { total: 4, caption: "Etapa 3 de 4 · depois: confirmação do repasse" };
 }
 
 /** Condições exibidas em S09 (as mesmas que vão para o registro do acordo). */

@@ -33,7 +33,7 @@ const roleText: Record<AgreementListItem["role"], string> = {
   coordination: "Acompanhado pela coordenação",
 };
 
-/** Aba Acordos (derivada): acordos registrados em que a pessoa participa. */
+/** Repasses confirmados a partir de ofertas; acordos externos têm fluxo próprio. */
 export function AgreementsList({
   agreements,
   unread,
@@ -49,8 +49,8 @@ export function AgreementsList({
       tabBar={<TabBar canPublish={canPublish} />}
     >
       <ScreenHeading
-        title="Acordos"
-        subtitle="Repasses registrados, com data, hora e trilha de auditoria"
+        title="Repasses confirmados"
+        subtitle="Ofertas publicadas no Repassafe que tiveram a substituição confirmada"
       />
       <section className={styles.panel} aria-labelledby="external-heading">
         <h2 id="external-heading" className={styles.panelTitle}>
@@ -72,12 +72,13 @@ export function AgreementsList({
             : "Aprovar acordos registrados dos meus grupos"}
         </ButtonLink>
       </section>
+      <h2 className={styles.sectionTitle}>Confirmados a partir de ofertas</h2>
       {agreements.length ? (
         <ul className={styles.list}>
           {agreements.map((agreement) => (
             <li key={agreement.id}>
               <ShiftCard
-                status={{ tone: "registered", label: "Acordo registrado" }}
+                status={{ tone: "confirmed", label: "Repasse confirmado" }}
                 group={agreement.groupName ?? "Oferta livre"}
                 title={agreement.sector}
                 date={formatShiftDay(agreement.startsAt)}
@@ -85,7 +86,7 @@ export function AgreementsList({
                   agreement.startsAt,
                   agreement.endsAt,
                 )}
-                meta={`${roleText[agreement.role]} · registrado em ${formatShortDate(agreement.confirmedAt)}`}
+                meta={`${roleText[agreement.role]} · confirmado em ${formatShortDate(agreement.confirmedAt)}`}
                 href={
                   agreement.hasDocument
                     ? `/acordos/${agreement.id}`
@@ -96,8 +97,9 @@ export function AgreementsList({
           ))}
         </ul>
       ) : (
-        <EmptyState icon={FileText} title="Nenhum acordo registrado">
-          Quando um repasse for confirmado, o acordo aparece aqui.
+        <EmptyState icon={FileText} title="Nenhum repasse confirmado">
+          Depois da seleção e dos aceites necessários, o repasse da oferta
+          aparece aqui.
         </EmptyState>
       )}
     </AppScreen>

@@ -3,6 +3,8 @@ import {
   filterMuralOffers,
   groupByDay,
   parseMuralFilter,
+  parseMuralGroup,
+  muralHref,
 } from "@/features/shifts/mural-filters";
 import {
   offerTitle,
@@ -35,11 +37,11 @@ const offers = [
 ];
 
 describe("mural filters", () => {
-  it("defaults to this week and accepts known filters only", () => {
-    expect(parseMuralFilter(undefined)).toBe("semana");
+  it("defaults to all periods and accepts known filters only", () => {
+    expect(parseMuralFilter(undefined)).toBe("todos");
     expect(parseMuralFilter("noturno")).toBe("noturno");
     expect(parseMuralFilter("todos")).toBe("todos");
-    expect(parseMuralFilter("qualquer")).toBe("semana");
+    expect(parseMuralFilter("qualquer")).toBe("todos");
   });
 
   it("filters by week, night, ICU and weekend in the product time zone", () => {
@@ -69,6 +71,57 @@ describe("mural filters", () => {
     expect(groupByDay(offers, (item) => item.startsAt)).toHaveLength(3);
     expect(offerTitle(offers[0])).toBe("UTI Adulto · Hospital Exemplo");
     expect(offerTitle({ sector: "UTI Adulto" })).toBe("UTI Adulto");
+  });
+
+  it("includes free offers and every accessible group by default, even beyond a week", () => {
+    const mixed = [
+      { ...offers[0], id: "free", groupId: undefined },
+      { ...offers[1], id: "group-a", groupId: "a" },
+      { ...offers[2], id: "group-b", groupId: "b" },
+    ];
+    const ids = (group = "todos") =>
+      filterMuralOffers(mixed, {
+        filter: parseMuralFilter(undefined),
+        group,
+        now,
+      }).map((item) => item.id);
+    expect(ids()).toEqual(["free", "group-a", "group-b"]);
+    expect(ids("livres")).toEqual(["free"]);
+    expect(ids("grupos")).toEqual(["group-a", "group-b"]);
+    expect(ids("b")).toEqual(["group-b"]);
+    expect(ids("unknown")).toEqual([]);
+    expect(
+      filterMuralOffers(mixed, { filter: "semana", group: "b", now }),
+    ).toEqual([]);
+  });
+
+  it("does not present closed, cancelled, expired or already started offers as available", () => {
+    const unavailable = [
+      "closed_confirmed",
+      "selection_in_progress",
+      "cancelled_by_owner",
+      "expired",
+    ].map((status) => ({ ...offers[0], status }));
+    unavailable.push({ ...offers[0], startsAt: now.toISOString() });
+    expect(filterMuralOffers(unavailable, { filter: "todos", now })).toEqual(
+      [],
+    );
+  });
+
+  it("accepts only available group options and preserves scope when period/search change", () => {
+    const groups = [{ id: "group-a", name: "Grupo A" }];
+    expect(parseMuralGroup(undefined, groups)).toBe("todos");
+    expect(parseMuralGroup("group-a", groups)).toBe("group-a");
+    expect(parseMuralGroup("unavailable", groups)).toBe("todos");
+    expect(parseMuralGroup("livres", [])).toBe("livres");
+    expect(parseMuralGroup("grupos", [])).toBe("grupos");
+    expect(muralHref("todos")).toBe("/plantoes");
+    expect(muralHref("noturno", "UTI Adulto", "group-a")).toBe(
+      "/plantoes?filtro=noturno&q=UTI+Adulto&grupo=group-a",
+    );
+    expect(muralHref("todos", undefined, "livres")).toBe(
+      "/plantoes?grupo=livres",
+    );
   });
 });
 

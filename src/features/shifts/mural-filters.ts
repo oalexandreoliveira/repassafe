@@ -1,8 +1,9 @@
 import { dayKey } from "@/features/shifts/format";
 import type { OfferSummary } from "@/features/shifts/offer-view";
 
-/** Filtros rápidos do mural (S02). "semana" é o padrão; "todos" desliga o filtro. */
+/** Filtros opcionais do mural. Sem escolha explícita, mostra todos os períodos. */
 export const muralFilters = [
+  { id: "todos", label: "Todos os períodos" },
   { id: "semana", label: "Esta semana" },
   { id: "noturno", label: "Noturno" },
   { id: "uti", label: "UTI" },
@@ -11,7 +12,33 @@ export const muralFilters = [
 
 export type MuralFilter = (typeof muralFilters)[number]["id"] | "todos";
 
-export const defaultMuralFilter: MuralFilter = "semana";
+export const defaultMuralFilter: MuralFilter = "todos";
+
+export type MuralGroup = { id: string; name: string };
+/** "todos", "livres", "grupos", or an active membership's group id. */
+export function parseMuralGroup(
+  value: string | undefined,
+  groups: MuralGroup[],
+) {
+  return value === "livres" ||
+    value === "grupos" ||
+    groups.some((group) => group.id === value)
+    ? value!
+    : "todos";
+}
+
+export function muralHref(
+  filter: MuralFilter,
+  query?: string,
+  group = "todos",
+) {
+  const params = new URLSearchParams();
+  if (filter !== defaultMuralFilter) params.set("filtro", filter);
+  if (query) params.set("q", query);
+  if (group !== "todos") params.set("grupo", group);
+  const search = params.toString();
+  return search ? `/plantoes?${search}` : "/plantoes";
+}
 
 export function parseMuralFilter(value: string | undefined): MuralFilter {
   if (value === "todos") return "todos";
@@ -62,11 +89,24 @@ function matchesFilter(offer: OfferSummary, filter: MuralFilter, now: Date) {
 
 export function filterMuralOffers(
   offers: OfferSummary[],
-  { filter, query, now }: { filter: MuralFilter; query?: string; now: Date },
+  {
+    filter,
+    query,
+    group = "todos",
+    now,
+  }: { filter: MuralFilter; query?: string; group?: string; now: Date },
 ) {
   const needle = query ? normalizeText(query) : "";
   return offers.filter(
     (offer) =>
+      ["open_normal", "open_emergency"].includes(offer.status) &&
+      new Date(offer.startsAt) > now &&
+      (group === "todos" ||
+        (group === "livres"
+          ? !offer.groupId
+          : group === "grupos"
+            ? !!offer.groupId
+            : offer.groupId === group)) &&
       matchesFilter(offer, filter, now) &&
       (!needle ||
         [offer.sector, offer.groupName, offer.institutionName].some(

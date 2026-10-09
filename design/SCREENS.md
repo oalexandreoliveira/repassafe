@@ -4,6 +4,32 @@ Cada tela tem: imagem de referência em `screens/png/` (renderizada a 2×, 390×
 
 Textos entre colchetes (`[HOSPITAL]`, `[NOME]`, `[ID]`, `[HASH]`) são dados dinâmicos. Horários e datas de exemplo são ilustrativos.
 
+## Ajuste funcional — 08/10/2026
+
+A solicitação de separar ofertas de acordos externos atualiza os textos das
+referências abaixo, preservando seus componentes, tokens e composição:
+
+- S02 abre com todas as ofertas futuras ainda abertas que o usuário pode ler:
+  livres e dos grupos autorizados. O subtítulo explicita as duas origens.
+  “Todos os períodos” é o padrão; “Esta semana” passa a ser opcional.
+  “Origem das ofertas” permite todas, somente livres, todos os grupos do usuário
+  ou um grupo específico. Busca, período e origem se combinam pela URL; limpar
+  restaura o mural completo. O vazio geral é “Nenhum plantão disponível agora”.
+- S07 chama a aba de ofertas encerradas com sucesso de “Confirmados”. Seus
+  cartões usam o tom `confirmed` e “Repasse confirmado”. O parâmetro histórico
+  `aba=registrados` continua válido para preservar links existentes.
+- A aba principal antes chamada “Acordos” passa a “Repasses”, com título
+  “Repasses confirmados” e seção “Confirmados a partir de ofertas”. O acesso
+  a “Acordos combinados fora do app” continua em seção própria, com destino
+  `/acordos/registrados` e sua ação exclusiva “Registrar acordo”.
+- S03/S04/S09/S10 identificam o resultado da oferta como “Repasse confirmado”,
+  com “Comprovante do repasse”. O comprovante informa sua origem na oferta.
+  O documento e a trilha imutáveis não mudam; `registered` continua válido
+  para o selo “Imutável”, sem classificar a oferta como acordo externo.
+
+As imagens estáticas anteriores são referências visuais, não a fonte do novo
+vocabulário. A implementação e seus testes seguem este ajuste funcional.
+
 ## Mapa de navegação
 
 ```

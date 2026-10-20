@@ -61,6 +61,19 @@ const dateOfBirth = z.string().refine((value) => {
   );
 }, "Informe uma data de nascimento válida.");
 
+export const crmFormatMessage =
+  "O CRM deve ter de 4 a 12 números, sem letras. Pontos e espaços são ignorados.";
+
+// Aceita "12.345" ou "12 345"; letras e outros símbolos continuam inválidos.
+const crmNumberField = z
+  .string()
+  .transform((value) => value.replace(/[.\s]/g, ""))
+  .refine(
+    (value) => value === "" || /^\d{4,12}$/.test(value),
+    crmFormatMessage,
+  )
+  .default("");
+
 export const registrationSchema = z
   .object({
     civilName: z.string().trim().min(3, "Informe seu nome completo.").max(120),
@@ -82,7 +95,7 @@ export const registrationSchema = z
         "Informe um celular brasileiro com DDD.",
       ),
     practicesMedicine: z.enum(["yes", "no"]),
-    crmNumber: z.string().trim().max(12).default(""),
+    crmNumber: crmNumberField,
     crmState: z.union([z.enum(brazilianStates), z.literal("")]).default(""),
     specialty: z.string().trim().max(120).default(""),
     rqe: z.string().trim().max(12).default(""),
@@ -96,7 +109,7 @@ export const registrationSchema = z
         context.addIssue({
           code: "custom",
           path: ["crmNumber"],
-          message: "Informe o CRM.",
+          message: value.crmNumber ? crmFormatMessage : "Informe o CRM.",
         });
       if (!value.crmState)
         context.addIssue({
@@ -131,7 +144,7 @@ export const registrationDraftSchema = z.object({
     )
     .default(""),
   practicesMedicine: z.enum(["yes", "no"]).default("yes"),
-  crmNumber: z.string().trim().max(12).default(""),
+  crmNumber: crmNumberField,
   crmState: z.union([z.enum(brazilianStates), z.literal("")]).default(""),
   specialty: z.string().trim().max(120).default(""),
   rqe: z.string().trim().max(12).default(""),

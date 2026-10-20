@@ -74,6 +74,14 @@ export async function saveRegistrationAction(
       if (error.code === "23505") {
         // Valor já vinculado a outro cadastro: não revelar de quem.
         const text = `${error.message} ${error.details ?? ""}`;
+        if (/crm/i.test(text))
+          return {
+            ...failure("Não foi possível vincular este CRM e UF ao cadastro."),
+            fieldErrors: {
+              crmNumber:
+                "Não foi possível vincular este CRM e UF ao cadastro. Confira os dados; se estiverem corretos, fale com o suporte e peça a revisão do CRM.",
+            },
+          };
         const field = /phone/i.test(text) ? "phone" : "cpf";
         const label = field === "phone" ? "celular" : "CPF";
         return {
@@ -115,7 +123,19 @@ export async function submitRegistrationAction(
   if (readError || !data?.draft)
     return failure("Salve seu cadastro antes de enviar.");
   const parsed = registrationSchema.safeParse(data.draft.data);
-  if (!parsed.success) return failure(parsed.error.issues[0].message);
+  if (!parsed.success) {
+    const fieldErrors: Record<string, string> = {};
+    for (const issue of parsed.error.issues) {
+      const key = String(issue.path[0] ?? "");
+      if (key && !fieldErrors[key]) fieldErrors[key] = issue.message;
+    }
+    return {
+      ...failure(
+        `Corrija antes de enviar: ${Object.values(fieldErrors).join(" ")} Depois de editar, use “Salvar progresso”.`,
+      ),
+      fieldErrors,
+    };
+  }
   if (process.env.SMS_VERIFICATION_ENABLED === "true") {
     const { data: account, error: accountError } =
       await identity.supabase.auth.getUser();

@@ -51,6 +51,30 @@ describe("cadastro completo", () => {
       registrationSchema.safeParse({ ...complete, crmNumber: "" }).success,
     ).toBe(false);
   });
+  it("distingue CRM ausente de CRM em formato inválido e já no rascunho", () => {
+    const message = (input: object) =>
+      registrationSchema.safeParse({ ...complete, ...input }).error?.issues[0]
+        .message;
+    expect(message({ crmNumber: "" })).toBe("Informe o CRM.");
+    expect(message({ crmNumber: "12A45" })).toMatch(/4 a 12 números/);
+    expect(message({ crmNumber: "123" })).toMatch(/4 a 12 números/);
+    expect(
+      registrationDraftSchema.safeParse({ crmNumber: "CRM 123" }).success,
+    ).toBe(false);
+    expect(registrationDraftSchema.safeParse({ crmNumber: "" }).success).toBe(
+      true,
+    );
+  });
+  it("aceita pontos e espaços no CRM e salva só os números", () => {
+    const parsed = registrationSchema.parse({
+      ...complete,
+      crmNumber: " 12.345 ",
+    });
+    expect(parsed.crmNumber).toBe("12345");
+    expect(
+      registrationDraftSchema.parse({ crmNumber: "12 345" }).crmNumber,
+    ).toBe("12345");
+  });
   it("valida datas civis reais e impede futuro", () => {
     expect(
       registrationSchema.safeParse({ ...complete, birthDate: "1990-02-31" })

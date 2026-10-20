@@ -1,6 +1,6 @@
 import { PrintDocumentButton } from "@/components/print-document-button";
 import { AppScreen } from "@/components/ui/app-shell";
-import { ButtonLink } from "@/components/ui/button";
+import { ButtonLink, buttonClassName } from "@/components/ui/button";
 import { InfoBanner } from "@/components/ui/info-banner";
 import { KeyValueList } from "@/components/ui/key-value-list";
 import { Logo } from "@/components/ui/logo";
@@ -79,10 +79,12 @@ export function AgreementRegistered({
   /** Momento da escolha do substituto, quando disponível. */
   selectedAt?: string;
   documentHashValid: boolean;
-  eventChainValid: boolean;
+  /** null indica falha de leitura; não é evidência de divergência. */
+  eventChainValid: boolean | null;
   backHref: string;
 }) {
-  const intact = documentHashValid && eventChainValid;
+  const intact = documentHashValid && eventChainValid === true;
+  const divergent = !documentHashValid || eventChainValid === false;
   const trail: AuditEvent[] = [
     ...evidence.map((event) => ({
       label: trailLabels[event.event_type] ?? event.event_type,
@@ -124,7 +126,7 @@ export function AgreementRegistered({
         </p>
       </header>
 
-      {!intact ? (
+      {divergent ? (
         <InfoBanner variant="warning" role="alert">
           A verificação local encontrou divergência neste registro. Procure o
           suporte antes de usar o documento.
@@ -148,7 +150,7 @@ export function AgreementRegistered({
         />
       </RegistryCard>
 
-      <AuditTrail events={trail} />
+      {eventChainValid !== null ? <AuditTrail events={trail} /> : null}
 
       <section className={styles.stack} aria-labelledby="document-heading">
         <h2 id="document-heading" className={styles.sectionTitle}>
@@ -203,30 +205,53 @@ export function AgreementRegistered({
           ]}
         />
         <RegistryCard title="Cadeia de evidências">
-          <ol className={styles.list}>
-            {evidence.map((event) => (
-              <li key={event.id} className={styles.stack}>
-                <strong>
-                  {evidenceLabels[event.event_type] ?? event.event_type}
-                </strong>
-                <span className={styles.help}>
-                  Realizado em {formatDateTime(event.occurred_at)} · registrado
-                  na trilha em {formatDateTime(event.recorded_at)}
-                </span>
-                <RegistryBlock
-                  lines={[
-                    ...(event.actor_id ? [`ator ${event.actor_id}`] : []),
-                    `sha256 ${event.event_sha256}`,
-                  ]}
-                />
-              </li>
-            ))}
-          </ol>
+          {eventChainValid === null ? (
+            <>
+              <InfoBanner variant="warning" role="alert">
+                Não foi possível ler a trilha de evidências. A verificação da
+                cadeia está indisponível no momento. Tente novamente.
+              </InfoBanner>
+              <a
+                href={`/acordos/${encodeURIComponent(content.agreement_id)}`}
+                className={buttonClassName({
+                  variant: "secondary",
+                  size: "sm",
+                })}
+              >
+                Tentar novamente
+              </a>
+            </>
+          ) : (
+            <ol className={styles.list}>
+              {evidence.map((event) => (
+                <li key={event.id} className={styles.stack}>
+                  <strong>
+                    {evidenceLabels[event.event_type] ?? event.event_type}
+                  </strong>
+                  <span className={styles.help}>
+                    Realizado em {formatDateTime(event.occurred_at)} ·
+                    registrado na trilha em {formatDateTime(event.recorded_at)}
+                  </span>
+                  <RegistryBlock
+                    lines={[
+                      ...(event.actor_id ? [`ator ${event.actor_id}`] : []),
+                      `sha256 ${event.event_sha256}`,
+                    ]}
+                  />
+                </li>
+              ))}
+            </ol>
+          )}
         </RegistryCard>
         <p className={styles.help} role="status">
           Verificação local: conteúdo{" "}
           {documentHashValid ? "íntegro" : "divergente"}; cadeia de eventos{" "}
-          {eventChainValid ? "íntegra" : "divergente"}.
+          {eventChainValid === null
+            ? "indisponível"
+            : eventChainValid
+              ? "íntegra"
+              : "divergente"}
+          .
         </p>
         <p className={styles.help}>
           O hash e a cadeia ajudam a detectar alterações. Eles não equivalem a

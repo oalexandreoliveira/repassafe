@@ -46,7 +46,9 @@ export function ChooseSubstitute({
         <h2 className={styles.sectionTitle}>
           {plural(applications.length, "candidatura", "candidaturas")}
         </h2>
-        <span className={styles.sectionNote}>Todos com CRM verificado</span>
+        <span className={styles.sectionNote}>
+          Confira a situação de cada candidato
+        </span>
       </div>
       <form
         id={FORM_ID}
@@ -64,6 +66,34 @@ export function ChooseSubstitute({
               inputName="candidatura"
               value={application.id}
               name={application.candidate_display_name}
+              verified={application.professional?.verified === true}
+              disabled={application.professional?.verified !== true}
+              details={
+                application.professional ? (
+                  <span>
+                    <span>
+                      CRM {application.professional.crm ?? "não informado"}/
+                      {application.professional.uf ?? "—"}
+                    </span>
+                    <br />
+                    <span>
+                      {application.professional.specialty ??
+                        "Especialidade não informada"}
+                      {application.professional.rqe
+                        ? ` · RQE ${application.professional.rqe} — ${application.professional.rqe_verified ? "verificado" : "declarado, não verificado"}`
+                        : ""}
+                    </span>
+                    <br />
+                    <span>
+                      {application.professional.verified
+                        ? `Verificação válida até ${new Date(application.professional.valid_until!).toLocaleDateString("pt-BR", { timeZone: "America/Fortaleza" })}`
+                        : "Cadastro precisa de revalidação"}
+                    </span>
+                  </span>
+                ) : (
+                  "Dados profissionais indisponíveis"
+                )
+              }
               meta={appliedAt(application.created_at, now)}
               required={index === 0}
             />

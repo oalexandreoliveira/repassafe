@@ -79,7 +79,7 @@ select set_config('request.jwt.claims', '{}', true);
 
 set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"10000000-0000-0000-0000-000000000001","role":"authenticated"}', true);
-select is((select count(*) from public.shift_offers), 1::bigint, 'owner reads group offer');
+select is((select count(*) from public.shift_offers where id='40000000-0000-0000-0000-000000000001'), 1::bigint, 'owner reads group offer');
 select is((select count(*) from public.shift_applications), 1::bigint, 'owner reads applications to own offer');
 select is((select count(*) from public.substitutions), 1::bigint, 'owner reads substitution');
 select is((select count(*) from public.shift_agreements), 1::bigint, 'owner reads agreement');
@@ -91,7 +91,7 @@ select throws_ok(
 );
 
 select set_config('request.jwt.claims', '{"sub":"10000000-0000-0000-0000-000000000002","role":"authenticated"}', true);
-select is((select count(*) from public.shift_offers), 1::bigint, 'candidate reads eligible offer');
+select is((select count(*) from public.shift_offers where id='40000000-0000-0000-0000-000000000001'), 1::bigint, 'candidate reads eligible offer');
 select is((select count(*) from public.shift_applications), 1::bigint, 'candidate reads own application');
 select is((select count(*) from public.substitutions), 1::bigint, 'substitute reads substitution');
 select is((select count(*) from public.shift_agreements), 1::bigint, 'substitute reads agreement');
@@ -101,7 +101,7 @@ select is((select count(*) from public.substitutions), 1::bigint, 'approver read
 select is((select count(*) from public.shift_agreements), 1::bigint, 'approver reads group agreement');
 
 select set_config('request.jwt.claims', '{"sub":"10000000-0000-0000-0000-000000000004","role":"authenticated"}', true);
-select is((select count(*) from public.shift_offers), 0::bigint, 'outsider cannot read other group offer');
+select is((select count(*) from public.shift_offers where id='40000000-0000-0000-0000-000000000001'), 0::bigint, 'outsider cannot read other group offer');
 select is((select count(*) from public.shift_applications), 0::bigint, 'outsider cannot read application');
 select is((select count(*) from public.substitutions), 0::bigint, 'outsider cannot read substitution');
 select is((select count(*) from public.shift_agreements), 0::bigint, 'outsider cannot read agreement');

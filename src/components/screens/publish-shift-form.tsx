@@ -31,6 +31,7 @@ const fieldIds: Partial<Record<ShiftFormField, string>> = {
   end: "field-end",
   value: "field-value",
   paymentTerms: "field-paymentTerms",
+  dueDate: "field-dueDate",
 };
 
 function useShiftForm(

@@ -61,6 +61,16 @@ export const applications: ApplicationItem[] = [
   candidate_display_name: name,
   status: "active",
   created_at: createdAt,
+  professional: {
+    id: `00000000-0000-4000-8000-00000000001${index}`,
+    crm: `${12345 + index}`,
+    uf: "CE",
+    specialty: "Clínica médica",
+    rqe: index === 0 ? "1234" : null,
+    rqe_verified: index === 0,
+    verified: true,
+    valid_until: "2027-10-10T12:00:00.000Z",
+  },
 }));
 
 export const notifications: NotificationRow[] = [

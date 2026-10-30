@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { safeReturnPath } from "@/features/groups/invite-path";
 import { createClient } from "@/lib/supabase/server";
 import {
   getAdministrativeAccess,
@@ -63,7 +64,13 @@ export async function GET(request: NextRequest) {
     if (identity && (await getAdministrativeAccess(identity))) {
       return NextResponse.redirect(new URL("/senha/nova", request.url));
     }
-    return NextResponse.redirect(new URL("/cadastro/completar", request.url));
+    return NextResponse.redirect(
+      new URL(
+        safeReturnPath(request.nextUrl.searchParams.get("proximo")) ??
+          "/cadastro/completar",
+        request.url,
+      ),
+    );
   }
   return NextResponse.redirect(
     new URL("/entrar?erro=confirmacao", request.url),

@@ -29,7 +29,7 @@ select throws_ok($$update public.profiles set crm_number='99999' where id='98000
 reset role;
 update public.profiles set verification_valid_until=now()-interval '1 second' where id='98000000-0000-0000-0000-000000000001';
 select set_config('request.jwt.claims','{"sub":"98000000-0000-0000-0000-000000000001","role":"authenticated"}',true);
-select throws_ok($$insert into public.workflow_commands(actor_id,command,payload) values('98000000-0000-0000-0000-000000000001','publish_offer','{"owner_terms_acknowledged":true}')$$,'P0001','Revalide seu cadastro profissional','expired verification blocks publication in database');
+select throws_ok($$insert into public.workflow_commands(actor_id,command,payload) values('98000000-0000-0000-0000-000000000001','publish_offer',jsonb_build_object('owner_terms_acknowledged',true,'payment_due_date',(current_date+40)::text))$$,'P0001','Revalide seu cadastro profissional','expired verification blocks publication in database');
 select throws_ok($$insert into public.workflow_commands(actor_id,command,payload) values('98000000-0000-0000-0000-000000000001','apply_to_offer','{}')$$,'P0001','Revalide seu cadastro profissional','expired verification blocks candidacy in database');
 select lives_ok($$select public.registration_save('98000000-0000-0000-0000-000000000002','{"civilName":"Aprovador Teste","displayName":"Aprovador Teste","cpf":"11144477735","birthDate":"1990-01-01","phone":"+5521987654321","practicesMedicine":"no"}',0)$$,'nonmedical approver saves identity without CRM');
 select public.registration_photo('98000000-0000-0000-0000-000000000002','98000000-0000-0000-0000-000000000002/test-photo');

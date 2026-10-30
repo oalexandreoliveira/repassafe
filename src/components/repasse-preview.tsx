@@ -25,6 +25,7 @@ const example: ShiftFormValues = {
   end: "19:00",
   value: "1200,00",
   paymentTerms: "Pagamento em até 30 dias",
+  dueDate: "2026-11-14",
   notes: "",
 };
 const exampleRange = composeRange(example);
@@ -302,11 +303,15 @@ export function RepassePreview() {
       <details className={styles.transcript}>
         <summary>Ler demonstração</summary>
         <p>
-          Exemplo de oferta livre: Clínica médica, em 15/10/2026, das 07h às 19h
-          (Fortaleza), por R$ 1.200,00, com pagamento em até 30 dias. O titular
-          preenche os dados, confirma as condições e escolhe Publicar plantão. A
-          oferta aparece como Aberto em Plantões disponíveis, com a ação
-          Gerenciar. Isso ainda não confirma um repasse.
+          Exemplo fictício de oferta livre: intercorrência em enfermaria de
+          Clínica médica do Hospital Floriano Filho, em 15/10/2026, das 07h às
+          19h (Fortaleza), por R$ 1.200,00, com pagamento em até 30 dias. O
+          titular preenche os dados, confirma as condições e escolhe Publicar
+          plantão. A oferta aparece como Aberto em Plantões disponíveis, com a
+          ação Gerenciar. Publicar ainda não confirma um repasse. O titular
+          escolhe um substituto, que revisa e aceita as condições. Quando
+          exigida pelo grupo, a coordenação também aprova. Então o repasse é
+          registrado.
         </p>
       </details>
     </div>

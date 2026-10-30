@@ -43,7 +43,7 @@ select is((select count(*) from public.notifications
   'owner is not notified at shift end');
 select is(private.notify_shift_end(), 0, 'second run is idempotent');
 select is((select count(*) from public.notifications
-  where event_type like 'shift.ended_%'), 1::bigint, 'no duplicate notifications');
+  where event_type like 'shift.ended_%' and href='/plantoes/98000000-0000-0000-0000-000000000010'), 1::bigint, 'no duplicate notifications');
 select is((select end_notified_at is null from public.substitutions
   where id = '98000000-0000-0000-0000-000000000022'), true,
   'ongoing shift is not notified');

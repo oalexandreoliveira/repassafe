@@ -94,7 +94,8 @@ export default async function AgreementDocumentPage({
 }) {
   const { id } = await params;
   const identity = await getVerifiedIdentity();
-  if (!identity) redirect("/entrar");
+  if (!identity)
+    redirect(`/entrar?proximo=${encodeURIComponent(`/acordos/${id}`)}`);
 
   let dataClient = identity.supabase;
   const isAdministrator = Boolean(await getAdministrativeAccess(identity));
@@ -168,6 +169,16 @@ export default async function AgreementDocumentPage({
 
   return (
     <AgreementRegistered
+      paymentHref={
+        [
+          content.parties.owner.profile_id,
+          content.parties.substitute.profile_id,
+        ].includes(identity.userId) &&
+        documentHashValid &&
+        eventChainValid
+          ? `/acordos/${id}/pagamento`
+          : undefined
+      }
       content={content}
       schemaVersion={document.schema_version}
       generatedAt={document.generated_at}

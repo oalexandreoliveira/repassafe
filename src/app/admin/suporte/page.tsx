@@ -31,8 +31,12 @@ export default async function AdminSupportPage() {
         (data as Request[]).map((request) => (
           <section className="registration-section" key={request.id}>
             <h2>
-              {request.category === "privacy" ? "Privacidade" : "Suporte"} —{" "}
-              {request.state === "open" ? "Aberto" : "Respondido"}
+              {request.category === "privacy"
+                ? "Privacidade"
+                : request.category === "crm_review"
+                  ? "Revisão de CRM"
+                  : "Suporte"}{" "}
+              — {request.state === "open" ? "Aberto" : "Respondido"}
             </h2>
             <p>Protocolo: {request.id}</p>
             <p>Contato: {request.contact_email}</p>

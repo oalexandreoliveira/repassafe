@@ -1,5 +1,6 @@
 "use client";
 
+import { ShiftTemplates } from "@/components/shift-templates";
 import { SelectField, TextAreaField, TextField } from "@/components/ui/field";
 import { InfoBanner } from "@/components/ui/info-banner";
 import {
@@ -8,6 +9,7 @@ import {
   type ShiftFormField,
   type ShiftFormValues,
 } from "@/features/shifts/form-values";
+import { deadlineNotice } from "@/features/agreements/schema";
 import { PATIENT_DATA_NOTICE } from "@/features/shifts/copy";
 import styles from "./publish-shift-fields.module.css";
 
@@ -51,7 +53,7 @@ export function PublishShiftFields({
   const { startsAt, endsAt } = composeRange(values);
   const group = groups.find((item) => item.id === values.groupId);
   const bind = (field: ShiftFormField) => ({
-    value: values[field],
+    value: values[field] ?? "",
     readOnly,
     onChange: (
       event: React.ChangeEvent<
@@ -98,6 +100,7 @@ export function PublishShiftFields({
           value={mode === "free" ? "" : values.groupId}
         />
       )}
+      {!readOnly && <ShiftTemplates values={values} onChange={onChange} />}
       <TextField
         label="Setor"
         name="sector"
@@ -151,9 +154,21 @@ export function PublishShiftFields({
         {...bind("value")}
       />
       <TextField
+        label="Data-limite de pagamento"
+        name="dueDate"
+        id="field-dueDate"
+        type="date"
+        min={minDate}
+        required
+        {...bind("dueDate")}
+      />
+      <InfoBanner>
+        Quem repassa paga a quem assume até a data-limite. {deadlineNotice}
+      </InfoBanner>
+      <TextField
         label="Condições de pagamento"
         name="paymentTerms"
-        maxLength={300}
+        maxLength={140}
         required
         {...bind("paymentTerms")}
       />

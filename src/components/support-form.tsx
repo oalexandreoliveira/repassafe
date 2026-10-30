@@ -2,7 +2,13 @@
 import { useActionState, useState } from "react";
 import { createSupportAction } from "@/app/suporte/actions";
 import { initialActionState } from "@/features/auth/schemas";
-export function SupportForm({ email }: { email?: string }) {
+export function SupportForm({
+  email,
+  initialCategory = "support",
+}: {
+  email?: string;
+  initialCategory?: string;
+}) {
   const [contact, setContact] = useState(email ?? "");
   const [message, setMessage] = useState("");
   const [state, action, pending] = useActionState(
@@ -34,7 +40,8 @@ export function SupportForm({ email }: { email?: string }) {
       ) : null}
       <label htmlFor="category">
         Assunto
-        <select id="category" name="category">
+        <select id="category" name="category" defaultValue={initialCategory}>
+          <option value="crm_review">Revisão de CRM ou uso indevido</option>
           <option value="support">Suporte do cadastro ou dos repasses</option>
           <option value="privacy">
             Privacidade e direitos sobre meus dados

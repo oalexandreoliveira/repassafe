@@ -70,6 +70,7 @@ export function AgreementRegistered({
   documentHashValid,
   eventChainValid,
   backHref,
+  paymentHref,
 }: {
   content: AgreementContent;
   schemaVersion: string;
@@ -82,6 +83,7 @@ export function AgreementRegistered({
   /** null indica falha de leitura; não é evidência de divergência. */
   eventChainValid: boolean | null;
   backHref: string;
+  paymentHref?: string;
 }) {
   const intact = documentHashValid && eventChainValid === true;
   const divergent = !documentHashValid || eventChainValid === false;
@@ -106,6 +108,11 @@ export function AgreementRegistered({
     <AppScreen
       footer={
         <div className={`${styles.actions} no-print`}>
+          {paymentHref && (
+            <ButtonLink href={paymentHref} block>
+              Acompanhar pagamento
+            </ButtonLink>
+          )}
           <PrintDocumentButton />
           <ButtonLink href={backHref} variant="secondary" block>
             Voltar aos plantões

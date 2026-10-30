@@ -1,5 +1,5 @@
 begin;
-select plan(20);
+select plan(37);
 create temporary table acceptance_existing_audit as select id from public.audit_events;
 
 create temporary table acceptance_ids (
@@ -52,7 +52,7 @@ insert into public.workflow_commands (id, command, payload) values (
     'starts_at', now() + interval '5 days',
     'ends_at', now() + interval '5 days 12 hours',
     'sector', 'UTI', 'value_cents', 120000,
-    'payment_terms', '30 dias', 'notes', 'Fluxo sem aprovação',
+    'payment_due_date', (current_date + 40)::text, 'payment_terms', '30 dias', 'notes', 'Fluxo sem aprovação',
     'owner_terms_acknowledged', true
   )
 );
@@ -89,6 +89,15 @@ insert into public.workflow_commands (id, command, target_id) values (
 reset role;
 insert into acceptance_ids select 'competing_application', result_id
 from public.workflow_commands where id = '41000000-0000-0000-0000-000000000003';
+
+select is(jsonb_array_length(public.offer_candidate_profiles((select id from acceptance_ids where name='offer_without_approval'),'11000000-0000-0000-0000-000000000001')),2,'owner sees individual professional projections');
+select is(public.offer_candidate_profiles((select id from acceptance_ids where name='offer_without_approval'),'11000000-0000-0000-0000-000000000004'),'[]'::jsonb,'candidate cannot inspect competitors through projection');
+select ok(not has_function_privilege('authenticated','public.offer_candidate_profiles(uuid,uuid)','execute'),'client cannot impersonate owner in projection');
+update public.profiles set verification_valid_until=now()-interval '1 second' where id='11000000-0000-0000-0000-000000000002';
+select set_config('request.jwt.claims', '{"sub":"11000000-0000-0000-0000-000000000001","role":"authenticated"}', true);
+select throws_ok($$insert into public.workflow_commands(command,target_id,payload) values('select_candidate',(select id from acceptance_ids where name='application_without_approval'),'{"confirmation_minutes":30}')$$,'P0001','O candidato precisa revalidar o cadastro profissional','expired candidate cannot be selected');
+update public.profiles set verification_valid_until=now()+interval '90 days' where id='11000000-0000-0000-0000-000000000002';
+
 
 set local role authenticated;
 select set_config('request.jwt.claims', '{"sub":"11000000-0000-0000-0000-000000000001","role":"authenticated"}', true);
@@ -174,7 +183,7 @@ insert into public.workflow_commands (id, command, payload) values (
     'starts_at', now() + interval '6 days',
     'ends_at', now() + interval '6 days 12 hours',
     'sector', 'Emergência', 'value_cents', 150000,
-    'payment_terms', '30 dias', 'notes', 'Fluxo com aprovação',
+    'payment_due_date', (current_date + 40)::text, 'payment_terms', '30 dias', 'notes', 'Fluxo com aprovação',
     'owner_terms_acknowledged', true
   )
 );
@@ -254,7 +263,7 @@ insert into public.workflow_commands (id, command, payload) values (
     'starts_at', now() + interval '7 days',
     'ends_at', now() + interval '7 days 12 hours',
     'sector', 'Clínica', 'value_cents', 90000,
-    'payment_terms', '15 dias', 'notes', 'Cancelamento',
+    'payment_due_date', (current_date + 40)::text, 'payment_terms', '15 dias', 'notes', 'Cancelamento',
     'owner_terms_acknowledged', true
   )
 );
@@ -318,6 +327,24 @@ select ok(
   ),
   'institutional decision is attributed to the approver'
 );
+
+
+select is((select count(*)::integer from public.agreement_email_deliveries where recipient_id::text like '11000000-%'),4,'each confirmed agreement queues exactly two party emails');
+select is((select payment_due_date from public.shift_agreements where offer_id=(select id from acceptance_ids where name='offer_without_approval')),current_date+40,'deadline is preserved in the agreement');
+select ok(not has_function_privilege('authenticated','public.record_agreement_payment(uuid,uuid,uuid,text,jsonb)','execute'),'clients cannot impersonate payment actors');
+select ok(not has_table_privilege('authenticated','public.agreement_payment_events','insert'),'clients cannot insert payment events directly');
+select ok(not has_table_privilege('service_role','public.agreement_payment_events','UPDATE,DELETE,TRUNCATE'),'service worker cannot rewrite payment history');
+select ok(not has_table_privilege('authenticated','public.agreement_email_deliveries','SELECT'),'clients cannot inspect email recipients or attempts');
+select lives_ok($$select public.record_agreement_payment('11000000-0000-0000-0000-000000000001','91000000-0000-0000-0000-000000000001',(select id from public.shift_agreements where offer_id=(select id from acceptance_ids where name='offer_without_approval')),'payment',jsonb_build_object('paid_on',current_date,'amount_cents',120000))$$,'owner reports full payment');
+select lives_ok($$select public.record_agreement_payment('11000000-0000-0000-0000-000000000001','91000000-0000-0000-0000-000000000001',(select id from public.shift_agreements where offer_id=(select id from acceptance_ids where name='offer_without_approval')),'payment',jsonb_build_object('paid_on',current_date,'amount_cents',120000))$$,'same request is idempotent');
+select is((select count(*)::integer from public.agreement_payment_events where request_id='91000000-0000-0000-0000-000000000001'),1,'retry creates only one event');
+select throws_ok($$select public.record_agreement_payment('11000000-0000-0000-0000-000000000001','91000000-0000-0000-0000-000000000002',(select id from public.shift_agreements where offer_id=(select id from acceptance_ids where name='offer_without_approval')),'receive','{"accepted":true}')$$,'P0001','Somente quem recebe pode confirmar o recebimento integral','payer cannot confirm receipt');
+select lives_ok($$select public.record_agreement_payment('11000000-0000-0000-0000-000000000002','91000000-0000-0000-0000-000000000003',(select id from public.shift_agreements where offer_id=(select id from acceptance_ids where name='offer_without_approval')),'receive','{"accepted":true}')$$,'beneficiary confirms receipt');
+select throws_ok($$update public.agreement_payment_events set description='altered record' where request_id='91000000-0000-0000-0000-000000000001'$$,'P0001','Acordos confirmados são imutáveis','payment event is immutable');
+set local role authenticated;
+select set_config('request.jwt.claims', '{"sub":"11000000-0000-0000-0000-000000000004","role":"authenticated"}', true);
+select is((select count(*)::integer from public.agreement_payment_events),0,'unrelated candidate cannot read payment history');
+reset role;
 
 select * from finish();
 rollback;

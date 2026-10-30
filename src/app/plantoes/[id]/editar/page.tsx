@@ -74,7 +74,11 @@ export default async function EditShiftPage({
         start: start.time,
         end: end.time,
         value: (offer.value_cents / 100).toFixed(2).replace(".", ","),
-        paymentTerms: offer.payment_terms,
+        paymentTerms: offer.payment_terms.replace(
+          /^Quem repassa paga a quem assume até \d{2}\/\d{2}\/\d{4}\. A data-limite vale mesmo se o hospital atrasar o pagamento\. /,
+          "",
+        ),
+        dueDate: offer.payment_due_date ?? "",
         notes: offer.notes ?? "",
       }}
     />

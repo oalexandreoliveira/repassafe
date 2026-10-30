@@ -1,11 +1,23 @@
 import { formatAuditTime, formatTime, dayKey } from "@/features/shifts/format";
 
+export type CandidateProfile = {
+  id: string;
+  crm: string | null;
+  uf: string | null;
+  specialty: string | null;
+  rqe: string | null;
+  rqe_verified: boolean;
+  verified: boolean;
+  valid_until: string | null;
+};
+
 export type ApplicationItem = {
   id: string;
   candidate_id: string;
   candidate_display_name: string;
   status: string;
   created_at: string;
+  professional?: CandidateProfile;
 };
 
 /** "Candidatou-se hoje, 14:32" / "ontem, 21:48" / "10/10 09:12". */

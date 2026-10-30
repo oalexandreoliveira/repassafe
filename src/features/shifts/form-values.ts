@@ -14,6 +14,7 @@ export type ShiftFormValues = {
   end: string;
   value: string;
   paymentTerms: string;
+  dueDate?: string;
   notes: string;
 };
 
@@ -28,6 +29,7 @@ export const emptyShiftForm: ShiftFormValues = {
   end: "",
   value: "",
   paymentTerms: "",
+  dueDate: "",
   notes: "",
 };
 
@@ -78,6 +80,12 @@ export function validateShiftForm(
   if (!values.end) errors.end = "Informe o horário de término.";
   if (!money.test(values.value.trim()))
     errors.value = "Informe o valor em reais, por exemplo 1200,00.";
+  if (!values.dueDate || !/^\d{4}-\d{2}-\d{2}$/.test(values.dueDate))
+    errors.dueDate = "Informe a data-limite de pagamento.";
+  else if (minDate && values.dueDate < minDate)
+    errors.dueDate = "A data-limite não pode estar no passado.";
+  if (values.paymentTerms.trim().length > 140)
+    errors.paymentTerms = "Use até 140 caracteres nas condições adicionais.";
   if (values.paymentTerms.trim().length < 2)
     errors.paymentTerms = "Descreva as condições de pagamento.";
   return errors;

@@ -13,6 +13,10 @@ export default async function ChooseSubstitutePage({
   const workspace = await getShiftDetails(id);
   if (!workspace) notFound();
   const { identity, offer, applications, ownerTermsAcknowledged } = workspace;
+  if (workspace.candidateProfilesFailed)
+    throw new Error(
+      "Não foi possível consultar os perfis dos candidatos. Tente novamente.",
+    );
   const active = applications.filter(
     (application) => application.status === "active",
   );

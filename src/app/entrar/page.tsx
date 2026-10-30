@@ -14,7 +14,7 @@ export default async function LoginPage({
       title="Entrar na plataforma"
       intro={
         next
-          ? "Entre para ver o convite do grupo. Depois do login, você volta para ele."
+          ? "Entre para consultar o link recebido. Depois do login, você volta para ele, conforme suas permissões."
           : "Use o e-mail confirmado para acessar seu grupo."
       }
     >

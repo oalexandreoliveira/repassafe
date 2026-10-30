@@ -154,7 +154,7 @@ set local role authenticated;
 insert into public.workflow_commands (id, command, payload) values ('98300000-0000-4000-8000-000000000001', 'publish_offer',
   jsonb_build_object('group_id', current_setting('test.group'), 'starts_at', now() + interval '5 days',
     'ends_at', now() + interval '5 days 12 hours', 'sector', 'UTI', 'value_cents', 120000,
-    'payment_terms', '30 dias', 'notes', 'Grupo de colegas', 'owner_terms_acknowledged', true));
+    'payment_due_date', (current_date + 40)::text, 'payment_terms', '30 dias', 'notes', 'Grupo de colegas', 'owner_terms_acknowledged', true));
 reset role;
 select set_config('test.offer', (select result_id::text from public.workflow_commands where id = '98300000-0000-4000-8000-000000000001'), true);
 select pg_temp.actor(4);

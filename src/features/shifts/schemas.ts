@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { dateSchema, businessDate } from "@/features/agreements/schema";
 
 const localDateTime = z
   .string()
@@ -39,7 +40,11 @@ const offerFieldsSchema = z.object({
   endsAt: localDateTime,
   sector: z.string().trim().min(2).max(120),
   value: moneyToCents,
-  paymentTerms: z.string().trim().min(2).max(300),
+  paymentTerms: z.string().trim().min(2).max(140),
+  dueDate: dateSchema.refine(
+    (value) => value >= businessDate(),
+    "A data-limite não pode estar no passado.",
+  ),
   notes: z.string().trim().max(1000).default(""),
 });
 

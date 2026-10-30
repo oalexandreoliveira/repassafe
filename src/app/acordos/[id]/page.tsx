@@ -1,6 +1,9 @@
 import { createHash } from "node:crypto";
 import { notFound, redirect } from "next/navigation";
 import { AgreementRegistered } from "@/components/screens/agreement-registered";
+import { AppScreen, TopBar } from "@/components/ui/app-shell";
+import { buttonClassName } from "@/components/ui/button";
+import { InfoBanner } from "@/components/ui/info-banner";
 import {
   getAdministrativeAccess,
   getVerifiedIdentity,
@@ -62,6 +65,9 @@ function verifyEventChain(events: EvidenceEvent[], documentHash: string) {
     } catch {
       return false;
     }
+    if (!content || typeof content !== "object" || Array.isArray(content)) {
+      return false;
+    }
     if (
       sha256(event.event_content) !== event.event_sha256 ||
       event.previous_event_sha256 !== previousHash ||
@@ -88,7 +94,8 @@ export default async function AgreementDocumentPage({
 }) {
   const { id } = await params;
   const identity = await getVerifiedIdentity();
-  if (!identity) redirect("/entrar");
+  if (!identity)
+    redirect(`/entrar?proximo=${encodeURIComponent(`/acordos/${id}`)}`);
 
   let dataClient = identity.supabase;
   const isAdministrator = Boolean(await getAdministrativeAccess(identity));
@@ -97,7 +104,10 @@ export default async function AgreementDocumentPage({
     dataClient = createAdminClient();
   }
 
-  const [{ data: document }, { data: events }] = await Promise.all([
+  const [
+    { data: document, error: documentError },
+    { data: events, error: eventsError },
+  ] = await Promise.all([
     dataClient
       .from("agreement_documents")
       .select(
@@ -114,15 +124,42 @@ export default async function AgreementDocumentPage({
       .order("recorded_at")
       .order("id"),
   ]);
+  if (documentError) {
+    return (
+      <AppScreen
+        header={
+          <TopBar
+            title="Comprovante do repasse"
+            backHref={isAdministrator ? "/admin" : "/plantoes"}
+          />
+        }
+        footer={
+          <a
+            href={`/acordos/${encodeURIComponent(id)}`}
+            className={buttonClassName({ block: true })}
+          >
+            Tentar novamente
+          </a>
+        }
+      >
+        <InfoBanner variant="warning" role="alert">
+          Não foi possível ler o documento. A verificação está indisponível no
+          momento. Tente novamente.
+        </InfoBanner>
+      </AppScreen>
+    );
+  }
   if (!document) notFound();
 
   const content = document.canonical_content as unknown as AgreementContent;
-  const evidence = (events ?? []) as EvidenceEvent[];
+  const evidenceUnavailable = Boolean(eventsError) || events === null;
+  const evidence = (evidenceUnavailable ? [] : events) as EvidenceEvent[];
   const documentHashValid =
     sha256(document.canonical_content_text) === document.document_sha256;
-  const eventChainValid =
-    evidence.at(-1)?.event_type === "document_generated" &&
-    verifyEventChain(evidence, document.document_sha256);
+  const eventChainValid = evidenceUnavailable
+    ? null
+    : evidence.at(-1)?.event_type === "document_generated" &&
+      verifyEventChain(evidence, document.document_sha256);
 
   const { data: substitution } = await dataClient
     .from("substitutions")
@@ -132,6 +169,16 @@ export default async function AgreementDocumentPage({
 
   return (
     <AgreementRegistered
+      paymentHref={
+        [
+          content.parties.owner.profile_id,
+          content.parties.substitute.profile_id,
+        ].includes(identity.userId) &&
+        documentHashValid &&
+        eventChainValid
+          ? `/acordos/${id}/pagamento`
+          : undefined
+      }
       content={content}
       schemaVersion={document.schema_version}
       generatedAt={document.generated_at}

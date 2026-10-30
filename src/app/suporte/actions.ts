@@ -18,7 +18,7 @@ export async function createSupportAction(
   const parsed = z
     .object({
       email: z.email(),
-      category: z.enum(["support", "privacy"]),
+      category: z.enum(["support", "privacy", "crm_review"]),
       message: z.string().trim().min(10).max(4000),
     })
     .safeParse(Object.fromEntries(formData));

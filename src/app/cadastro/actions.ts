@@ -2,6 +2,7 @@
 
 import { createHash } from "node:crypto";
 import sharp from "sharp";
+import { registrationConflict } from "@/features/registration/errors";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { registrationContext } from "@/lib/registration";
@@ -71,21 +72,10 @@ export async function saveRegistrationAction(
         return failure(
           "Seu cadastro mudou em outra sessão. Recarregue para continuar.",
         );
-      if (error.code === "23505") {
-        // Valor já vinculado a outro cadastro: não revelar de quem.
-        const text = `${error.message} ${error.details ?? ""}`;
-        const field = /phone/i.test(text) ? "phone" : "cpf";
-        const label = field === "phone" ? "celular" : "CPF";
-        return {
-          ...failure(`Não foi possível usar este ${label} no cadastro.`),
-          fieldErrors: {
-            [field]: `Este ${label} não pode ser usado neste cadastro. Confira os números digitados; se estiverem corretos, fale com o suporte.`,
-          },
-        };
-      }
+      const conflict = registrationConflict(error);
+      if (conflict) return conflict;
       console.error("registration_save failed", {
         code: error.code,
-        message: error.message,
       });
       return failure(
         "Não foi possível salvar agora. Tente novamente em instantes; se persistir, fale com o suporte.",
@@ -107,7 +97,14 @@ export async function submitRegistrationAction(
   _previous: ActionState,
   formData: FormData,
 ): Promise<ActionState> {
-  const identity = await context();
+  let identity;
+  try {
+    identity = await context();
+  } catch (error) {
+    if (error instanceof RateLimitExceededError)
+      return failure("Aguarde antes de enviar novamente.");
+    throw error;
+  }
   const { data, error: readError } = await identity.admin.rpc(
     "registration_read",
     { target_user: identity.userId },
@@ -115,7 +112,19 @@ export async function submitRegistrationAction(
   if (readError || !data?.draft)
     return failure("Salve seu cadastro antes de enviar.");
   const parsed = registrationSchema.safeParse(data.draft.data);
-  if (!parsed.success) return failure(parsed.error.issues[0].message);
+  if (!parsed.success) {
+    const fieldErrors: Record<string, string> = {};
+    for (const issue of parsed.error.issues) {
+      const key = String(issue.path[0] ?? "");
+      if (key && !fieldErrors[key]) fieldErrors[key] = issue.message;
+    }
+    return {
+      ...failure(
+        `Corrija antes de enviar: ${Object.values(fieldErrors).join(" ")} Depois de editar, use “Salvar progresso”.`,
+      ),
+      fieldErrors,
+    };
+  }
   if (process.env.SMS_VERIFICATION_ENABLED === "true") {
     const { data: account, error: accountError } =
       await identity.supabase.auth.getUser();
@@ -133,10 +142,13 @@ export async function submitRegistrationAction(
     target_user: identity.userId,
     expected_revision: revision,
   });
-  if (error)
+  if (error) {
+    const conflict = registrationConflict(error);
+    if (conflict) return conflict;
     return failure(
-      "Não foi possível enviar. Confirme o e-mail, complete a foto e aceite os documentos atuais.",
+      "Não foi possível enviar. Confirme o e-mail, complete a foto e aceite os documentos atuais. Se persistir, solicite uma revisão no suporte.",
     );
+  }
   revalidatePath("/cadastro/completar");
   revalidatePath("/painel");
   return success(

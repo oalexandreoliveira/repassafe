@@ -41,7 +41,7 @@ export async function loginAction(
 ): Promise<ActionState> {
   const parsed = loginSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) return invalidCredentials;
-  // Só convites de grupo podem ser destino após o login (sem redirecionamento aberto).
+  // Somente destinos internos compartilháveis, validados por lista permitida.
   const returnPath = safeReturnPath(formData.get("next"));
 
   try {
@@ -108,6 +108,7 @@ export async function signupAction(
   }
 
   const { email, password } = parsed.data;
+  const next = safeReturnPath(formData.get("next"));
   try {
     const ip = await getRequestIp();
     await enforceRateLimit({
@@ -143,7 +144,7 @@ export async function signupAction(
     email,
     password,
     options: {
-      emailRedirectTo: `${env.NEXT_PUBLIC_APP_URL}/auth/confirm`,
+      emailRedirectTo: `${env.NEXT_PUBLIC_APP_URL}/auth/confirm${next ? `?proximo=${encodeURIComponent(next)}` : ""}`,
     },
   });
 
@@ -180,7 +181,7 @@ export async function signupAction(
     });
   }
 
-  if (data.session) redirect("/cadastro/completar");
+  if (data.session) redirect(next ?? "/cadastro/completar");
 
   return {
     status: "success",

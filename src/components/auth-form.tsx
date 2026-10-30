@@ -14,7 +14,7 @@ export function AuthForm({
   next,
 }: {
   mode: "login" | "signup";
-  /** Destino após o login (apenas convite de grupo, validado no servidor). */
+  /** Destino após o login (destino interno validado no servidor). */
   next?: string;
 }) {
   const [email, setEmail] = useState("");
@@ -27,9 +27,7 @@ export function AuthForm({
 
   return (
     <form action={formAction} className={styles.form}>
-      {mode === "login" && next ? (
-        <input type="hidden" name="next" value={next} />
-      ) : null}
+      {next ? <input type="hidden" name="next" value={next} /> : null}
       <TextField
         label={mode === "login" ? "E-mail ou celular confirmado" : "E-mail"}
         id="auth-email"
@@ -94,7 +92,9 @@ export function AuthForm({
       </Button>
       <p className={styles.inlineLinks}>
         {mode === "login" ? "Ainda não possui acesso? " : "Já possui acesso? "}
-        <Link href={mode === "login" ? "/cadastro" : "/entrar"}>
+        <Link
+          href={`${mode === "login" ? "/cadastro" : "/entrar"}${next ? `?proximo=${encodeURIComponent(next)}` : ""}`}
+        >
           {mode === "login" ? "Criar conta" : "Entrar"}
         </Link>
       </p>

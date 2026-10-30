@@ -25,6 +25,7 @@ const previews = [
   ["s09-substituto", "S09 · Confirmar condições (substituto)"],
   ["s10", "S10 · Acordo registrado"],
   ["acordos", "Acordos · lista (derivada)"],
+  ["pagamento", "Acordos · acompanhamento de pagamento (derivada)"],
   ["s11", "S11 · Notificações"],
   ["cadastro-completar", "Cadastro · completar (derivada)"],
   ["senha-nova", "Senha · nova senha (derivada)"],

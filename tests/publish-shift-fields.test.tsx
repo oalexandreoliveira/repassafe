@@ -33,6 +33,7 @@ test("publicação em duas etapas preserva os dados enviados e o aceite obrigat�
   fill("Início", "19:00");
   fill("Fim", "07:00");
   fill("Valor (R$)", "900,00");
+  fill("Data-limite de pagamento", "2026-11-10");
   fill("Condições de pagamento", "Pagamento em até 30 dias");
   expect(screen.getByText("Termina no dia seguinte.")).toBeInTheDocument();
   expect(screen.getByText(/aprovação da coordenação/)).toBeInTheDocument();
@@ -98,6 +99,7 @@ test("monta o período e valida as regras do formulário", () => {
     start: "07:00",
     end: "19:00",
     value: "1200",
+    dueDate: "2026-11-10",
     paymentTerms: "À vista",
     notes: "",
   };

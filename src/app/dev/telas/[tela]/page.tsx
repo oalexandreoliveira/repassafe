@@ -8,6 +8,7 @@ import { ShiftMural } from "@/components/screens/shift-mural";
 import { AgreementsList } from "@/components/screens/agreements-list";
 import { ApplicationSent } from "@/components/screens/application-sent";
 import { ChooseSubstitute } from "@/components/screens/choose-substitute";
+import { PaymentTracking } from "@/components/screens/payment-tracking";
 import {
   OwnerConditionsReview,
   SubstituteConditions,
@@ -85,6 +86,7 @@ const draft = {
   start: "19:00",
   end: "07:00",
   value: "1200,00",
+  dueDate: "2026-11-10",
   paymentTerms: "Transferência em até 30 dias após o plantão",
   notes: "Passagem presencial às 18h45 com a equipe de enfermagem.",
 };
@@ -511,6 +513,24 @@ const screens: Record<string, () => React.ReactNode> = {
     >
       <MfaForm factorId="preview" />
     </AuthScreen>
+  ),
+  pagamento: () => (
+    <PaymentTracking
+      id={agreementContent.agreement_id}
+      userId={ownerId}
+      owner
+      amount={120000}
+      terms="Quem repassa paga a quem assume até 10/11/2026. A data-limite vale mesmo se o hospital atrasar o pagamento. Transferência bancária."
+      dueDate="2026-11-10"
+      events={[]}
+      today="2026-10-30"
+      requestIds={{
+        payment: previewRequestId,
+        receive: previewRequestId,
+        dispute: previewRequestId,
+        source_delay: previewRequestId,
+      }}
+    />
   ),
   acordos: () => (
     <AgreementsList

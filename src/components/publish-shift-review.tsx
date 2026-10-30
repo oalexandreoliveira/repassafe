@@ -86,6 +86,11 @@ export function PublishShiftReview({
               : values.value,
           },
           {
+            label: "Data-limite de pagamento",
+            value:
+              values.dueDate?.split("-").reverse().join("/") ?? "Não informada",
+          },
+          {
             label: "Condições de pagamento",
             value: values.paymentTerms,
             stacked: true,
@@ -93,8 +98,9 @@ export function PublishShiftReview({
         ]}
       />
       <InfoBanner icon={Share2}>
-        Depois de publicar, você pode compartilhar o link no grupo do WhatsApp.
-        Quem tocar cai direto neste plantão.
+        Depois de publicar, compartilhe o link do plantão em grupos de médicos
+        no WhatsApp. Para consultar e se candidatar, é necessário entrar e estar
+        habilitado no Repassafe. Ofertas de grupo exigem vínculo ativo.
       </InfoBanner>
       <InfoBanner>{PAYMENT_NOTICE}</InfoBanner>
       <CheckboxField

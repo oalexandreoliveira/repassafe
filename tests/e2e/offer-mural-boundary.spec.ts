@@ -113,6 +113,9 @@ test("separates offers from external agreements and filters all accessible offer
       sector: `${tag} ${label}`,
       value_cents: 55000,
       payment_terms: "PIX em 10 dias",
+      payment_due_date: new Date(Date.now() + 40 * 86400000)
+        .toISOString()
+        .slice(0, 10),
       owner_terms_acknowledged: true,
     });
   }

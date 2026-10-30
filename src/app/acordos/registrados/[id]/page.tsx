@@ -56,10 +56,16 @@ export default async function RegisteredAgreementPage({
           condições de pagamento.
         </p>
         <div className="actions">
-          <Link className="button button-primary" href="/entrar">
+          <Link
+            className="button button-primary"
+            href={`/entrar?proximo=${encodeURIComponent(`/acordos/registrados/${id}`)}`}
+          >
             Entrar
           </Link>
-          <Link className="button button-secondary" href="/cadastro">
+          <Link
+            className="button button-secondary"
+            href={`/cadastro?proximo=${encodeURIComponent(`/acordos/registrados/${id}`)}`}
+          >
             Criar conta
           </Link>
         </div>

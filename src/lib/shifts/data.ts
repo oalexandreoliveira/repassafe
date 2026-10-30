@@ -1,12 +1,14 @@
 import "server-only";
+import type { CandidateProfile } from "@/components/screens/candidate-selection";
 
 import { redirect } from "next/navigation";
 import { getVerifiedIdentity } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { loginPath } from "@/features/groups/invite-path";
 
-export async function requireApprovedProfessional() {
+export async function requireApprovedProfessional(destination?: string) {
   const identity = await getVerifiedIdentity();
-  if (!identity) redirect("/entrar");
+  if (!identity) redirect(destination ? loginPath(destination) : "/entrar");
 
   const { data: profile } = await identity.supabase
     .from("profiles")
@@ -21,7 +23,11 @@ export async function requireApprovedProfessional() {
       (!profile.verification_valid_until ||
         new Date(profile.verification_valid_until) <= new Date()))
   )
-    redirect("/painel");
+    redirect(
+      destination
+        ? `/cadastro/completar?proximo=${encodeURIComponent(destination)}`
+        : "/painel",
+    );
 
   return { ...identity, profile };
 }
@@ -62,11 +68,11 @@ export async function listShiftWorkspace() {
 }
 
 export async function getShiftDetails(offerId: string) {
-  const identity = await requireApprovedProfessional();
+  const identity = await requireApprovedProfessional(`/plantoes/${offerId}`);
   const { data: offer } = await identity.supabase
     .from("shift_offers")
     .select(
-      "id,group_id,owner_id,starts_at,ends_at,sector,value_cents,payment_terms,notes,status,published_at,groups(name,requires_approval,institutions(name))",
+      "id,group_id,owner_id,starts_at,ends_at,sector,value_cents,payment_terms,payment_due_date,notes,status,published_at,groups(name,requires_approval,institutions(name))",
     )
     .eq("id", offerId)
     .single();
@@ -95,6 +101,21 @@ export async function getShiftDetails(offerId: string) {
       .eq("offer_id", offerId)
       .maybeSingle(),
   ]);
+  let candidateProfiles: Record<string, CandidateProfile> = {};
+  let candidateProfilesFailed = false;
+  if (offer.owner_id === identity.userId && applications?.length) {
+    const result = await createAdminClient().rpc("offer_candidate_profiles", {
+      target_offer: offerId,
+      target_user: identity.userId,
+    });
+    candidateProfilesFailed = Boolean(result.error);
+    candidateProfiles = Object.fromEntries(
+      ((result.data ?? []) as CandidateProfile[]).map((profile) => [
+        profile.id,
+        profile,
+      ]),
+    );
+  }
   const selectedSubstitution = substitutions?.[0];
   const [{ data: completion }, { data: occurrences }] = selectedSubstitution
     ? await Promise.all([
@@ -144,7 +165,11 @@ export async function getShiftDetails(offerId: string) {
   return {
     identity,
     offer,
-    applications: applications ?? [],
+    applications: (applications ?? []).map((application) => ({
+      ...application,
+      professional: candidateProfiles[application.candidate_id],
+    })),
+    candidateProfilesFailed,
     substitutions: substitutions ?? [],
     agreement: agreements,
     completion,

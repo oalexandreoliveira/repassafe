@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useState } from "react";
+import { useRegistrationEditState } from "@/components/registration-edit-state";
+import { PATIENT_DATA_NOTICE } from "@/features/shifts/copy";
+import { useActionState, useEffect, useState } from "react";
 import {
   acceptDocumentsAction,
   changeEmailAction,
@@ -22,7 +24,7 @@ import {
   TextField,
 } from "@/components/ui/field";
 import { InfoBanner } from "@/components/ui/info-banner";
-import { initialActionState } from "@/features/auth/schemas";
+import { initialActionState, type ActionState } from "@/features/auth/schemas";
 import { brazilianStates } from "@/features/registration/schemas";
 
 export function RegistrationForm({
@@ -34,15 +36,33 @@ export function RegistrationForm({
   revision: number;
   correctionFields?: Record<string, string>;
 }) {
+  const edit = useRegistrationEditState();
   const [values, setValues] = useState(data);
-  const change = (name: string, value: string) =>
+  const change = (name: string, value: string) => {
+    edit.setDirty(true);
+    edit.setErrors({ ...edit.errors, [name]: "" });
     setValues((current) => ({ ...current, [name]: value }));
+  };
   const [state, action, pending] = useActionState(
-    saveRegistrationAction,
+    async (previous: ActionState, formData: FormData) => {
+      edit.setDirty(true);
+      const result = await saveRegistrationAction(previous, formData);
+      edit.setErrors(result.fieldErrors ?? {});
+      if (result.status === "success") edit.setDirty(false);
+      return result;
+    },
     initialActionState,
   );
+  useEffect(() => {
+    if (pending) return;
+    const first = Object.keys(state.fieldErrors ?? {})[0];
+    if (first) document.getElementById(first)?.focus();
+  }, [state, pending]);
   const problem = (name: string) =>
-    state.fieldErrors?.[name] || correctionFields[name] || undefined;
+    edit.errors[name] ||
+    state.fieldErrors?.[name] ||
+    correctionFields[name] ||
+    undefined;
   const field = (
     name: string,
     label: string,
@@ -74,7 +94,7 @@ export function RegistrationForm({
         type="hidden"
         value={Math.max(state.revision ?? 0, revision)}
       />
-      <fieldset className={styles.formSection}>
+      <fieldset className={styles.formSection} disabled={pending}>
         <legend>Identificação</legend>
         <p className={styles.help}>
           Dados civis ficam restritos a você e à equipe autorizada.
@@ -97,7 +117,7 @@ export function RegistrationForm({
           "Informe um celular brasileiro com DDD. Formato: (DDD) 9XXXX-XXXX, com ou sem +55.",
         )}
       </fieldset>
-      <fieldset className={styles.formSection}>
+      <fieldset className={styles.formSection} disabled={pending}>
         <legend>Atuação profissional</legend>
         <SelectField
           id="practicesMedicine"
@@ -134,7 +154,7 @@ export function RegistrationForm({
           Especialidade e RQE serão conferidos separadamente do CRM.
         </p>
       </fieldset>
-      <fieldset className={styles.formSection}>
+      <fieldset className={styles.formSection} disabled={pending}>
         <legend>Vínculo declarado</legend>
         {field("institution", "Instituição — opcional")}
         {field("sector", "Setor — opcional")}
@@ -149,11 +169,22 @@ export function RegistrationForm({
           name="response"
           label="Resposta às correções"
           maxLength={2000}
+          disabled={pending}
           value={values.response ?? ""}
           onChange={(event) => change("response", event.target.value)}
         />
       ) : (
         <input type="hidden" name="response" value={data.response ?? ""} />
+      )}
+      <p className={styles.help}>{PATIENT_DATA_NOTICE}</p>
+      {edit.dirty && (
+        <InfoBanner role="status">
+          Há alterações não salvas. Salve o progresso antes de enviar para
+          verificação.
+        </InfoBanner>
+      )}
+      {(edit.errors.crmNumber || state.fieldErrors?.crmNumber) && (
+        <Link href="/suporte?assunto=crm">Solicitar revisão do CRM</Link>
       )}
       <ActionFeedback state={state} />
       <Button type="submit" block loading={pending}>
@@ -319,10 +350,25 @@ export function RegistrationSubmit({
   revision: number;
   submitted: boolean;
 }) {
+  const edit = useRegistrationEditState();
   const [state, action, pending] = useActionState(
-    submitRegistrationAction,
+    async (previous: ActionState, formData: FormData) => {
+      if (edit.dirty)
+        return {
+          status: "error" as const,
+          message: "Salve as alterações na identificação antes de enviar.",
+        };
+      const result = await submitRegistrationAction(previous, formData);
+      edit.setErrors(result.fieldErrors ?? {});
+      return result;
+    },
     initialActionState,
   );
+  useEffect(() => {
+    if (pending) return;
+    const first = Object.keys(state.fieldErrors ?? {})[0];
+    if (first) document.getElementById(first)?.focus();
+  }, [state, pending]);
   return (
     <form action={action} className={styles.form}>
       <input type="hidden" name="revision" value={revision} />
@@ -337,9 +383,22 @@ export function RegistrationSubmit({
           separadamente.
         </InfoBanner>
       ) : null}
-      <Button type="submit" block loading={pending} disabled={submitted}>
+      <Button
+        type="submit"
+        block
+        loading={pending}
+        disabled={submitted || edit.dirty}
+      >
         {submitted ? "Enviado para verificação" : "Enviar para verificação"}
       </Button>
+      {edit.dirty && (
+        <InfoBanner>
+          Salve o progresso na identificação para liberar o envio.
+        </InfoBanner>
+      )}
+      {state.fieldErrors?.crmNumber && (
+        <Link href="/suporte?assunto=crm">Solicitar revisão do CRM</Link>
+      )}
       <ActionFeedback state={state} />
     </form>
   );

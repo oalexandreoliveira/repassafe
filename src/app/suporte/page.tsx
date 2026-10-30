@@ -10,7 +10,12 @@ type Request = {
   state: string;
   created_at: string;
 };
-export default async function SupportPage() {
+export default async function SupportPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ assunto?: string }>;
+}) {
+  const crmReview = (await searchParams).assunto === "crm";
   const identity = await getVerifiedIdentity();
   const account = identity ? await identity.supabase.auth.getUser() : null;
   const result = identity
@@ -30,7 +35,18 @@ export default async function SupportPage() {
         Descreva sua dúvida ou pedido. O responsável pelo Repassafe é Alexandre
         Oliveira. Você receberá um protocolo ao registrar a solicitação.
       </p>
-      <SupportForm email={account?.data.user?.email} />
+      {crmReview && (
+        <p>
+          Confira o número e a UF do CRM. A equipe verificará sua identidade
+          antes de decidir. Este pedido não cancela nem transfere outro cadastro
+          automaticamente. Não envie documentos por este campo; aguarde
+          orientação pelo canal de suporte.
+        </p>
+      )}
+      <SupportForm
+        email={account?.data.user?.email}
+        initialCategory={crmReview ? "crm_review" : "support"}
+      />
       {identity ? (
         <section>
           <h2>Minhas solicitações</h2>

@@ -4,7 +4,7 @@ Implementação: 30/10/2026. Domínio `auth.repassafe.com.br` informado pelo res
 
 ## Configuração e ativação
 
-1. Aplicar a migração `20261030144738_tester_feedback.sql` após as migrações anteriores, primeiro em homologação. O código novo de publicação depende dessa migração.
+1. Aplicar as migrações pendentes em ordem, primeiro em homologação, incluindo `20261030144738_tester_feedback.sql` e a correção posterior de privilégios `20261030170000_payment_events_service_role_privileges.sql`. O código novo de publicação depende da migração de feedback; a correção posterior revoga permissões de escrita direta que podem ser herdadas dos privilégios padrão do Supabase.
 2. Configurar no gerenciador de segredos do servidor: `RESEND_API_KEY` com permissão de envio, `AGREEMENT_EMAIL_JOB_TOKEN` aleatório com pelo menos 32 caracteres e `AGREEMENT_EMAIL_FROM` com o remetente acima. Nunca usar prefixo `NEXT_PUBLIC_` para as chaves.
 3. Configurar `NEXT_PUBLIC_APP_URL` com a origem HTTPS publicada e `AGREEMENT_EMAIL_ENABLED=true`. A origem local HTTP é rejeitada pelo trabalhador.
 4. Configurar um agendador para fazer **POST** em `/api/jobs/agreement-emails` a cada cinco minutos, com `Authorization: Bearer <AGREEMENT_EMAIL_JOB_TOKEN>`. Esse endpoint não exige sessão de usuário e autentica o token com comparação de tempo constante. Não colocar o token na URL. Não há agendador criado automaticamente por este código.

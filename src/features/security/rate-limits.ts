@@ -61,6 +61,11 @@ export const rateLimitPolicies = {
     maxRequests: 20,
     windowSeconds: 900,
   },
+  waitlistIp: {
+    namespace: "marketing.waitlist.ip",
+    maxRequests: 5,
+    windowSeconds: 3600,
+  },
   workflow: {
     namespace: "workflow.command.user",
     maxRequests: 60,

@@ -74,11 +74,14 @@ test("destino interno é preservado na alternância entre entrar e criar conta",
   await expect(page.locator('input[name="next"]')).toHaveValue(next);
 });
 
-test("erro devolvido pelo servidor mantém o CRM e recebe foco com teclado", async ({ page }) => {
+test("erro devolvido pelo servidor mantém o CRM e recebe foco com teclado", async ({
+  page,
+}) => {
   test.setTimeout(90000);
   await page.setViewportSize({ width: 390, height: 1000 });
   await page.goto("/dev/telas/cadastro-completar");
-  for (const label of ["CPF", "Nascimento", "Celular com DDD"]) await page.getByLabel(label, { exact: true }).fill("");
+  for (const label of ["CPF", "Nascimento", "Celular com DDD"])
+    await page.getByLabel(label, { exact: true }).fill("");
   const crm = page.getByLabel("CRM — para atuação médica");
   await crm.fill("abc");
   await page.getByRole("button", { name: "Salvar progresso" }).click();
@@ -86,9 +89,13 @@ test("erro devolvido pelo servidor mantém o CRM e recebe foco com teclado", asy
   await expect(crm).toBeFocused();
   await expect(crm).toHaveAttribute("aria-invalid", "true");
   await expect(crm).toHaveValue("abc");
-  await page.screenshot({ path: "test-results/feedback-visual/cadastro-erro-390.png" });
+  await page.screenshot({
+    path: "test-results/feedback-visual/cadastro-erro-390.png",
+  });
   await page.goto("/dev/telas/s05");
   await page.getByLabel("Data-limite de pagamento").focus();
   await page.getByLabel("Data-limite de pagamento").scrollIntoViewIfNeeded();
-  await page.screenshot({ path: "test-results/feedback-visual/s05-vencimento-390.png" });
+  await page.screenshot({
+    path: "test-results/feedback-visual/s05-vencimento-390.png",
+  });
 });

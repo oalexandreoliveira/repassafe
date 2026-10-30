@@ -68,10 +68,7 @@ export const crmFormatMessage =
 const crmNumberField = z
   .string()
   .transform((value) => value.replace(/[.\s]/g, ""))
-  .refine(
-    (value) => value === "" || /^\d{4,12}$/.test(value),
-    crmFormatMessage,
-  )
+  .refine((value) => value === "" || /^\d{4,12}$/.test(value), crmFormatMessage)
   .default("");
 
 export const registrationSchema = z

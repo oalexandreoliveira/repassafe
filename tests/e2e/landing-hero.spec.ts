@@ -154,7 +154,7 @@ test("hero demonstra publicação real, permite controle e respeita movimento re
   }
   await demo.getByText("Ler demonstração", { exact: true }).click();
   await expect(
-    demo.getByText(/Isso ainda não confirma um repasse/),
+    demo.getByText(/Publicar ainda não confirma um repasse/),
   ).toBeVisible();
   expect(mutations).toEqual([]);
 });

@@ -44,9 +44,14 @@ por canal controlado]`.
 
 4.1. **Outras partes de um acordo ou grupo:** nome de exibição, selo “CRM verificado”, CRM/UF e as condições do acordo.
 Dados civis (CPF, nascimento, telefone, foto de documento) **não** são exibidos à outra parte.
-4.2. **Fornecedores (operadores):** Supabase (autenticação, banco de dados e arquivos), Vercel (hospedagem)
-`[PENDENTE: atualizar lista, e-mail e SMS se contratados; carimbo de tempo, ADR-012]`. Eles tratam os dados em nosso
-nome e sob contrato `[PENDENTE: LGPD-04 — DPAs assinados]`.
+4.2. **Fornecedores (operadores):** Supabase (autenticação, banco de dados e arquivos), Vercel (hospedagem) e Resend
+(envio por e-mail do registro final do acordo e de avisos críticos, como seleção, prazo de confirmação, cancelamento e
+decisão de cadastro). Nesses envios, o Resend recebe o endereço do destinatário e um resumo mínimo: o tipo de aviso, o
+prazo de resposta quando houver e um link que exige entrar na conta, sem dados do plantão, valores ou campos livres
+`[PENDENTE: confirmar se a confirmação de conta e a recuperação de senha também passam pelo Resend, como SMTP do
+provedor de autenticação; D-5 e D-7 — região de processamento e retenção das mensagens no Resend]`
+`[PENDENTE: atualizar lista, SMS se contratado; carimbo de tempo, ADR-012]`. Eles tratam os dados em nosso
+nome e sob contrato `[PENDENTE: LGPD-04 — DPAs assinados, incluindo o Resend]`.
 4.3. **Autoridades:** quando a lei exigir ou para defender direitos em processo, na medida necessária.
 4.4. Não vendemos dados nem os usamos para publicidade.
 

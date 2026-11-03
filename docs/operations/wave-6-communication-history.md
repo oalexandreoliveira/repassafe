@@ -10,7 +10,8 @@ informativas; o estado do repasse permanece a fonte de verdade.
 Eventos cobertos incluem nova oferta, candidatura, seleção, confirmação,
 decisão institucional, conclusão, cancelamento, ocorrência, decisão
 administrativa e revisão cadastral. Acesso às notificações é restrito ao
-destinatário.
+destinatário. Parte desses eventos também gera e-mail, conforme os
+[avisos críticos](agreement-email-resend.md#avisos-críticos).
 
 ## Histórico pessoal
 

@@ -1,5 +1,8 @@
 import "server-only";
-import type { CandidateProfile } from "@/components/screens/candidate-selection";
+import {
+  candidateProfileSchema,
+  type CandidateProfile,
+} from "@/features/shifts/candidate-profile";
 
 import { redirect } from "next/navigation";
 import { getVerifiedIdentity } from "@/lib/auth/session";
@@ -108,12 +111,13 @@ export async function getShiftDetails(offerId: string) {
       target_offer: offerId,
       target_user: identity.userId,
     });
-    candidateProfilesFailed = Boolean(result.error);
+    // Strip unexpected fields before any profile reaches a rendered surface.
+    const profiles = candidateProfileSchema.array().safeParse(result.data);
+    candidateProfilesFailed = Boolean(result.error) || !profiles.success;
     candidateProfiles = Object.fromEntries(
-      ((result.data ?? []) as CandidateProfile[]).map((profile) => [
-        profile.id,
-        profile,
-      ]),
+      (!result.error && profiles.success ? profiles.data : []).map(
+        (profile) => [profile.id, profile],
+      ),
     );
   }
   const selectedSubstitution = substitutions?.[0];

@@ -6,10 +6,13 @@ import { getShiftDetails } from "@/lib/shifts/data";
 /** S08 · Escolher substituto (somente o titular, com a oferta aberta). */
 export default async function ChooseSubstitutePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ verificacao?: string }>;
 }) {
   const { id } = await params;
+  const { verificacao } = await searchParams;
   const workspace = await getShiftDetails(id);
   if (!workspace) notFound();
   const { identity, offer, applications, ownerTermsAcknowledged } = workspace;
@@ -33,6 +36,7 @@ export default async function ChooseSubstitutePage({
       offer={toOfferSummary(offer)}
       applications={active}
       now={new Date()}
+      verificationChanged={verificacao === "atualizada"}
     />
   );
 }

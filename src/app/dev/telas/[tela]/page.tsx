@@ -453,6 +453,8 @@ const screens: Record<string, () => React.ReactNode> = {
       offer={uti}
       applicationId={applications[0].id}
       candidateName={applications[0].candidate_display_name}
+      candidateProfile={applications[0].professional}
+      now={now}
       select={noop}
     />
   ),

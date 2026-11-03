@@ -70,7 +70,7 @@ export function PersonRow({
   );
 }
 
-/** Candidato selecionável: o cartão inteiro é o rótulo do radio. */
+/** Resumo selecionável pelo rótulo do radio; detalhes ficam fora desse alvo. */
 export function CandidateCard({
   name,
   details,
@@ -78,6 +78,7 @@ export function CandidateCard({
   verified = false,
   value,
   inputName,
+  children,
   ...radio
 }: {
   name: string;
@@ -89,31 +90,36 @@ export function CandidateCard({
   value: string;
   /** Nome do grupo de radios no formulário. */
   inputName: string;
+  /** Optional disclosure, outside the selection label. */
+  children?: ReactNode;
 } & Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "name" | "value">) {
   const id = `candidate-${value}`;
   return (
-    <label className={styles.candidate} htmlFor={id}>
-      <Avatar name={name} size="lg" />
-      <span className={styles.candidateText}>
-        <span className={styles.candidateName} id={`${id}-name`}>
-          {name}
+    <div className={styles.candidate}>
+      <label className={styles.candidateChoice} htmlFor={id}>
+        <Avatar name={name} size="lg" />
+        <span className={styles.candidateText}>
+          <span className={styles.candidateName} id={`${id}-name`}>
+            {name}
+          </span>
+          <span id={`${id}-details`} className={styles.candidateDetails}>
+            {details}
+            {verified ? <CrmVerifiedSeal /> : null}
+          </span>
+          {meta ? <span className={styles.candidateMeta}>{meta}</span> : null}
         </span>
-        <span id={`${id}-details`} className={styles.candidateDetails}>
-          {details}
-          {verified ? <CrmVerifiedSeal /> : null}
-        </span>
-        {meta ? <span className={styles.candidateMeta}>{meta}</span> : null}
-      </span>
-      <input
-        type="radio"
-        id={id}
-        name={inputName}
-        value={value}
-        className={styles.radio}
-        aria-labelledby={`${id}-name`}
-        aria-describedby={`${id}-details`}
-        {...radio}
-      />
-    </label>
+        <input
+          type="radio"
+          id={id}
+          name={inputName}
+          value={value}
+          className={styles.radio}
+          aria-labelledby={`${id}-name`}
+          aria-describedby={`${id}-details`}
+          {...radio}
+        />
+      </label>
+      {children}
+    </div>
   );
 }

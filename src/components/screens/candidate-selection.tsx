@@ -1,15 +1,6 @@
 import { formatAuditTime, formatTime, dayKey } from "@/features/shifts/format";
-
-export type CandidateProfile = {
-  id: string;
-  crm: string | null;
-  uf: string | null;
-  specialty: string | null;
-  rqe: string | null;
-  rqe_verified: boolean;
-  verified: boolean;
-  valid_until: string | null;
-};
+import type { CandidateProfile } from "@/features/shifts/candidate-profile";
+export type { CandidateProfile } from "@/features/shifts/candidate-profile";
 
 export type ApplicationItem = {
   id: string;

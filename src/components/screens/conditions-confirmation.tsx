@@ -14,6 +14,8 @@ import { offerTitle, type OfferSummary } from "@/features/shifts/offer-view";
 import { formatCurrency } from "@/features/shifts/schemas";
 import { CommandFields, type FormAction } from "./command-fields";
 import styles from "./screens.module.css";
+import type { CandidateProfile } from "@/features/shifts/candidate-profile";
+import { CandidateProfessionalDetails } from "./candidate-professional-details";
 
 const ACCEPT_FORM_ID = "aceitar-condicoes";
 
@@ -76,11 +78,15 @@ export function OwnerConditionsReview({
   offer,
   applicationId,
   candidateName,
+  candidateProfile,
+  now,
   select,
 }: {
   offer: OfferSummary;
   applicationId: string;
   candidateName: string;
+  candidateProfile?: CandidateProfile;
+  now?: Date;
   select: FormAction;
 }) {
   return (
@@ -98,6 +104,13 @@ export function OwnerConditionsReview({
         </form>
       }
     >
+      {candidateProfile && now && (
+        <CandidateProfessionalDetails
+          name={candidateName}
+          profile={candidateProfile}
+          now={now}
+        />
+      )}
       <Conditions
         offer={offer}
         parties={{ owner: "Você", substitute: candidateName }}

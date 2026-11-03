@@ -57,14 +57,20 @@
 }
 .candidate {
   position: relative;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 14px;
   border-radius: var(--rs-radius-xl);
   background: var(--rs-white);
-  cursor: pointer;
   transition: box-shadow var(--rs-duration) var(--rs-ease);
+}
+.candidateChoice {
+  display: flex;
+  align-items: center;
+  gap: var(--rs-space-3);
+  padding: var(--rs-space-3h);
+  border-radius: var(--rs-radius-xl);
+  cursor: pointer;
+}
+.candidateChoice:has(input:disabled) {
+  cursor: default;
 }
 .candidate:has(input:checked) {
   box-shadow: var(--rs-ring-selected);
@@ -96,6 +102,7 @@
   align-items: center;
   gap: 2px 8px;
   color: var(--rs-text-muted);
+  overflow-wrap: anywhere;
   font-size: 0.8125rem;
   line-height: 1.125rem;
 }

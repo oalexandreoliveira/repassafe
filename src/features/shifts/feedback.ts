@@ -1,4 +1,6 @@
 export const workflowFeedback = {
+  professional_expired:
+    "A verificação profissional do candidato não está vigente. Volte às candidaturas e confira os perfis atualizados antes de escolher.",
   unavailable:
     "Não foi possível concluir esta ação. Atualize a página e tente novamente.",
   invalid: "Confira os campos e a justificativa antes de continuar.",

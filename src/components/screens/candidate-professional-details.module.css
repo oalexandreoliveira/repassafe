@@ -1,0 +1,45 @@
+.details {
+  padding: 0 var(--rs-space-3h) var(--rs-space-3h);
+}
+.summary {
+  min-height: var(--rs-touch-min);
+  padding: var(--rs-space-3);
+  border-radius: var(--rs-radius-md);
+  color: var(--rs-teal-dark);
+  font: var(--rs-type-button);
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+.summary:hover {
+  background: var(--rs-base);
+}
+.summary:focus-visible {
+  outline: 2px solid var(--rs-teal);
+  outline-offset: 2px;
+}
+.content {
+  display: grid;
+  gap: var(--rs-space-4);
+  padding: var(--rs-space-3);
+  color: var(--rs-text-body);
+  font: var(--rs-type-body-sm);
+  overflow-wrap: anywhere;
+}
+.title {
+  color: var(--rs-ink);
+  font: var(--rs-type-card-title);
+}
+.facts {
+  display: grid;
+  gap: var(--rs-space-3);
+}
+.facts dt {
+  color: var(--rs-text-muted);
+  font: var(--rs-type-label);
+}
+.facts dd {
+  margin: 0;
+}
+.note {
+  color: var(--rs-text-muted);
+}

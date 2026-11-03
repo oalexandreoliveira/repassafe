@@ -1,5 +1,5 @@
 begin;
-select plan(37);
+select plan(42);
 create temporary table acceptance_existing_audit as select id from public.audit_events;
 
 create temporary table acceptance_ids (
@@ -93,7 +93,18 @@ from public.workflow_commands where id = '41000000-0000-0000-0000-000000000003';
 select is(jsonb_array_length(public.offer_candidate_profiles((select id from acceptance_ids where name='offer_without_approval'),'11000000-0000-0000-0000-000000000001')),2,'owner sees individual professional projections');
 select is(public.offer_candidate_profiles((select id from acceptance_ids where name='offer_without_approval'),'11000000-0000-0000-0000-000000000004'),'[]'::jsonb,'candidate cannot inspect competitors through projection');
 select ok(not has_function_privilege('authenticated','public.offer_candidate_profiles(uuid,uuid)','execute'),'client cannot impersonate owner in projection');
+select ok(not has_function_privilege('anon','public.offer_candidate_profiles(uuid,uuid)','execute'),'anonymous client cannot inspect candidate profiles');
+select is(public.offer_candidate_profiles((select id from acceptance_ids where name='offer_without_approval'),'11000000-0000-0000-0000-000000000003'),'[]'::jsonb,'institutional approver cannot inspect candidate profiles');
+select is(
+  (select array_agg(key order by key) from jsonb_object_keys(public.offer_candidate_profiles((select id from acceptance_ids where name='offer_without_approval'),'11000000-0000-0000-0000-000000000001')->0) key),
+  array['crm','id','rqe','rqe_verified','specialty','uf','valid_until','verified']::text[],
+  'projection contains only authorized professional fields, no identity, contact, photo or evidence'
+);
+update public.shift_applications set status='withdrawn' where id=(select id from acceptance_ids where name='competing_application');
+select is(jsonb_array_length(public.offer_candidate_profiles((select id from acceptance_ids where name='offer_without_approval'),'11000000-0000-0000-0000-000000000001')),1,'withdrawn candidate is excluded from projection');
+update public.shift_applications set status='active' where id=(select id from acceptance_ids where name='competing_application');
 update public.profiles set verification_valid_until=now()-interval '1 second' where id='11000000-0000-0000-0000-000000000002';
+select is((select item->>'verified' from jsonb_array_elements(public.offer_candidate_profiles((select id from acceptance_ids where name='offer_without_approval'),'11000000-0000-0000-0000-000000000001')) item where item->>'id'='11000000-0000-0000-0000-000000000002'),'false','projection does not advertise expired verification as valid');
 select set_config('request.jwt.claims', '{"sub":"11000000-0000-0000-0000-000000000001","role":"authenticated"}', true);
 select throws_ok($$insert into public.workflow_commands(command,target_id,payload) values('select_candidate',(select id from acceptance_ids where name='application_without_approval'),'{"confirmation_minutes":30}')$$,'P0001','O candidato precisa revalidar o cadastro profissional','expired candidate cannot be selected');
 update public.profiles set verification_valid_until=now()+interval '90 days' where id='11000000-0000-0000-0000-000000000002';

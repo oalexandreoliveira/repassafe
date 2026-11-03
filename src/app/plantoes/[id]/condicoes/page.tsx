@@ -9,6 +9,7 @@ import {
 } from "@/components/screens/conditions-confirmation";
 import { toOfferSummary } from "@/features/shifts/offer-view";
 import { getShiftDetails } from "@/lib/shifts/data";
+import { hasCurrentVerification } from "@/features/shifts/candidate-profile";
 
 /**
  * S09 · Confirmar condições. O titular chega de S08 com ?candidatura=;
@@ -45,11 +46,19 @@ export default async function ConditionsPage({
       !application
     )
       redirect(`/plantoes/${id}`);
+    if (workspace.candidateProfilesFailed)
+      throw new Error(
+        "Não foi possível consultar os perfis dos candidatos. Tente novamente.",
+      );
+    if (!hasCurrentVerification(application.professional, new Date()))
+      redirect(`/plantoes/${id}/candidaturas?verificacao=atualizada`);
     return (
       <OwnerConditionsReview
         offer={summary}
         applicationId={application.id}
         candidateName={application.candidate_display_name}
+        candidateProfile={application.professional}
+        now={new Date()}
         select={selectCandidateAction}
       />
     );

@@ -23,6 +23,8 @@ function returnWorkflowFeedback(code: WorkflowFeedbackCode): never {
 }
 
 function safeWorkflowFailure(message?: string): WorkflowFeedbackCode {
+  if (message === "O candidato precisa revalidar o cadastro profissional")
+    return "professional_expired";
   if (message?.includes("42501") || message?.includes("P0001"))
     return "restricted";
   return "unavailable";

@@ -125,3 +125,8 @@ test("aguarda cinco minutos antes de tentar novamente", async () => {
   await dispatchAgreementEmails();
   expect(fetch).not.toHaveBeenCalled();
 });
+test("não inicia novo envio depois do limite de tempo da execução", async () => {
+  await dispatchAgreementEmails(Date.now() - 1);
+  expect(fetch).not.toHaveBeenCalled();
+  expect(updates).toEqual([]);
+});

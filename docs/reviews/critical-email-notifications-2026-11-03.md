@@ -50,7 +50,9 @@ A suíte SQL rodou em um banco descartável no contêiner local, criado só com 
 
 ## Limites
 
-Nenhum e-mail real foi enviado: o trabalhador foi testado com o provedor simulado, e o caminho PostgREST não foi exercitado de ponta a ponta. O privilégio por coluna foi verificado por SQL com o papel `service_role`. Playwright não foi executado, pois não houve mudança de interface. `sent` significa aceitação pela API, sem webhooks de entrega ou bounce. Um e-mail reduz o risco de perder os 30 minutos, mas não garante leitura durante um plantão; a taxa de expiração em `/admin/metricas` deve orientar qualquer mudança na regra.
+Em 03/11, o trabalhador foi testado com o provedor simulado e o privilégio por coluna foi verificado por SQL com o papel `service_role`. A validação posterior exercita o job pelo PostgREST local com o Resend simulado. Consulte a [estratégia de testes](../testing/strategy.md#filas-de-e-mail-pelo-postgrest).
+
+Playwright não foi executado, pois não houve mudança de interface. `sent` significa aceitação pela API, sem webhooks de entrega ou bounce. Um e-mail reduz o risco de perder os 30 minutos, mas não garante leitura durante um plantão; a taxa de expiração em `/admin/metricas` deve orientar qualquer mudança na regra.
 
 ## Pendências antes de ativar
 

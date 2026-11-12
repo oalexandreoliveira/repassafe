@@ -61,7 +61,7 @@ function criticalEmailContent(item: CriticalEmail) {
     cancelled: {
       subject: "Repasse cancelado",
       intro:
-        "Um repasse confirmado foi cancelado. Consulte o plantão para ver a justificativa e a situação atual.",
+        "Um repasse foi cancelado ou encerrado sem confirmação. Consulte o plantão para ver o motivo e a situação atual.",
     },
     registration_reviewed: {
       subject: "Seu cadastro foi analisado",

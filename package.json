@@ -16,6 +16,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css}\" \"tests/**/*.{ts,tsx}\" \"scripts/**/*.mjs\" \"*.{ts,mjs,json}\"",
     "test": "vitest run",
+    "test:postgrest": "node scripts/test-postgrest.mjs",
     "test:e2e": "playwright test",
     "check:scope": "node scripts/verify-sprint-zero.mjs",
     "check:scope:mvp": "node scripts/check-mvp-scope.mjs",

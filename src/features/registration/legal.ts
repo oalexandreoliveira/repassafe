@@ -49,7 +49,7 @@ export const legalDocuments = {
       ],
       [
         "Acesso e fornecedores",
-        "Dados civis e documentos são restritos ao próprio titular e à equipe autorizada. Outros participantes recebem informações profissionais necessárias ao fluxo; declarações não confirmam vínculos institucionais. Usamos Supabase para autenticação, banco e arquivos e Vercel para hospedagem. Essas operações podem envolver infraestrutura fora do Brasil, sujeita às condições aplicáveis dos fornecedores. SMS aguarda configuração de provedor e não produz confirmação fictícia.",
+        "Dados civis e documentos são restritos ao próprio titular e à equipe autorizada. Outros participantes recebem informações profissionais necessárias ao fluxo; declarações não confirmam vínculos institucionais. Usamos Supabase para autenticação, banco e arquivos, Vercel para hospedagem e Resend para enviar por e-mail o registro final do acordo e avisos críticos, como seleção, prazo de confirmação, cancelamento e decisão de cadastro. Nesses envios, o Resend recebe o endereço do destinatário e um resumo mínimo: o tipo de aviso, o prazo de resposta quando houver e um link que exige entrar na conta, sem dados do plantão, valores ou campos livres. Essas operações podem envolver infraestrutura fora do Brasil, sujeita às condições aplicáveis dos fornecedores. SMS aguarda configuração de provedor e não produz confirmação fictícia.",
       ],
       [
         "Conservação e proteção",

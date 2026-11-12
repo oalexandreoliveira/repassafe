@@ -497,9 +497,16 @@ export function ShiftDetail({
             </p>
           ) : null}
 
-          {substitution.status === "confirmed" && !completion && involved ? (
+          {(substitution.status === "confirmed" ||
+            substitution.status === "pending_institutional_approval") &&
+          !completion &&
+          involved ? (
             <details className={styles.disclosure}>
-              <summary>Cancelar repasse confirmado</summary>
+              <summary>
+                {substitution.status === "confirmed"
+                  ? "Cancelar repasse confirmado"
+                  : "Retirar pedido antes da decisão"}
+              </summary>
               <form
                 action={
                   isOwner
@@ -518,7 +525,9 @@ export function ShiftDetail({
                   hint={PATIENT_DATA_NOTICE}
                 />
                 <SubmitButton variant="secondary" block>
-                  Registrar cancelamento
+                  {substitution.status === "confirmed"
+                    ? "Registrar cancelamento"
+                    : "Retirar pedido"}
                 </SubmitButton>
               </form>
             </details>

@@ -26,7 +26,18 @@ import {
 } from "@/components/screens/groups";
 import type { GroupDetail } from "@/features/groups/types";
 import { offerPresentation } from "@/features/shifts/presentation";
+import { AgendaEntryForm } from "@/components/agenda-entry-form";
+import { AgendaScreen } from "@/components/screens/agenda";
+import { AgendaEntryScreen } from "@/components/screens/agenda-entry";
 import { requireDevPages } from "../../enabled";
+import {
+  agendaEmpty,
+  agendaEntry,
+  agendaFixture,
+  agendaMonth,
+  agendaSettledEntry,
+  agendaToday,
+} from "../agenda-fixtures";
 import {
   agreementContent,
   applications,
@@ -144,6 +155,64 @@ const peerGroup: GroupDetail = {
 };
 
 const screens: Record<string, () => React.ReactNode> = {
+  agenda: () => (
+    <AgendaScreen
+      agenda={agendaFixture}
+      filter="tudo"
+      isCurrent
+      failed={false}
+      unread={false}
+      canPublish
+    />
+  ),
+  "agenda-vazia": () => (
+    <AgendaScreen
+      agenda={agendaEmpty}
+      filter="tudo"
+      isCurrent={false}
+      failed={false}
+      unread={false}
+      canPublish
+    />
+  ),
+  "agenda-novo": () => (
+    <AgendaEntryForm
+      mode="create"
+      requestId="5a0e1c2d-0000-4000-8000-0000000000ff"
+      initialMonth={agendaMonth}
+      today={agendaToday}
+      backHref="/dev/telas/agenda"
+      initial={{
+        kind: "own",
+        dates: ["2026-11-18", "2026-11-25"],
+        start: "19:00",
+        end: "07:00",
+        location: "",
+        sector: "",
+        value: "",
+        dueMode: "days",
+        dueDate: "",
+        dueDays: "60",
+        paymentMethod: "",
+        counterparty: "",
+        notes: "",
+      }}
+    />
+  ),
+  "agenda-detalhe": () => (
+    <AgendaEntryScreen
+      entry={agendaEntry}
+      today={agendaToday}
+      startsInFuture={false}
+    />
+  ),
+  "agenda-recebido": () => (
+    <AgendaEntryScreen
+      entry={agendaSettledEntry}
+      today={agendaToday}
+      startsInFuture={false}
+    />
+  ),
   grupos: () => (
     <GroupsScreen
       approved

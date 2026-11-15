@@ -1,0 +1,251 @@
+/* Agenda (derivada): calendário do mês, resumo de pagamentos e lista por dia. Somente tokens. */
+
+.calendar {
+  display: grid;
+  gap: 8px;
+  padding: 12px 12px 14px;
+  border-radius: var(--rs-radius-xl);
+  background: var(--rs-white);
+}
+.monthNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.monthButton {
+  background: var(--rs-base);
+}
+.monthTitle {
+  margin: 0;
+  font: var(--rs-type-h2);
+  letter-spacing: var(--rs-track-h2);
+  text-align: center;
+}
+
+.grid {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2px 4px;
+  table-layout: fixed;
+}
+.grid th {
+  padding: 4px 0;
+  color: var(--rs-text-muted);
+  font: var(--rs-type-label);
+  text-align: center;
+}
+.grid td {
+  padding: 0;
+  text-align: center;
+  vertical-align: top;
+}
+.day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 3px;
+  min-height: var(--rs-touch-min);
+  padding: 6px 0 5px;
+  border-radius: var(--rs-radius-sm);
+  color: var(--rs-ink);
+  text-decoration: none;
+  transition: background-color var(--rs-duration-fast) var(--rs-ease);
+}
+a.day {
+  background: var(--rs-base);
+}
+a.day:hover {
+  background: var(--rs-mist);
+}
+.dayIdle {
+  color: var(--rs-text-muted);
+}
+.day[aria-current="date"] {
+  box-shadow: inset 0 0 0 2px var(--rs-teal);
+}
+.day[aria-current="date"] .dayNumber {
+  color: var(--rs-teal-dark);
+  font-weight: 700;
+}
+.dayNumber {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.125rem;
+  font-variant-numeric: tabular-nums;
+}
+.dayIdle .dayNumber {
+  font-weight: 400;
+}
+.marks {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: 6px;
+}
+/* Formas diferentes (barra e ponto), não só cores, para plantão e pagamento. */
+.shiftMark {
+  display: inline-block;
+  flex: none;
+  width: 14px;
+  height: 4px;
+  border-radius: var(--rs-radius-pill);
+  background: var(--rs-teal);
+}
+.paymentMark {
+  display: inline-block;
+  flex: none;
+  width: 7px;
+  height: 7px;
+  border: 2px solid var(--rs-ink);
+  border-radius: var(--rs-radius-pill);
+  background: var(--rs-white);
+}
+.overdueMark {
+  border-color: var(--rs-status-pending-dot);
+  background: var(--rs-status-pending-dot);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  margin: 0;
+  padding: 2px 4px 0;
+  list-style: none;
+  color: var(--rs-text-muted);
+  font: var(--rs-type-caption);
+}
+.legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.legend .todayLink {
+  margin-left: auto;
+}
+.todayLink a {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--rs-touch-min);
+  color: var(--rs-teal-dark);
+  font-weight: 600;
+  text-underline-offset: 0.2em;
+}
+
+.money {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.breakdown {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+.breakdown th,
+.breakdown td {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--rs-divider);
+  text-align: right;
+}
+.breakdown thead th {
+  color: var(--rs-text-muted);
+  font: var(--rs-type-label);
+}
+.breakdown tbody th {
+  color: var(--rs-text-secondary);
+  font-weight: 400;
+  text-align: left;
+}
+.breakdown td {
+  padding-left: 8px;
+  color: var(--rs-ink);
+  font-weight: 600;
+}
+.breakdown tr:last-child > * {
+  border-bottom: 0;
+}
+
+.dayGroup {
+  scroll-margin-top: 16px;
+}
+.warning {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+  color: var(--rs-status-pending-fg);
+  font-weight: 600;
+}
+
+.paymentCard {
+  position: relative;
+  display: grid;
+  gap: var(--rs-space-2);
+  padding: var(--rs-card-padding);
+  border-radius: var(--rs-radius-xl);
+  background: var(--rs-white);
+}
+.cardTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--rs-space-2);
+}
+.origin {
+  color: var(--rs-text-muted);
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+.amount {
+  margin: 0;
+  color: var(--rs-ink);
+  font: var(--rs-type-card-title);
+  font-variant-numeric: tabular-nums;
+}
+.cardLink {
+  color: inherit;
+  text-decoration: none;
+}
+.cardLink::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+.cardLink:focus-visible {
+  outline: none;
+}
+.paymentCard:has(.cardLink:focus-visible) {
+  outline: 3px solid var(--rs-teal);
+  outline-offset: 3px;
+}
+.paymentCard:has(.cardLink:hover) .amount {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.cardLine {
+  margin: 0;
+  color: var(--rs-text-secondary);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  overflow-wrap: anywhere;
+}
+.cardMeta {
+  margin: 0;
+  color: var(--rs-text-muted);
+  font: var(--rs-type-caption);
+  font-weight: 400;
+  overflow-wrap: anywhere;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .day {
+    transition: none;
+  }
+}

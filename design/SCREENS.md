@@ -47,6 +47,10 @@ Tab "Publicar" (raiz) ─► S07 Meus plantões publicados
 
 Tab "Acordos" (raiz) ─► lista de acordos (NÃO desenhada — derivar) ─► S10
 Tab "Perfil" (raiz) ─► (NÃO desenhada — derivar)
+Tab "Agenda" (raiz, derivada em 15/11/2026) ─► mês com calendário, resumo de pagamentos e lista por dia
+        ├─ FAB "Adicionar plantão" ─► Adicionar plantão (uma ou várias datas) ─► volta à Agenda com toast
+        ├─ anotação pessoal ─► Detalhe da anotação ─► Editar · Marcar como recebido/pago · Excluir
+        └─ repasse ou acordo do app ─► telas existentes de Repasses (sem edição)
 ```
 
 ## Ciclo de vida do plantão (para mapear ao domínio existente)
@@ -149,5 +153,5 @@ Tab "Perfil" (raiz) ─► (NÃO desenhada — derivar)
 ---
 
 ## Telas não desenhadas (derivar do sistema, sem inventar estilo novo)
-Login/cadastro · Verificação de CRM · Onboarding · Lista de acordos (tab Acordos) · Perfil · Gestão de grupos e convites · Painel da coordenação (aprovar/recusar repasse) · Configuração de avisos · Estados de erro/vazio não listados.
+Login/cadastro · Verificação de CRM · Onboarding · Lista de acordos (tab Acordos) · Perfil · Gestão de grupos e convites · Painel da coordenação (aprovar/recusar repasse) · Configuração de avisos · Agenda (mês, adicionar plantão, detalhe da anotação; prévias em `/dev/telas/agenda*`) · Estados de erro/vazio não listados.
 Regra: usar apenas componentes da seção 6 do DESIGN.md e a estrutura de tela da seção 5. Listar essas telas no relatório final como "derivadas".

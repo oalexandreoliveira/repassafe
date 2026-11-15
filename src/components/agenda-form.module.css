@@ -1,0 +1,209 @@
+/* Formulário e seletor de datas da agenda. Somente tokens. */
+
+.message:focus {
+  outline: none;
+}
+.hint {
+  margin: 0;
+  color: var(--rs-text-muted);
+  font: var(--rs-type-caption);
+  font-weight: 400;
+}
+.error {
+  margin: 0;
+  color: var(--rs-status-cancelled-fg);
+  font: var(--rs-type-caption);
+  font-weight: 400;
+}
+
+/* Tipo: opções em linhas, a linha inteira é o alvo. */
+.choices {
+  display: grid;
+  gap: 8px;
+}
+.choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: var(--rs-touch-min);
+  padding: 12px 14px;
+  border: 1.5px solid var(--rs-border);
+  border-radius: var(--rs-radius-md);
+  cursor: pointer;
+  transition:
+    border-color var(--rs-duration-fast) var(--rs-ease),
+    background-color var(--rs-duration-fast) var(--rs-ease);
+}
+.choice:hover {
+  border-color: var(--rs-field-border);
+}
+.choice:has(input:checked) {
+  border-color: var(--rs-teal);
+  background: var(--rs-light);
+  box-shadow: inset 0 0 0 1px var(--rs-teal);
+}
+.choice:has(input:focus-visible) {
+  outline: 3px solid var(--rs-teal);
+  outline-offset: 2px;
+}
+.choice input {
+  flex: none;
+  width: 20px;
+  min-width: 20px;
+  height: 20px;
+  min-height: 20px;
+  margin: 1px 0 0;
+  accent-color: var(--rs-teal);
+}
+.choice input:focus-visible {
+  box-shadow: none;
+}
+.choiceText {
+  display: grid;
+  gap: 2px;
+}
+.choiceTitle {
+  color: var(--rs-ink);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  line-height: 1.3125rem;
+}
+.choiceHint {
+  color: var(--rs-text-muted);
+  font-size: 0.8125rem;
+  line-height: 1.125rem;
+}
+
+/* Prazo em dias com atalhos. */
+.daysField {
+  display: grid;
+  gap: 8px;
+}
+.quickDays {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.quickDay {
+  min-height: var(--rs-touch-min);
+  padding: 0 16px;
+  border: 1.5px solid var(--rs-border);
+  border-radius: var(--rs-radius-pill);
+  background: var(--rs-white);
+  color: var(--rs-ink);
+  font: var(--rs-type-label);
+  cursor: pointer;
+}
+.quickDay:hover {
+  border-color: var(--rs-field-border);
+}
+.quickDay[aria-pressed="true"] {
+  border-color: var(--rs-teal);
+  background: var(--rs-mist);
+  color: var(--rs-teal-dark);
+}
+
+/* Seletor de datas. */
+.picker {
+  display: grid;
+  gap: 8px;
+}
+.pickerGroup {
+  display: grid;
+  gap: 6px;
+  padding: 10px;
+  border: 1.5px solid var(--rs-field-border);
+  border-radius: var(--rs-radius-md);
+}
+.pickerGroup[data-invalid="true"] {
+  border-color: var(--rs-status-cancelled-dot);
+}
+.pickerLabel {
+  margin: 0 4px;
+  color: var(--rs-text-secondary);
+  font: var(--rs-type-label);
+}
+.pickerNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.pickerNavButton {
+  background: var(--rs-base);
+}
+.pickerNavButton:disabled {
+  color: var(--rs-disabled);
+  cursor: not-allowed;
+}
+.pickerMonth {
+  margin: 0;
+  font: var(--rs-type-card-title);
+  text-align: center;
+}
+.pickerGrid {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 2px;
+  table-layout: fixed;
+}
+.pickerGrid th {
+  padding: 2px 0 4px;
+  color: var(--rs-text-muted);
+  font: var(--rs-type-label);
+  text-align: center;
+}
+.pickerGrid td {
+  padding: 0;
+}
+.pickerDay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: var(--rs-touch-min);
+  padding: 0;
+  border: 0;
+  border-radius: var(--rs-radius-sm);
+  background: transparent;
+  color: var(--rs-ink);
+  font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background-color var(--rs-duration-fast) var(--rs-ease);
+}
+.pickerDay:hover:not(:disabled) {
+  background: var(--rs-mist);
+}
+.pickerDay[aria-current="date"] {
+  box-shadow: inset 0 0 0 2px var(--rs-teal);
+  color: var(--rs-teal-dark);
+  font-weight: 700;
+}
+.pickerDay[aria-pressed="true"] {
+  background: var(--rs-teal);
+  color: var(--rs-text-on-teal);
+  font-weight: 700;
+}
+.pickerDay[aria-pressed="true"]:hover {
+  background: var(--rs-teal-dark);
+}
+.pickerDay:disabled {
+  color: var(--rs-disabled);
+  cursor: not-allowed;
+}
+.pickerSummary {
+  display: grid;
+  justify-items: start;
+  gap: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .choice,
+  .pickerDay {
+    transition: none;
+  }
+}

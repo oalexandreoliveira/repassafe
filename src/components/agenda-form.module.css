@@ -207,3 +207,56 @@
     transition: none;
   }
 }
+
+/* Lembrete de pagamento. */
+.reminder {
+  display: grid;
+  gap: 10px;
+}
+.reminderSeparated {
+  padding-top: 4px;
+  border-top: 1px solid var(--rs-divider);
+}
+.reminderOptions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+@media (max-width: 380px) {
+  .reminderOptions {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+.reminderStatus {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: var(--rs-radius-lg);
+  background: var(--rs-white);
+  color: var(--rs-text-secondary);
+}
+.reminderStatus svg {
+  flex: none;
+  margin-top: 2px;
+  color: var(--rs-teal);
+}
+.reminderText {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+.reminderText a {
+  color: var(--rs-teal-dark);
+  font-weight: 600;
+  text-underline-offset: 0.2em;
+}
+.reminderTitle {
+  display: block;
+  color: var(--rs-ink);
+  font-weight: 600;
+}
+.collect {
+  display: grid;
+  gap: 6px;
+}

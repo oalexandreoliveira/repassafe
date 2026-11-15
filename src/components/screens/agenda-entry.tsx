@@ -17,6 +17,11 @@ import { StatusChip } from "@/components/ui/status-chip";
 import { SubmitButton } from "@/components/ui/submit-button";
 import { Toast } from "@/components/ui/toast";
 import {
+  CollectOnWhatsApp,
+  ReminderStatus,
+} from "@/components/agenda-payment-extras";
+import {
+  collectionMessage,
   monthOf,
   paymentDirection,
   paymentPresentation,
@@ -31,7 +36,11 @@ import {
   formatHourRange,
 } from "@/features/shifts/format";
 import { formatCurrency } from "@/features/shifts/schemas";
-import { personalShift, type AgendaEntryRow } from "@/features/agenda/rows";
+import {
+  entryReminder,
+  personalShift,
+  type AgendaEntryRow,
+} from "@/features/agenda/rows";
 import styles from "./screens.module.css";
 
 const displayDate = (date: string) => date.split("-").reverse().join("/");
@@ -48,12 +57,15 @@ function difference(planned: number | null, actual: number) {
 export function AgendaEntryScreen({
   entry,
   today,
+  reminderFrom = today,
   startsInFuture,
   saved = false,
   settled = false,
 }: {
   entry: AgendaEntryRow;
   today: string;
+  /** Primeira data ainda sem aviso (hoje antes das 8h, amanhã depois). */
+  reminderFrom?: string;
   /** Acordo registrado exige plantão futuro. */
   startsInFuture: boolean;
   saved?: boolean;
@@ -166,6 +178,26 @@ export function AgendaEntryScreen({
           </p>
         )}
         {gap ? <p className={styles.help}>{gap}.</p> : null}
+        {entry.due_date && !entry.settled_on ? (
+          <ReminderStatus
+            settings={entryReminder(entry)}
+            direction={paymentDirection(entry.kind)}
+            dueDate={entry.due_date}
+            from={reminderFrom}
+            editHref={`/agenda/${entry.id}/editar`}
+          />
+        ) : null}
+        {receive && !entry.settled_on ? (
+          <CollectOnWhatsApp
+            message={collectionMessage({
+              startsAt: entry.starts_at,
+              title: shift.title,
+              valueCents: entry.value_cents,
+              dueDate: entry.due_date,
+              today,
+            })}
+          />
+        ) : null}
         {entry.settled_on ? (
           <form action={unsettleAgendaEntryAction}>
             <input type="hidden" name="entryId" value={entry.id} />

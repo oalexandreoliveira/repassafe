@@ -1,7 +1,7 @@
 # Agenda de plantões e repasses
 
-Status: etapa 1 implementada e validada localmente (ver “Etapa 1 entregue”);
-etapas 2 e 3 não iniciadas; nada publicado.
+Status: etapas 1 e 2 implementadas e validadas localmente (ver “Etapa 1
+entregue” e “Etapa 2 entregue”); etapa 3 não iniciada; nada publicado.
 Atualizado em: 15/11/2026.
 Origem: decisões do responsável pelo produto nesta conversa.
 
@@ -271,6 +271,51 @@ anotação. O colega da mesma conta de acordo vê o pagamento como “A pagar”
 recebe 404 ao abrir a anotação dela. O aprovador sem atuação médica é levado
 ao painel. Não verificado: leitores de tela, zoom de 200% e um repasse do
 mural no fluxo autenticado (coberto apenas pelos testes de regra).
+
+## Etapa 2 entregue
+
+Decisões confirmadas para esta etapa:
+
+- **Registros do app com lembrete ligado por padrão.** Todo repasse do mural e
+  acordo registrado confirmado com data-limite recebe o lembrete sugerido (no
+  vencimento e depois semanal), para quem recebe e para quem paga. Cada parte
+  pode ajustar ou desligar; a preferência é pessoal e não altera o acordo.
+- **Repetição por até 6 meses** após o vencimento (182 dias), ou até marcar
+  recebido ou pago.
+- **Configuração dos registros do app na própria agenda.** O pagamento de um
+  repasse do app abre `/agenda/pagamento/repasse/{id}` ou
+  `/agenda/pagamento/acordo/{id}`, com situação, lembrete, cobrança e o caminho
+  para confirmar ou informar no acordo. As telas de repasse e de acordo não
+  mudaram.
+- **Horário:** uma vez por dia, às 8h de Fortaleza (rotina `pg_cron` às 11h UTC).
+
+Como funciona:
+
+- Opções: primeiro aviso no dia do vencimento ou 1, 3 ou 7 dias antes;
+  depois do vencimento, repetir toda semana, a cada 15 dias ou não repetir.
+- A rotina envia só o aviso mais recente previsto até o dia e registra o envio
+  por item e data. Rodar de novo, ou depois de uma pausa, não duplica avisos
+  nem dispara os atrasados de uma vez.
+- Os avisos param ao marcar recebido ou pago, ao desligar o lembrete, ao
+  excluir a anotação, com repasse cancelado ou conta fora da agenda. Nos
+  registros do app, quem paga deixa de ser lembrado ao informar o pagamento;
+  quem recebe passa a ver “Pagamento informado: confirme se recebeu”.
+- Texto do aviso sem valor, nomes ou local: “Pagamento a receber vence em 3
+  dias · Plantão de 12/10. Confira na agenda.” Os avisos ficam só na central
+  (evento `agenda.payment_reminder`), fora da fila de e-mails críticos.
+- “Cobrar pelo WhatsApp” aparece para quem recebe, com pagamento em aberto.
+  Abre `wa.me` sem destinatário, com a mensagem pronta e editável, sem
+  nomes; o tempo verbal muda depois do vencimento (“que venceu em …”).
+  Nenhum telefone é armazenado e nada é enviado pelo Repassafe.
+
+Validação: 43 asserções pgTAP em `supabase/tests/agenda_reminders.sql`
+(datas previstas, repetição e limite de 6 meses, idempotência, quem paga após
+informar, repasse cancelado, conta suspensa, preferência pessoal e acesso de
+terceiros, ausência de e-mail), além das suítes da etapa 1, de RLS e de acordos
+registrados. Testes unitários do cálculo do próximo aviso, da mensagem e das
+telas. No banco local, a rotina ficou agendada; o aviso apareceu na central com
+“Abrir na agenda”; a preferência de um acordo foi salva só para quem a
+alterou; desligar o lembrete pela edição foi refletido no detalhe.
 
 ## Pendências fora do código
 

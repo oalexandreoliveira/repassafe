@@ -458,6 +458,9 @@ describe("agenda: navegação e telas", () => {
       notes: "",
       settled_on: "2026-11-03",
       settled_cents: 162000,
+      reminder_enabled: true,
+      reminder_lead_days: 0,
+      reminder_repeat_days: 7,
       created_at: at("2026-10-01", "10:00"),
       updated_at: at("2026-10-01", "10:00"),
     };

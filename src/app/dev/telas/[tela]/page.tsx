@@ -29,8 +29,11 @@ import { offerPresentation } from "@/features/shifts/presentation";
 import { AgendaEntryForm } from "@/components/agenda-entry-form";
 import { AgendaScreen } from "@/components/screens/agenda";
 import { AgendaEntryScreen } from "@/components/screens/agenda-entry";
+import { AgendaAppPaymentScreen } from "@/components/screens/agenda-app-payment";
 import { requireDevPages } from "../../enabled";
 import {
+  agendaAppPayReported,
+  agendaAppReceive,
   agendaEmpty,
   agendaEntry,
   agendaFixture,
@@ -196,6 +199,7 @@ const screens: Record<string, () => React.ReactNode> = {
         paymentMethod: "",
         counterparty: "",
         notes: "",
+        reminder: { enabled: true, leadDays: 3, repeatDays: 7 },
       }}
     />
   ),
@@ -211,6 +215,22 @@ const screens: Record<string, () => React.ReactNode> = {
       entry={agendaSettledEntry}
       today={agendaToday}
       startsInFuture={false}
+    />
+  ),
+  "agenda-app-recebe": () => (
+    <AgendaAppPaymentScreen
+      shift={agendaAppReceive}
+      trackingHref="/dev/telas/pagamento"
+      reminder={{ enabled: true, leadDays: 0, repeatDays: 7 }}
+      today={agendaToday}
+    />
+  ),
+  "agenda-app-paga": () => (
+    <AgendaAppPaymentScreen
+      shift={agendaAppPayReported}
+      trackingHref="/dev/telas/acordos"
+      reminder={{ enabled: true, leadDays: 0, repeatDays: 7 }}
+      today={agendaToday}
     />
   ),
   grupos: () => (

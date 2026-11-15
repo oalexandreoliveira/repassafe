@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import {
+  BellRing,
   BadgeCheck,
   Bell,
   Calendar,
@@ -95,6 +96,8 @@ export function notificationPresentation(eventType: string): Presentation {
       return { tone: "action", icon: Users, cta: "Abrir grupo" };
     case "group.member_removed":
       return { tone: "history", icon: UserMinus };
+    case "agenda.payment_reminder":
+      return { tone: "action", icon: BellRing, cta: "Abrir na agenda" };
     default:
       return { tone: "history", icon: Bell };
   }

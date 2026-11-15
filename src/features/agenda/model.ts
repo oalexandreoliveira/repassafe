@@ -1,6 +1,6 @@
 import type { ShiftStatus } from "@/styles/theme";
 import { dayKey } from "@/features/shifts/format";
-import { addDays, type AgendaKind } from "./schema";
+import { addDays, type AgendaKind, type ReminderSettings } from "./schema";
 
 /**
  * Agenda do mês: plantões e pagamentos vindos dos registros do app (só
@@ -412,4 +412,112 @@ export function buildAgendaMonth(
     shiftCount: monthShifts.length,
     paymentCount: payments.length,
   };
+}
+
+/* ---------- Lembretes (etapa 2) ---------- */
+
+/** Repetição para 182 dias após o vencimento (regra do banco). */
+export const REMINDER_WINDOW_DAYS = 182;
+/** Hora do aviso na central, no fuso do produto. */
+export const REMINDER_HOUR = 8;
+
+const dayDiff = (later: string, earlier: string) =>
+  Math.round(
+    (Date.parse(`${later}T12:00:00Z`) - Date.parse(`${earlier}T12:00:00Z`)) /
+      86_400_000,
+  );
+
+/** Datas previstas de aviso: antecedência, vencimento e repetições. */
+export function reminderDates(
+  dueDate: string,
+  settings: Pick<ReminderSettings, "leadDays" | "repeatDays">,
+) {
+  const dates: string[] = [];
+  if (settings.leadDays > 0) dates.push(addDays(dueDate, -settings.leadDays));
+  dates.push(dueDate);
+  if (settings.repeatDays > 0)
+    for (
+      let offset = settings.repeatDays;
+      offset <= REMINDER_WINDOW_DAYS;
+      offset += settings.repeatDays
+    )
+      dates.push(addDays(dueDate, offset));
+  return dates;
+}
+
+/** Próxima data de aviso a partir de `from` (inclusive), ou null se encerrados. */
+export function nextReminderDate(
+  dueDate: string | null,
+  settings: ReminderSettings,
+  from: string,
+) {
+  if (!dueDate || !settings.enabled) return null;
+  return reminderDates(dueDate, settings).find((date) => date >= from) ?? null;
+}
+
+/** Primeiro dia ainda sem aviso: depois das 8h, o aviso de hoje já saiu. */
+export function reminderFrom(today: string, hour: number) {
+  return hour >= REMINDER_HOUR ? addDays(today, 1) : today;
+}
+
+/** "Na central do app às 8h: 3 dias antes do vencimento e depois toda semana…" */
+export function reminderDescription(
+  settings: ReminderSettings,
+  direction: PaymentDirection,
+) {
+  if (!settings.enabled)
+    return "Desligado: a agenda não vai avisar sobre este pagamento.";
+  const first =
+    settings.leadDays === 0
+      ? "no dia do vencimento"
+      : `${settings.leadDays} ${settings.leadDays === 1 ? "dia" : "dias"} antes do vencimento`;
+  const done = direction === "receive" ? "recebido" : "pago";
+  const repeat =
+    settings.repeatDays === 0
+      ? ""
+      : `, depois ${settings.repeatDays === 7 ? "toda semana" : "a cada 15 dias"} até você marcar como ${done}, por até 6 meses`;
+  return `Aviso na central do app às ${REMINDER_HOUR}h: ${first}${repeat}.`;
+}
+
+/* ---------- Cobrança pelo WhatsApp ---------- */
+
+const brl = (cents: number) =>
+  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(
+    cents / 100,
+  );
+const ddmm = (date: string) => `${date.slice(8, 10)}/${date.slice(5, 7)}`;
+
+/**
+ * Texto editável de cobrança. Não leva nomes; o usuário escolhe o contato
+ * e revisa a mensagem no próprio WhatsApp.
+ */
+export function collectionMessage({
+  startsAt,
+  title,
+  valueCents,
+  dueDate,
+  today,
+}: {
+  startsAt: string;
+  title: string;
+  valueCents: number | null;
+  dueDate: string | null;
+  today: string;
+}) {
+  const parts = [
+    `Olá, tudo bem? Passando para lembrar do pagamento do plantão de ${ddmm(dayKey(startsAt))} (${title})`,
+  ];
+  if (valueCents !== null) parts.push(`no valor de ${brl(valueCents)}`);
+  if (dueDate)
+    parts.push(
+      dayDiff(dueDate, today) < 0
+        ? `que venceu em ${ddmm(dueDate)}`
+        : `com vencimento em ${ddmm(dueDate)}`,
+    );
+  return `${parts.join(", ")}. Pode me informar a previsão? Agradeço.`;
+}
+
+/** Abre o WhatsApp do próprio usuário sem destinatário definido. */
+export function whatsappHref(message: string) {
+  return `https://wa.me/?text=${encodeURIComponent(message)}`;
 }

@@ -33,6 +33,67 @@ export const MAX_DATES = 31;
 export const dueModes = ["none", "date", "days"] as const;
 export type DueMode = (typeof dueModes)[number];
 
+/* ---------- Lembrete (etapa 2) ---------- */
+
+export const reminderLeads = ["0", "1", "3", "7"] as const;
+export const reminderRepeats = ["7", "15", "0"] as const;
+export type ReminderLead = (typeof reminderLeads)[number];
+export type ReminderRepeat = (typeof reminderRepeats)[number];
+
+export const reminderLeadLabels: Record<ReminderLead, string> = {
+  "0": "No dia do vencimento",
+  "1": "1 dia antes",
+  "3": "3 dias antes",
+  "7": "7 dias antes",
+};
+export const reminderRepeatLabels: Record<ReminderRepeat, string> = {
+  "7": "Repetir toda semana",
+  "15": "Repetir a cada 15 dias",
+  "0": "Não repetir",
+};
+
+/** Padrão do produto: ligado, aviso no vencimento, repetição semanal. */
+export type ReminderSettings = {
+  enabled: boolean;
+  leadDays: number;
+  repeatDays: number;
+};
+export const defaultReminder: ReminderSettings = {
+  enabled: true,
+  leadDays: 0,
+  repeatDays: 7,
+};
+
+/** Ausentes, valem o padrão do produto (ligado, no vencimento, semanal). */
+const reminderFields = {
+  reminderEnabled: z.enum(["true", "false"]).default("true"),
+  reminderLead: z
+    .enum(reminderLeads, { error: "Escolha o primeiro aviso." })
+    .default("0"),
+  reminderRepeat: z
+    .enum(reminderRepeats, { error: "Escolha a repetição." })
+    .default("7"),
+};
+
+export function reminderInput(input: {
+  reminderEnabled: "true" | "false";
+  reminderLead: ReminderLead;
+  reminderRepeat: ReminderRepeat;
+}) {
+  return {
+    enabled: input.reminderEnabled === "true",
+    lead_days: Number(input.reminderLead),
+    repeat_days: Number(input.reminderRepeat),
+  };
+}
+
+/** Preferência pessoal sobre um repasse do mural ou acordo registrado. */
+export const recordReminderSchema = z.object({
+  source: z.enum(["mural", "registered"]),
+  recordId: z.uuid(),
+  ...reminderFields,
+});
+
 const timeSchema = (message: string) =>
   z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, message);
 
@@ -91,6 +152,7 @@ export function agendaEntrySchema(today = businessDate()) {
       paymentMethod: limited(120),
       counterparty: limited(120),
       notes: limited(1000),
+      ...reminderFields,
     })
     .superRefine((value, ctx) => {
       const earliest = addDays(today, -730);
@@ -168,6 +230,9 @@ export function agendaFormObject(formData: FormData) {
     paymentMethod: text("paymentMethod"),
     counterparty: text("counterparty"),
     notes: text("notes"),
+    reminderEnabled: text("reminderEnabled") || "true",
+    reminderLead: text("reminderLead") || "0",
+    reminderRepeat: text("reminderRepeat") || "7",
   };
 }
 
@@ -204,6 +269,7 @@ export function agendaCommandInput(input: AgendaEntryInput) {
     counterparty: input.counterparty,
     notes: input.notes,
     shifts: composeShifts(input),
+    reminder: reminderInput(input),
   };
 }
 
@@ -237,6 +303,8 @@ const knownDatabaseMessages = [
   "Limite de anotações atingido",
   "Plantão indisponível",
   "Texto acima do limite",
+  "Lembrete inválido",
+  "Registro indisponível",
 ];
 
 export function agendaFailure(message: string) {

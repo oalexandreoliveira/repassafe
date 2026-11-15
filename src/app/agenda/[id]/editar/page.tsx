@@ -4,6 +4,7 @@ import { AgendaEntryForm } from "@/components/agenda-entry-form";
 import { monthOf } from "@/features/agenda/model";
 import { businessDate } from "@/features/agreements/schema";
 import { dayKey, formatTime } from "@/features/shifts/format";
+import { entryReminder } from "@/features/agenda/rows";
 import { loadAgendaEntry, requireAgendaUser } from "@/lib/agenda";
 
 export const metadata = { title: "Editar plantão | Repassafe" };
@@ -43,6 +44,7 @@ export default async function EditAgendaEntryPage({
         paymentMethod: entry.payment_method,
         counterparty: entry.counterparty,
         notes: entry.notes,
+        reminder: entryReminder(entry),
       }}
     />
   );

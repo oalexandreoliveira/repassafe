@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { AgendaEntryForm } from "@/components/agenda-entry-form";
 import { monthOf, parseMonth } from "@/features/agenda/model";
 import { businessDate, dateSchema } from "@/features/agreements/schema";
+import { defaultReminder } from "@/features/agenda/schema";
 import { requireAgendaUser } from "@/lib/agenda";
 
 export const metadata = { title: "Adicionar plantão | Repassafe" };
@@ -41,6 +42,7 @@ export default async function NewAgendaEntryPage({
         paymentMethod: "",
         counterparty: "",
         notes: "",
+        reminder: defaultReminder,
       }}
     />
   );

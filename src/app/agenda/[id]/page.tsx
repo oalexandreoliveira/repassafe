@@ -1,7 +1,12 @@
 import { notFound } from "next/navigation";
 import { AgendaEntryScreen } from "@/components/screens/agenda-entry";
+import { reminderFrom } from "@/features/agenda/model";
 import { businessDate } from "@/features/agreements/schema";
-import { loadAgendaEntry, requireAgendaUser } from "@/lib/agenda";
+import {
+  fortalezaHour,
+  loadAgendaEntry,
+  requireAgendaUser,
+} from "@/lib/agenda";
 
 export const metadata = { title: "Plantão na agenda | Repassafe" };
 
@@ -16,10 +21,12 @@ export default async function AgendaEntryPage({
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const entry = await loadAgendaEntry(identity, id);
   if (!entry) notFound();
+  const today = businessDate();
   return (
     <AgendaEntryScreen
       entry={entry}
-      today={businessDate()}
+      today={today}
+      reminderFrom={reminderFrom(today, fortalezaHour())}
       // eslint-disable-next-line react-hooks/purity -- Server component compares the shift start once per request.
       startsInFuture={Date.parse(entry.starts_at) > Date.now()}
       saved={query.salvo === "1"}

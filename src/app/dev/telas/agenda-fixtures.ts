@@ -22,6 +22,9 @@ export const agendaEntry: AgendaEntryRow = {
   notes: "Passagem de plantão presencial às 18h45.",
   settled_on: null,
   settled_cents: null,
+  reminder_enabled: true,
+  reminder_lead_days: 3,
+  reminder_repeat_days: 7,
   created_at: at("2026-10-20", "10:00"),
   updated_at: at("2026-10-20", "10:00"),
 };
@@ -114,3 +117,19 @@ export const agendaFixture = buildAgendaMonth(
   agendaToday,
 );
 export const agendaEmpty = buildAgendaMonth([], "2026-12", agendaToday);
+
+/** Pagamento do app visto pela agenda: quem assumiu e recebe. */
+export const agendaAppReceive = app({
+  paymentHref: "/dev/telas/agenda-app-recebe",
+});
+/** Quem repassou e já informou o pagamento: lembretes encerrados. */
+export const agendaAppPayReported = app({
+  key: "registered:fixture-pay",
+  source: "registered",
+  id: "6b1f2d3e-0000-4000-8000-000000000003",
+  kind: "passed",
+  title: "Centro cirúrgico · Hospital Exemplo",
+  valueCents: 130000,
+  dueDate: "2026-11-30",
+  reported: true,
+});

@@ -8,11 +8,13 @@ import {
   agendaEntrySchema,
   agendaFailure,
   agendaFormObject,
+  recordReminderSchema,
+  reminderInput,
   settleSchema,
   type AgendaFormState,
 } from "@/features/agenda/schema";
 import { monthOf } from "@/features/agenda/model";
-import { requireAgendaUser } from "@/lib/agenda";
+import { appPaymentPath, requireAgendaUser } from "@/lib/agenda";
 
 const uuid = z.uuid();
 
@@ -126,4 +128,32 @@ export async function deleteAgendaEntryAction(formData: FormData) {
       ? `/agenda?mes=${month}&excluido=1`
       : "/agenda?excluido=1";
   redirect(target);
+}
+
+/** Preferência pessoal de lembrete sobre um repasse do mural ou acordo registrado. */
+export async function saveRecordReminderAction(
+  _previous: AgendaFormState,
+  formData: FormData,
+): Promise<AgendaFormState> {
+  const parsed = recordReminderSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success)
+    return {
+      message: "Revise o lembrete.",
+      errors: z.flattenError(parsed.error).fieldErrors as Record<
+        string,
+        string[]
+      >,
+    };
+  const identity = await requireAgendaUser();
+  const { error } = await identity.supabase.rpc("agenda_command", {
+    request_ref: null,
+    operation: "record_reminder",
+    entry_ref: parsed.data.recordId,
+    input: { source: parsed.data.source, reminder: reminderInput(parsed.data) },
+  });
+  if (error) return { message: agendaFailure(error.message) };
+  revalidatePath("/agenda");
+  redirect(
+    `${appPaymentPath(parsed.data.source, parsed.data.recordId)}?salvo=1`,
+  );
 }

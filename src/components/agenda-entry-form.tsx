@@ -20,7 +20,9 @@ import {
   type AgendaFormState,
   type AgendaKind,
   type DueMode,
+  type ReminderSettings,
 } from "@/features/agenda/schema";
+import { AgendaReminderFields } from "@/components/agenda-reminder-fields";
 import { PATIENT_DATA_NOTICE } from "@/features/shifts/copy";
 import screens from "@/components/screens/screens.module.css";
 import styles from "./agenda-form.module.css";
@@ -39,6 +41,7 @@ export type AgendaFormInitial = {
   paymentMethod: string;
   counterparty: string;
   notes: string;
+  reminder: ReminderSettings;
 };
 
 /** Ordem de foco quando há erro (primeiro campo inválido recebe o foco). */
@@ -55,6 +58,8 @@ const fieldOrder: [string, string][] = [
   ["dueDays", "field-dueDays"],
   ["paymentMethod", "field-paymentMethod"],
   ["counterparty", "field-counterparty"],
+  ["reminderLead", "field-reminderLead"],
+  ["reminderRepeat", "field-reminderRepeat"],
   ["notes", "field-notes"],
 ];
 
@@ -391,6 +396,38 @@ export function AgendaEntryForm({
             defaultValue={value("paymentMethod")}
             error={error("paymentMethod")}
           />
+          {dueMode === "none" ? (
+            <>
+              <input
+                type="hidden"
+                name="reminderEnabled"
+                value={initial.reminder.enabled ? "true" : "false"}
+              />
+              <input
+                type="hidden"
+                name="reminderLead"
+                value={String(initial.reminder.leadDays)}
+              />
+              <input
+                type="hidden"
+                name="reminderRepeat"
+                value={String(initial.reminder.repeatDays)}
+              />
+              <p className={styles.hint}>
+                Com um prazo de pagamento, a agenda pode lembrar você de{" "}
+                {kind === "passed" ? "pagar" : "cobrar"}.
+              </p>
+            </>
+          ) : (
+            <AgendaReminderFields
+              initial={initial.reminder}
+              direction={kind === "passed" ? "pay" : "receive"}
+              errors={{
+                reminderLead: error("reminderLead"),
+                reminderRepeat: error("reminderRepeat"),
+              }}
+            />
+          )}
         </fieldset>
 
         <fieldset className={screens.formSection}>

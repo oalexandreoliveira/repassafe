@@ -40,6 +40,11 @@ const previews = [
   ["convite-pendente", "Grupos · convite com cadastro pendente (derivada)"],
   ["convite-indisponivel", "Grupos · convite indisponível (derivada)"],
   ["convite-sem-login", "Grupos · convite sem login (derivada)"],
+  ["agenda", "Agenda · mês (derivada)"],
+  ["agenda-vazia", "Agenda · mês vazio (derivada)"],
+  ["agenda-novo", "Agenda · adicionar plantão (derivada)"],
+  ["agenda-detalhe", "Agenda · anotação vencida (derivada)"],
+  ["agenda-recebido", "Agenda · anotação recebida (derivada)"],
 ] as const;
 
 export default async function ScreenPreviewIndex() {

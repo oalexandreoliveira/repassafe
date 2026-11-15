@@ -227,7 +227,7 @@ As três famílias são servidas pela aplicação a partir de `@fontsource` (Sor
 
 ## Layout
 
-Referência 390 × 844, fluido de 360 a 430. Padding lateral 20, espaço entre blocos 12–14, padding de cartão 16 (14 em listas densas). Estrutura de tela: top bar (voltar 44 em círculo branco + título Sora 22, ou logo + sino nas telas raiz), conteúdo com rolagem, rodapé fixo com botão primário de largura total e tab bar nas telas raiz (Plantões · Publicar · Acordos · Perfil). No desktop, fluxos de app em coluna de no máximo 480; painéis administrativos podem usar grid de 12 colunas com max-width 1200.
+Referência 390 × 844, fluido de 360 a 430. Padding lateral 20, espaço entre blocos 12–14, padding de cartão 16 (14 em listas densas). Estrutura de tela: top bar (voltar 44 em círculo branco + título Sora 22, ou logo + sino nas telas raiz), conteúdo com rolagem, rodapé fixo com botão primário de largura total e tab bar nas telas raiz (Plantões · Publicar · Repasses · Agenda · Perfil). No desktop, fluxos de app em coluna de no máximo 480; painéis administrativos podem usar grid de 12 colunas com max-width 1200.
 
 ## Elevation & Depth
 

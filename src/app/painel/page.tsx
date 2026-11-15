@@ -75,7 +75,7 @@ export default async function DashboardPage() {
       header={<RootTopBar unread={unread} />}
       tabBar={
         profile.status === "approved" ? (
-          <TabBar canPublish={false} />
+          <TabBar canPublish={false} agenda={profile.role === "doctor"} />
         ) : undefined
       }
     >
@@ -129,6 +129,22 @@ export default async function DashboardPage() {
           </ButtonLink>
           <ButtonLink href="/acordos/registrados" variant="secondary" block>
             Acordos registrados
+          </ButtonLink>
+        </section>
+      ) : null}
+
+      {profile.role === "doctor" &&
+      ["pending", "approved", "changes_requested"].includes(profile.status) ? (
+        <section className={styles.panel} aria-labelledby="agenda-heading">
+          <h2 id="agenda-heading" className={styles.panelTitle}>
+            Agenda
+          </h2>
+          <p className={styles.panelText}>
+            Anote seus plantões, valores e prazos de pagamento. A agenda é
+            pessoal e funciona enquanto a análise do cadastro estiver pendente.
+          </p>
+          <ButtonLink href="/agenda" variant="secondary" block>
+            Abrir agenda
           </ButtonLink>
         </section>
       ) : null}

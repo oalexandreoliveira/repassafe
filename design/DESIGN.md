@@ -103,7 +103,7 @@ Se o código já tiver um enum de status diferente, **mapeie** para esta tabela 
   1. **Top bar**: botão voltar (44×44, círculo branco) + título Sora 22, ou logo + sino de notificações (com badge âmbar) nas telas raiz.
   2. **Conteúdo** com rolagem.
   3. **Rodapé fixo** com botão primário de largura total (altura 52–54), padding 16/20/28 (base com safe area).
-  4. **Tab bar** (só nas telas raiz): Plantões · Publicar · Acordos · Perfil — altura 80 + safe area, ativo em `#0B5E5B` com ícone `#0F7C78`.
+  4. **Tab bar** (só nas telas raiz): Plantões · Publicar · Repasses · Agenda · Perfil (a aba "Repasses" é a antiga "Acordos"; "Publicar" só para quem publica; "Agenda" só para médicos, inclusive com análise pendente) — altura 80 + safe area, ativo em `#0B5E5B` com ícone `#0F7C78`.
 - Fundo da tela sempre `--rs-base`; cartões brancos sem borda e sem sombra (a separação é por cor).
 - Web/desktop (se houver painel web): conteúdo em coluna de no máx. 480px para fluxos de app; dashboards de coordenação podem usar grid 12 colunas com max-width 1200.
 

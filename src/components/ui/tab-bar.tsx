@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Calendar, FileText, Plus, User } from "lucide-react";
+import { Calendar, CalendarClock, FileText, Plus, User } from "lucide-react";
 import styles from "./app-shell.module.css";
 
-export type TabId = "plantoes" | "publicar" | "acordos" | "perfil";
+export type TabId = "plantoes" | "publicar" | "acordos" | "agenda" | "perfil";
 
 const tabs = [
   { id: "plantoes", label: "Plantões", href: "/plantoes", icon: Calendar },
@@ -16,6 +16,7 @@ const tabs = [
     icon: Plus,
   },
   { id: "acordos", label: "Repasses", href: "/acordos", icon: FileText },
+  { id: "agenda", label: "Agenda", href: "/agenda", icon: CalendarClock },
   { id: "perfil", label: "Perfil", href: "/perfil", icon: User },
 ] as const;
 
@@ -24,17 +25,21 @@ export function activeTab(pathname: string): TabId | null {
   if (/^\/plantoes\/(publicados|novo)(\/|$)/.test(pathname)) return "publicar";
   if (/^\/plantoes(\/|$)/.test(pathname)) return "plantoes";
   if (/^\/acordos(\/|$)/.test(pathname)) return "acordos";
+  if (/^\/agenda(\/|$)/.test(pathname)) return "agenda";
   if (/^\/(perfil|historico|grupos)(\/|$)/.test(pathname)) return "perfil";
   return null;
 }
 
 export function TabBar({
   canPublish = true,
+  agenda = canPublish,
   placement = "fixed",
   active,
 }: {
   /** Aprovadores sem atuação médica não veem "Publicar". */
   canPublish?: boolean;
+  /** Agenda pessoal: médicos, mesmo com análise cadastral pendente. */
+  agenda?: boolean;
   /** "static" apenas para o catálogo de componentes. */
   placement?: "fixed" | "static";
   /** Força a aba ativa (catálogo); por padrão vem da rota. */
@@ -49,7 +54,11 @@ export function TabBar({
     >
       <ul className={styles.tabs}>
         {tabs
-          .filter((tab) => canPublish || tab.id !== "publicar")
+          .filter(
+            (tab) =>
+              (canPublish || tab.id !== "publicar") &&
+              (agenda || tab.id !== "agenda"),
+          )
           .map(({ id, label, href, icon: Icon }) => (
             <li key={id}>
               <Link

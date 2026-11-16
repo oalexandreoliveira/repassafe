@@ -30,6 +30,7 @@ contas, conforme o art. 6º da LGPD. **Não coletamos nem aceitamos dados de pac
 | Registros de acesso, IP e dispositivo `[PENDENTE: L-5 — decidir se coleta]` | Segurança e prevenção de fraude | IX `[PENDENTE: teste]`; II se obrigação legal aplicável | Equipe de segurança | `[prazo]` |
 | Mensagens de suporte e protocolos | Atender pedidos e contestações | V; VI | Equipe autorizada | `[prazo]` |
 | Senhas e códigos de confirmação | Autenticação | V | Apenas o provedor de autenticação; não os vemos | Enquanto a conta existir |
+| Agenda pessoal: datas, horários, local, setor, valores, prazos, forma de pagamento, nome de quem paga ou recebe (informado pelo usuário), observações, preferências de lembrete | Organizar plantões e lembrar pagamentos do próprio usuário | V | Apenas o próprio usuário; não exibido a outras partes, aprovadores ou equipe na plataforma | Até o usuário excluir ou encerrar a conta |
 
 3.1. **Consentimento** não é a base do cadastro nem dos acordos. O aceite desta política registra **ciência**, não
 autorização genérica para outras finalidades. Se pedirmos consentimento para algo opcional, será separado e
@@ -44,11 +45,16 @@ por canal controlado]`.
 
 4.1. **Outras partes de um acordo ou grupo:** nome de exibição, selo “CRM verificado”, CRM/UF e as condições do acordo.
 Dados civis (CPF, nascimento, telefone, foto de documento) **não** são exibidos à outra parte.
-4.2. **Fornecedores (operadores):** Supabase (autenticação, banco de dados e arquivos), Vercel (hospedagem)
+4.2. **Fornecedores (operadores):** Supabase (autenticação, banco de dados e arquivos), Vercel (hospedagem), Resend
+(envio por e-mail do registro final do acordo e de avisos críticos, com endereço do destinatário, tipo de aviso, prazo de
+resposta quando houver e link que exige login, sem dados do plantão, valores ou campos livres)
 `[PENDENTE: atualizar lista, e-mail e SMS se contratados; carimbo de tempo, ADR-012]`. Eles tratam os dados em nosso
 nome e sob contrato `[PENDENTE: LGPD-04 — DPAs assinados]`.
 4.3. **Autoridades:** quando a lei exigir ou para defender direitos em processo, na medida necessária.
 4.4. Não vendemos dados nem os usamos para publicidade.
+
+4.5. **Agenda e WhatsApp.** O botão de cobrança da agenda monta a mensagem no aparelho do usuário e abre o WhatsApp
+dele; o Repassafe não envia o conteúdo nem guarda telefone. Os lembretes são avisos internos, sem valor, nomes ou local.
 
 ## 5. Transferência internacional
 

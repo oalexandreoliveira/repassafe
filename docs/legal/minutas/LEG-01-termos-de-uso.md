@@ -70,6 +70,13 @@ eventos), sem prejuízo de qualquer outro meio de prova e dos direitos de quem d
 4.10. **Cópias impressas.** Cópias em papel ou PDF do acordo trazem código de verificação e instruções para conferir
 a integridade `[PENDENTE: PRV-005]`.
 
+4.11. **Agenda pessoal.** A agenda é ferramenta de organização individual. Anotações são visíveis apenas para quem as
+criou, não têm aceite de outra parte e **não constituem acordo registrado nem prova** de compromisso entre pessoas. O
+usuário responde pelo que anota, inclusive nomes de instituições ou colegas, e pode editar ou excluir as anotações.
+Lembretes de pagamento aparecem na central de notificações e podem ser ajustados ou desligados. O botão de cobrança abre
+o WhatsApp do próprio usuário com mensagem para revisão; o Repassafe não envia mensagens a terceiros nem intermedeia
+pagamentos. Texto publicado na versão `2026-11-15` de `src/features/registration/legal.ts`.
+
 ## 5. Grupos
 
 5.1. **Grupo de colegas** é criado por médico com cadastro aprovado e vigente, que se torna seu gestor. **Grupo

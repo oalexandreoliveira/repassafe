@@ -86,7 +86,7 @@ grant all on flow to public;
 -- Item 1: suspensão, rejeição e a exceção de análise pendente ------------------------
 select public.registration_save(pg_temp.person(6), '{"civilName":"Suspensa Teste","displayName":"Dra Suspensa","cpf":"39053344705","birthDate":"1990-01-01","phone":"+5511912345678","practicesMedicine":"yes","crmNumber":"754321","crmState":"SP"}', 0);
 select public.registration_photo(pg_temp.person(6), pg_temp.person(6)::text || '/foto');
-select public.registration_accept(pg_temp.person(6), '2026-09-29', repeat('a', 64), repeat('b', 64));
+select public.registration_accept(pg_temp.person(6), '2026-11-15', repeat('a', 64), repeat('b', 64));
 select public.registration_submit(pg_temp.person(6), 2);
 select ok(private.external_eligible(pg_temp.person(6)), 'first-time pending registration keeps the direct-agreement exception');
 select public.registration_review(pg_temp.person(6), pg_temp.person(5), 2, 'suspended', '{}', 'suspensão registrada', '{}', false, 90);
@@ -100,7 +100,7 @@ select ok(private.external_eligible(pg_temp.person(6)), 'reinstated account is e
 
 select public.registration_save(pg_temp.person(7), '{"civilName":"Rejeitada Teste","displayName":"Dra Rejeitada","cpf":"11144477735","birthDate":"1990-01-01","phone":"+5521912345678","practicesMedicine":"yes","crmNumber":"754322","crmState":"SP"}', 0);
 select public.registration_photo(pg_temp.person(7), pg_temp.person(7)::text || '/foto');
-select public.registration_accept(pg_temp.person(7), '2026-09-29', repeat('a', 64), repeat('b', 64));
+select public.registration_accept(pg_temp.person(7), '2026-11-15', repeat('a', 64), repeat('b', 64));
 select public.registration_submit(pg_temp.person(7), 2);
 select public.registration_review(pg_temp.person(7), pg_temp.person(5), 2, 'rejected', '{}', 'CRM não localizado', '{}', false, 90);
 select public.registration_save(pg_temp.person(7), '{"civilName":"Rejeitada Teste","displayName":"Dra Rejeitada","cpf":"11144477735","birthDate":"1990-01-01","phone":"+5521912345678","practicesMedicine":"yes","crmNumber":"754322","crmState":"SP"}', 2);

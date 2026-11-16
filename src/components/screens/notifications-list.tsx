@@ -96,6 +96,8 @@ export function notificationPresentation(eventType: string): Presentation {
       return { tone: "action", icon: Users, cta: "Abrir grupo" };
     case "group.member_removed":
       return { tone: "history", icon: UserMinus };
+    case "legal.updated":
+      return { tone: "info", icon: FileText, cta: "Ler a política" };
     case "agenda.payment_reminder":
       return { tone: "action", icon: BellRing, cta: "Abrir na agenda" };
     default:

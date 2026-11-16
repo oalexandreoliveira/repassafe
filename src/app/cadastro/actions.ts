@@ -145,6 +145,10 @@ export async function submitRegistrationAction(
   if (error) {
     const conflict = registrationConflict(error);
     if (conflict) return conflict;
+    if (error.message.includes("Aceite os documentos atuais"))
+      return failure(
+        "Os Termos de uso e a Política de privacidade foram atualizados. Leia e registre o aceite da versão atual antes de enviar.",
+      );
     return failure(
       "Não foi possível enviar. Confirme o e-mail, complete a foto e aceite os documentos atuais. Se persistir, solicite uma revisão no suporte.",
     );

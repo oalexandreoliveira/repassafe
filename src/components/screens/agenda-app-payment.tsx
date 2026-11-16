@@ -1,5 +1,6 @@
 import { Users } from "lucide-react";
 import { AgendaRecordReminderForm } from "@/components/agenda-record-reminder-form";
+import { CalendarExport } from "@/components/agenda-handover";
 import {
   CollectOnWhatsApp,
   ReminderStatus,
@@ -164,6 +165,14 @@ export function AgendaAppPaymentScreen({
             direction={direction}
           />
         </section>
+      ) : null}
+
+      {!shift.cancelled ? (
+        <CalendarExport
+          action={`${shift.paymentHref}/calendario`}
+          withDue={remindable && shift.dueDate !== null}
+          detailsLabel="Incluir valor"
+        />
       ) : null}
 
       {saved ? <Toast message="Lembrete salvo" clearParam="salvo" /> : null}

@@ -45,6 +45,8 @@ const previews = [
   ["agenda-novo", "Agenda · adicionar plantão (derivada)"],
   ["agenda-detalhe", "Agenda · anotação vencida (derivada)"],
   ["agenda-recebido", "Agenda · anotação recebida (derivada)"],
+  ["agenda-repassar", "Agenda · repassar este plantão (derivada)"],
+  ["agenda-repassado", "Agenda · plantão repassado (derivada)"],
   ["agenda-app-recebe", "Agenda · pagamento do app, quem recebe (derivada)"],
   ["agenda-app-paga", "Agenda · pagamento do app já informado (derivada)"],
 ] as const;

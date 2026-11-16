@@ -4,6 +4,11 @@ import {
   unsettleAgendaEntryAction,
 } from "@/app/agenda/actions";
 import { AgendaSettleForm } from "@/components/agenda-settle-form";
+import {
+  CalendarExport,
+  HandOverShift,
+  HandoverStatus,
+} from "@/components/agenda-handover";
 import { AppScreen, TopBar } from "@/components/ui/app-shell";
 import { ButtonLink } from "@/components/ui/button";
 import { ConfirmSubmit } from "@/components/ui/confirm-submit";
@@ -26,6 +31,7 @@ import {
   paymentDirection,
   paymentPresentation,
   paymentState,
+  type Handover,
 } from "@/features/agenda/model";
 import { counterpartyLabel, kindLabels } from "@/features/agenda/schema";
 import { PAYMENT_NOTICE } from "@/features/shifts/copy";
@@ -59,6 +65,8 @@ export function AgendaEntryScreen({
   today,
   reminderFrom = today,
   startsInFuture,
+  handover,
+  canPublish = false,
   saved = false,
   settled = false,
 }: {
@@ -68,6 +76,10 @@ export function AgendaEntryScreen({
   reminderFrom?: string;
   /** Acordo registrado exige plantão futuro. */
   startsInFuture: boolean;
+  /** Repasse criado a partir de "Meu plantão". */
+  handover?: Handover;
+  /** Publicar no mural exige aprovação com verificação vigente. */
+  canPublish?: boolean;
   saved?: boolean;
   settled?: boolean;
 }) {
@@ -128,6 +140,8 @@ export function AgendaEntryScreen({
       : null;
   const colleague = entry.kind !== "own";
   const future = startsInFuture;
+  const label = counterpartyLabel(entry.kind);
+  const detailsLabel = `Incluir valor e ${label.charAt(0).toLowerCase()}${label.slice(1)}`;
 
   return (
     <AppScreen
@@ -157,8 +171,20 @@ export function AgendaEntryScreen({
           label="Duração"
           value={formatDuration(entry.starts_at, entry.ends_at)}
         />
-        <InfoTile icon={Users} label="Tipo" value={kindLabels[entry.kind]} />
+        <InfoTile
+          icon={Users}
+          label="Tipo"
+          value={
+            handover?.state === "confirmed"
+              ? "Repassado a um colega"
+              : kindLabels[entry.kind]
+          }
+        />
       </InfoTileGrid>
+
+      {handover && entry.kind === "own" ? (
+        <HandoverStatus handover={handover} />
+      ) : null}
 
       <section className={styles.stack} aria-labelledby="payment-heading">
         <div className={styles.sectionHeader}>
@@ -233,6 +259,15 @@ export function AgendaEntryScreen({
           <span className={styles.notesLabel}>Observações</span>
           <p className={styles.notesText}>{entry.notes}</p>
         </div>
+      ) : null}
+
+      <CalendarExport
+        action={`/agenda/${entry.id}/calendario`}
+        withDue={entry.due_date !== null && !entry.settled_on}
+        detailsLabel={detailsLabel}
+      />
+      {entry.kind === "own" && future && !handover ? (
+        <HandOverShift entryId={entry.id} canPublish={canPublish} />
       ) : null}
 
       {colleague && future ? (

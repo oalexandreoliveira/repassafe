@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { createHash } from "node:crypto";
 import { agreementIdentity } from "@/lib/agreements";
+import { linkHandover } from "@/lib/agenda-handover";
+import { handoverEntryId } from "@/features/agenda/handover";
 import {
   createAgreementSchema,
   agreementCommandSchema,
@@ -83,6 +85,10 @@ export async function createAgreementAction(
         ),
       ),
     };
+  // "Repassar este plantão": só quem repassa liga a anotação ao acordo.
+  const entryId = handoverEntryId(formData.get("agendaEntryId"));
+  if (entryId && v.creatorRole === "owner")
+    await linkHandover(identity, entryId, { agreementId: String(data) });
   revalidatePath("/acordos/registrados");
   redirect(`/acordos/registrados/${data}`);
 }

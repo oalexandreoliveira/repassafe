@@ -17,6 +17,8 @@ import {
 import { rateLimitPolicies } from "@/features/security/rate-limits";
 import { enforceRateLimit } from "@/lib/security/rate-limit";
 import type { WorkflowFeedbackCode } from "@/features/shifts/feedback";
+import { handoverEntryId } from "@/features/agenda/handover";
+import { linkHandover } from "@/lib/agenda-handover";
 
 function returnWorkflowFeedback(code: WorkflowFeedbackCode): never {
   redirect(`/plantoes?feedback=${code}`);
@@ -84,6 +86,12 @@ export async function publishOfferAction(formData: FormData) {
       owner_terms_acknowledged: parsed.ownerTermsAcknowledged === "true",
     },
   });
+  // "Repassar este plantão": a anotação da agenda passa a mostrar o repasse.
+  const entryId = handoverEntryId(formData.get("agendaEntryId"));
+  if (entryId)
+    await linkHandover(await requireApprovedProfessional(), entryId, {
+      offerId,
+    });
   revalidatePath("/plantoes");
   // S07 · Meus plantões publicados, com o aviso "Plantão publicado".
   redirect(`/plantoes/publicados?publicado=${offerId}`);

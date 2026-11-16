@@ -1,8 +1,8 @@
 # Agenda de plantões e repasses
 
-Status: etapas 1 e 2 implementadas e validadas localmente (ver “Etapa 1
-entregue” e “Etapa 2 entregue”); etapa 3 não iniciada; nada publicado.
-Atualizado em: 15/11/2026.
+Status: etapas 1 e 2 publicadas em 16/11/2026; etapa 3 implementada e
+validada localmente (ver “Etapa 3 entregue”).
+Atualizado em: 16/11/2026.
 Origem: decisões do responsável pelo produto nesta conversa.
 
 ## Objetivo
@@ -109,10 +109,12 @@ Em “Meu plantão” futuro, o botão “Repassar este plantão” abre “Publ
 plantão” ou “Registrar acordo” com data, horário, local e setor preenchidos.
 Valor e condições de pagamento do repasse são definidos no fluxo de repasse.
 
-Regra derivada, a confirmar: o plantão próprio repassado continua na agenda
-como valor a receber da instituição, porque no modelo do Repassafe quem
-repassa segue como pagador do colega. A agenda mostra que a escala passou ao
-colega e acrescenta o valor a pagar do repasse, sem duplicar o plantão.
+Regra confirmada em 16/11/2026 (“Unificar”): o plantão próprio repassado
+continua na agenda como valor a receber da instituição, porque no modelo do
+Repassafe quem repassa segue como pagador do colega. A anotação fica ligada ao
+repasse criado a partir dela; confirmado o repasse, a agenda mostra que a
+escala passou ao colega e acrescenta o valor a pagar do repasse, sem duplicar
+o plantão.
 
 ### Navegação e resumo
 
@@ -317,9 +319,57 @@ telas. No banco local, a rotina ficou agendada; o aviso apareceu na central com
 “Abrir na agenda”; a preferência de um acordo foi salva só para quem a
 alterou; desligar o lembrete pela edição foi refletido no detalhe.
 
+## Etapa 3 entregue
+
+Decisões confirmadas para esta etapa:
+
+- **Plantão repassado unificado.** A anotação “Meu plantão” guarda a oferta
+  publicada ou o acordo registrado criado a partir dela
+  (`agenda_entries.handover_offer_id` ou `handover_agreement_id`, gravados
+  pela função `agenda_link_handover`, que só aceita oferta do próprio autor ou
+  acordo em que ele repassa). Confirmado o repasse, o mês mostra um único
+  plantão, “Repassado a um colega”, com dois pagamentos: o valor da
+  instituição, na anotação, e o valor a pagar ao colega, no registro do app.
+  O plantão repassado não conta como sobreposição de horário.
+- **`.ics` nas anotações e nos registros do app.** O bloco “Adicionar à agenda
+  do celular” aparece no detalhe da anotação e na tela de pagamento da agenda
+  dos repasses e acordos (menos nos cancelados).
+
+Como funciona:
+
+- **Repassar este plantão:** só em “Meu plantão” futuro e sem repasse aberto.
+  “Publicar plantão” (para quem pode publicar) abre o fluxo com data,
+  horários e setor preenchidos e o grupo da mesma instituição, quando o nome
+  coincide; “Registrar acordo” chega com o papel “Repassar o plantão e
+  pagar”, local, setor, início e término. Valor, condições, colega e grupo
+  são definidos no próprio fluxo, cuja validação não mudou. O vínculo é
+  gravado depois que a publicação ou o convite é criado; se falhar, o repasse
+  continua e o usuário pode repassar de novo pela agenda.
+- **Situação na anotação:** oferta aberta ou convite aguardando aparece como
+  “Repasse em andamento”, com “Acompanhar repasse”. Oferta cancelada ou
+  expirada, acordo recusado ou repasse cancelado devolvem a opção de repassar.
+- **Agenda do celular:** o arquivo segue a RFC 5545: plantão em UTC e, com
+  pagamento em aberto, evento de dia inteiro no vencimento com alarme às 8h
+  (mais um no dia do primeiro aviso, quando o lembrete avisa antes). Leva
+  local, setor e horários; valor e nome de quem paga ou recebe só com a opção
+  marcada; observações nunca. Plantão repassado entra como livre na agenda.
+  Identificadores estáveis permitem reimportar sem duplicar em agendas que os
+  respeitam. A tela avisa que o arquivo não se atualiza e que, se a agenda
+  do aparelho sincroniza com Google ou Apple, o evento fica também lá.
+- **Documentos legais:** sem nova versão. O arquivo fica com o próprio
+  usuário e o repasse usa fluxos e registros já previstos, sem novo
+  destinatário nem finalidade; as telas informam os pontos no momento do uso
+  e as minutas registram o texto para a próxima revisão.
+
+Validação: 18 asserções pgTAP em `supabase/tests/agenda_handover.sql`
+(vínculo só pelo autor, oferta alheia, acordo em que o autor assume, colega
+sem leitura da anotação, edição preserva o vínculo, exclusão não altera o
+acordo) e testes unitários do arquivo `.ics` (estrutura, escape, dobra em 75
+octetos, alarmes, dados opcionais), da unificação no mês, do preenchimento e
+das telas, em `tests/agenda-handover.test.tsx`.
+
 ## Pendências fora do código
 
-- A política de privacidade precisa citar a nova finalidade e o nome de
-  terceiro informado pelo usuário, com revisão jurídica e nova versão do
-  texto, como já ocorre com a menção ao Resend.
+- Revisão jurídica das minutas, inclusive o texto da agenda do celular e do
+  repasse a partir da agenda para a próxima versão dos documentos.
 - Decidir se o uso da agenda entra nas métricas agregadas do piloto.

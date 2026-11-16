@@ -65,6 +65,7 @@ export function PublishShiftForm({
   initialValues,
   initialStep = 1,
   mode = "both",
+  fromAgenda,
 }: {
   action: FormAction;
   commandId: string;
@@ -75,6 +76,8 @@ export function PublishShiftForm({
   /** Valores iniciais (prévias de tela). */
   initialValues?: Partial<ShiftFormValues>;
   initialStep?: 1 | 2;
+  /** "Repassar este plantão": anotação de origem na agenda. */
+  fromAgenda?: { entryId: string; location: string };
 }) {
   const [step, setStep] = useState<1 | 2>(initialStep);
   const top = useRef<HTMLDivElement>(null);
@@ -113,6 +116,9 @@ export function PublishShiftForm({
       }}
     >
       <input type="hidden" name="commandId" value={commandId} />
+      {fromAgenda ? (
+        <input type="hidden" name="agendaEntryId" value={fromAgenda.entryId} />
+      ) : null}
       <AppScreen
         header={
           step === 1 ? (
@@ -151,6 +157,11 @@ export function PublishShiftForm({
         {Object.values(form.errors).some(Boolean) ? (
           <InfoBanner variant="warning" role="alert">
             Revise os campos indicados para continuar.
+          </InfoBanner>
+        ) : null}
+        {fromAgenda && step === 1 ? (
+          <InfoBanner>
+            {`Data, horário e setor vieram do seu plantão em ${fromAgenda.location}. Confira o grupo e defina o valor e o pagamento ao colega.`}
           </InfoBanner>
         ) : null}
         {mode === "group" && groups.length === 0 ? (

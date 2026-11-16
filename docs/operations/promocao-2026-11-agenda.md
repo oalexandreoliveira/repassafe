@@ -1,6 +1,6 @@
 # Promoção de novembro/2026: avisos críticos, correções e agenda
 
-Status: em execução em 15/11/2026.
+Status: executado em 16/11/2026; ver docs/reviews/publicacao-agenda-2026-11-15.md.
 Referência: `docs/operations/deployment.md`, `environments.md`, `rollback.md`.
 
 ## O que entra

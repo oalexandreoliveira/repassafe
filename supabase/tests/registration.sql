@@ -16,7 +16,7 @@ select throws_ok($$select public.registration_save('98000000-0000-0000-0000-0000
 select throws_ok($$select public.registration_submit('98000000-0000-0000-0000-000000000001',1)$$,'P0001','Complete a identificação e a foto','incomplete submission is rejected');
 select public.registration_photo('98000000-0000-0000-0000-000000000001','98000000-0000-0000-0000-000000000001/test-photo');
 select throws_ok($$select public.registration_submit('98000000-0000-0000-0000-000000000001',2)$$,'P0001','Aceite os documentos atuais','submission requires current legal versions');
-select public.registration_accept('98000000-0000-0000-0000-000000000001','2026-11-15',repeat('a',64),repeat('b',64));
+select public.registration_accept('98000000-0000-0000-0000-000000000001','2026-11-16',repeat('a',64),repeat('b',64));
 select lives_ok($$select public.registration_submit('98000000-0000-0000-0000-000000000001',2)$$,'complete medical submission succeeds');
 select lives_ok($$select public.registration_submit('98000000-0000-0000-0000-000000000001',2)$$,'retry is idempotent');
 select is((select count(*)::int from private.registration_submissions where user_id='98000000-0000-0000-0000-000000000001'),1,'submitted snapshot is preserved once');
@@ -33,7 +33,7 @@ select throws_ok($$insert into public.workflow_commands(actor_id,command,payload
 select throws_ok($$insert into public.workflow_commands(actor_id,command,payload) values('98000000-0000-0000-0000-000000000001','apply_to_offer','{}')$$,'P0001','Revalide seu cadastro profissional','expired verification blocks candidacy in database');
 select lives_ok($$select public.registration_save('98000000-0000-0000-0000-000000000002','{"civilName":"Aprovador Teste","displayName":"Aprovador Teste","cpf":"11144477735","birthDate":"1990-01-01","phone":"+5521987654321","practicesMedicine":"no"}',0)$$,'nonmedical approver saves identity without CRM');
 select public.registration_photo('98000000-0000-0000-0000-000000000002','98000000-0000-0000-0000-000000000002/test-photo');
-select public.registration_accept('98000000-0000-0000-0000-000000000002','2026-11-15',repeat('a',64),repeat('b',64));
+select public.registration_accept('98000000-0000-0000-0000-000000000002','2026-11-16',repeat('a',64),repeat('b',64));
 select public.registration_submit('98000000-0000-0000-0000-000000000002',2);
 select lives_ok($$select public.registration_review('98000000-0000-0000-0000-000000000002','98000000-0000-0000-0000-000000000003',2,'approved','{}','aprovação da identidade','{}',false,90)$$,'nonmedical approver is verified without fictional medical registration');
 select is((select count(*)::int from public.group_memberships where profile_id='98000000-0000-0000-0000-000000000002'),0,'identity approval does not grant institution membership');

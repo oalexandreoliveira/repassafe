@@ -29,7 +29,7 @@ export const brazilianStates = [
   "SE",
   "TO",
 ] as const;
-export const legalVersion = "2026-11-15";
+export const legalVersion = "2026-11-16";
 
 export function isValidCpf(value: string) {
   const digits = value.replace(/\D/g, "");

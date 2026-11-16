@@ -22,8 +22,11 @@ Os templates de confirmação e convite devem apontar para `/auth/confirm` com
 `token_hash` e `type`; o template de recuperação deve apontar para
 `/auth/recovery` com `token_hash` e `type=recovery`. O callback processa links
 PKCE (`code`) e links por token hash. Convites de contas com concessão
-administrativa seguem para definição de senha e, depois, para MFA. Configure
-SMTP próprio antes do piloto para garantir entrega e identidade das mensagens.
+administrativa seguem para definição de senha e, depois, para MFA. O SMTP
+próprio está ativo no projeto publicado: Resend (`smtp.resend.com`), remetente
+`Repassafe <acesso@auth.repassafe.com.br>`, conferido no painel em 16/11/2026.
+Os avisos de segurança do Auth (senha, e-mail ou MFA alterados) estão
+desligados. A Política de privacidade cita esse uso desde a versão 2026-11-16.
 
 ## Acesso administrativo independente
 

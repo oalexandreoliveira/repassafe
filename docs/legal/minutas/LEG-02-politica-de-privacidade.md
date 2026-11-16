@@ -47,8 +47,10 @@ por canal controlado]`.
 Dados civis (CPF, nascimento, telefone, foto de documento) **não** são exibidos à outra parte.
 4.2. **Fornecedores (operadores):** Supabase (autenticação, banco de dados e arquivos), Vercel (hospedagem), Resend
 (envio por e-mail do registro final do acordo e de avisos críticos, com endereço do destinatário, tipo de aviso, prazo de
-resposta quando houver e link que exige login, sem dados do plantão, valores ou campos livres)
-`[PENDENTE: atualizar lista, e-mail e SMS se contratados; carimbo de tempo, ADR-012]`. Eles tratam os dados em nosso
+resposta quando houver e link que exige login, sem dados do plantão, valores ou campos livres; e, como SMTP do provedor
+de autenticação, das mensagens de acesso à conta, como confirmação de cadastro, recuperação de senha, troca de e-mail e
+convites, com endereço do destinatário, novo endereço quando houver troca e link ou código de uso único; conferido no
+painel em 16/11/2026) `[PENDENTE: atualizar lista, SMS se contratado; carimbo de tempo, ADR-012]`. Eles tratam os dados em nosso
 nome e sob contrato `[PENDENTE: LGPD-04 — DPAs assinados]`.
 4.3. **Autoridades:** quando a lei exigir ou para defender direitos em processo, na medida necessária.
 4.4. Não vendemos dados nem os usamos para publicidade.
@@ -56,14 +58,15 @@ nome e sob contrato `[PENDENTE: LGPD-04 — DPAs assinados]`.
 4.5. **Agenda e WhatsApp.** O botão de cobrança da agenda monta a mensagem no aparelho do usuário e abre o WhatsApp
 dele; o Repassafe não envia o conteúdo nem guarda telefone. Os lembretes são avisos internos, sem valor, nomes ou local.
 
-4.6. **Agenda do celular e repasse a partir da agenda** (funções de 16/11/2026, a incluir na próxima versão revisada).
+4.6. **Agenda do celular e repasse a partir da agenda** (funções de 16/11/2026, incluídas na versão publicada `2026-11-16`).
 O arquivo para a agenda do celular é gerado a pedido do usuário e entregue só a ele; leva local, setor e horários e,
 apenas se ele marcar, valor e nome de quem paga ou recebe. Se a agenda do aparelho sincroniza com outro serviço, o
 conteúdo passa a seguir as regras desse serviço. Ao repassar um plantão a partir da agenda, data, horário, local e setor
 são copiados para o fluxo escolhido (publicação ou acordo registrado), que o usuário revisa e envia; a anotação continua
 privada e guarda apenas a ligação com o repasse para mostrar a sua situação. Avaliação: não há novo destinatário nem
-nova finalidade além das já informadas (organização pessoal e repasses), por isso a versão publicada `2026-11-15` não
-foi alterada; as telas informam esses pontos no momento do uso.
+nova finalidade além das já informadas (organização pessoal e repasses), por isso a versão `2026-11-15` não
+foi alterada só por elas; as telas informam esses pontos no momento do uso. O texto entrou na versão `2026-11-16`,
+aberta para citar o Resend nas mensagens de acesso à conta.
 
 ## 5. Transferência internacional
 

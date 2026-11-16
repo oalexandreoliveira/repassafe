@@ -2,7 +2,7 @@
 -- Resend como fornecedor de e-mails. Novo aceite no próximo envio do cadastro
 -- (correção, reenvio ou revalidação); contas aprovadas seguem operando.
 --
--- Transição: a versão 2026-09-29 ainda vale até 16/11/2026 0h em Fortaleza,
+-- Transição: a versão 2026-09-29 ainda vale até 17/11/2026 0h em Fortaleza,
 -- para cobrir a janela entre esta migration e a publicação da aplicação.
 -- Depois disso, o envio exige os dois aceites da versão atual.
 do $$
@@ -15,7 +15,7 @@ begin
   original := definition;
   definition := replace(definition,
     '(select count(*) from private.legal_acceptances where user_id=target_user and version=''2026-09-29'')<>2',
-    '(select count(distinct document) from private.legal_acceptances where user_id=target_user and (version=''2026-11-15'' or (version=''2026-09-29'' and now() < timestamptz ''2026-11-16 03:00:00+00'')))<>2');
+    '(select count(distinct document) from private.legal_acceptances where user_id=target_user and (version=''2026-11-15'' or (version=''2026-09-29'' and now() < timestamptz ''2026-11-17 03:00:00+00'')))<>2');
   if definition = original then
     raise exception 'Envio de cadastro incompatível com a nova versão dos documentos';
   end if;

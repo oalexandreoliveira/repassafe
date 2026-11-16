@@ -4,7 +4,7 @@ set local search_path=public,extensions;
 select no_plan();
 
 -- Documentos versão 2026-11-15: o envio do cadastro exige os dois aceites da versão
--- atual; a versão 2026-09-29 só vale durante a transição (até 16/11/2026 0h em Fortaleza).
+-- atual; a versão 2026-09-29 só vale durante a transição (até 17/11/2026 0h em Fortaleza).
 insert into auth.users(id,aud,role,email,email_confirmed_at,raw_app_meta_data,raw_user_meta_data)
 select ('96000000-0000-0000-0000-00000000000'||n)::uuid,'authenticated','authenticated','legal'||n||'@registration.test',now(),'{}','{}' from generate_series(1,3) n;
 
@@ -36,7 +36,7 @@ exception when others then
   return false;
 end;
 $$;
-select is(pg_temp.old_version_submits(), now() < timestamptz '2026-11-16 03:00:00+00',
+select is(pg_temp.old_version_submits(), now() < timestamptz '2026-11-17 03:00:00+00',
   'previous version is accepted only during the transition window');
 
 select * from finish();

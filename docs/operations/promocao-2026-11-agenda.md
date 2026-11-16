@@ -27,7 +27,7 @@ do responsável (15/11/2026): sem projeto Supabase adicional por ora.
 
 Documentos legais: versão `2026-11-15` de Termos e Política (agenda pessoal e
 Resend), com migration `20261115200000_legal_documents_2026_11_15.sql`. Novo
-aceite no próximo envio do cadastro; a versão anterior vale até 16/11/2026 0h
+aceite no próximo envio do cadastro; a versão anterior vale até 17/11/2026 0h
 em Fortaleza; todos os titulares recebem aviso na central.
 
 ## Compatibilidade

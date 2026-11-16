@@ -1,15 +1,16 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { BadgeCheck, Lock, ShieldOff, Wallet } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { WaitlistForm } from "@/components/waitlist-form";
+import { publicPageMetadata } from "@/lib/seo";
 import styles from "./page.module.css";
 
-export const metadata: Metadata = {
+export const metadata = publicPageMetadata({
+  path: "/lista-de-espera",
   title: "Lista de espera do piloto",
   description:
     "Entre na lista de espera do piloto privado do Repassafe para repassar e assumir plantões com colegas de CRM verificado.",
-};
+});
 
 const points = [
   [

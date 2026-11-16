@@ -9,11 +9,27 @@ import "@fontsource/jetbrains-mono/400.css";
 import "./globals.css";
 import { PwaRegistration } from "@/components/pwa-registration";
 import { colors } from "@/styles/theme";
+import {
+  homeDescription,
+  homeTitle,
+  sharedOpenGraph,
+  siteName,
+  siteUrl,
+} from "@/lib/seo";
 
 export const metadata: Metadata = {
-  title: "Repassafe | Repasse de plantões com clareza e segurança",
-  description:
-    "Uma rede privada para profissionais e instituições organizarem substituições de plantões com acesso controlado e etapas registradas.",
+  metadataBase: new URL(siteUrl),
+  applicationName: siteName,
+  title: {
+    default: `${homeTitle} | ${siteName}`,
+    template: `%s | ${siteName}`,
+  },
+  description: homeDescription,
+  openGraph: sharedOpenGraph,
+  twitter: { card: "summary_large_image" },
+  // Áreas autenticadas ficam fora dos buscadores por padrão; páginas públicas
+  // liberam a indexação com publicPageMetadata().
+  robots: { index: false, follow: false },
 };
 export const viewport: Viewport = {
   themeColor: colors.base,

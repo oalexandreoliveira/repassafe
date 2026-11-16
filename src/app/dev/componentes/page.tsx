@@ -71,7 +71,7 @@ import { requireDevPages } from "../enabled";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
-  title: "Catálogo de componentes | Repassafe",
+  title: "Catálogo de componentes",
   robots: { index: false, follow: false },
 };
 

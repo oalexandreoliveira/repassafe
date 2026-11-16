@@ -5,7 +5,7 @@ test("apresenta o fluxo do MVP e os acessos principais", async ({ page }) => {
     "Repasse seu plantão com clareza e segurança.",
   );
   await expect(
-    page.getByText(/Encontre um profissional elegível/),
+    page.getByText(/Encontre um médico com CRM verificado/),
   ).toBeVisible();
   await expect(
     page.getByRole("link", { name: "Entrar na plataforma" }).first(),

@@ -3,6 +3,15 @@ import { LandingSignupLink } from "@/components/landing-signup-link";
 import { RepassePreview } from "@/components/repasse-preview";
 import { Logo } from "@/components/ui/logo";
 import { repasseSteps } from "@/features/marketing/repasse-steps";
+import {
+  homeDescription,
+  homeStructuredData,
+  homeTitle,
+  publicPageMetadata,
+  serializeJsonLd,
+  siteName,
+} from "@/lib/seo";
+import type { Metadata } from "next";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -14,6 +23,13 @@ import {
   Users,
 } from "lucide-react";
 import styles from "./page.module.css";
+
+// O template de título do layout não se aplica à página do mesmo segmento.
+export const metadata: Metadata = publicPageMetadata({
+  path: "/",
+  title: `${homeTitle} | ${siteName}`,
+  description: homeDescription,
+});
 
 const safeguards = [
   [BadgeCheck, "Somente médicos previamente verificados"],
@@ -38,6 +54,12 @@ const recordFields = [
 export default function Home() {
   return (
     <main className={styles.page}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: serializeJsonLd(homeStructuredData()),
+        }}
+      />
       <header className={styles.navWrap}>
         <nav className={styles.nav} aria-label="Navegação principal">
           <Link href="/" className={styles.brandLink}>
@@ -62,8 +84,9 @@ export default function Home() {
                 Repasse seu plantão <span>com clareza e segurança.</span>
               </h1>
               <p className={styles.lede}>
-                Encontre um profissional elegível, confirme as condições e
-                registre cada etapa da substituição em um único lugar.
+                Encontre um médico com CRM verificado, confirme as condições e
+                registre cada etapa da substituição do plantão em um único
+                lugar.
               </p>
               <div className={styles.actions}>
                 <LandingSignupLink className={styles.primaryButton} />
@@ -212,7 +235,7 @@ export default function Home() {
           <div className={styles.footerBrand}>
             <Logo />
             <p>
-              Substituições de plantões com acesso controlado e etapas
+              Repasse de plantões médicos com acesso controlado e etapas
               registradas.
             </p>
           </div>

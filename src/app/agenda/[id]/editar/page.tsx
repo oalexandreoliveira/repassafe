@@ -7,7 +7,7 @@ import { dayKey, formatTime } from "@/features/shifts/format";
 import { entryReminder } from "@/features/agenda/rows";
 import { loadAgendaEntry, requireAgendaUser } from "@/lib/agenda";
 
-export const metadata = { title: "Editar plantão | Repassafe" };
+export const metadata = { title: "Editar plantão" };
 
 export default async function EditAgendaEntryPage({
   params,

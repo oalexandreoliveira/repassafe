@@ -3,6 +3,15 @@ import { SupportForm } from "@/components/support-form";
 import { getVerifiedIdentity } from "@/lib/auth/session";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { Logo } from "@/components/ui/logo";
+import { publicPageMetadata } from "@/lib/seo";
+
+export const metadata = publicPageMetadata({
+  path: "/suporte",
+  title: "Suporte e privacidade",
+  description:
+    "Abra uma solicitação de suporte ou privacidade no Repassafe e receba um protocolo para acompanhar a resposta da equipe.",
+});
+
 type Request = {
   id: string;
   message: string;

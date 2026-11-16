@@ -2,6 +2,8 @@ import { EmailActionForm } from "@/components/email-action-form";
 import { AuthScreen } from "@/components/screens/auth-screen";
 import { ButtonLink } from "@/components/ui/button";
 
+export const metadata = { title: "Esqueci minha senha" };
+
 export default function ForgotPasswordPage() {
   return (
     <AuthScreen

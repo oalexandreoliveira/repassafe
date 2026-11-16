@@ -5,7 +5,7 @@ import { businessDate, dateSchema } from "@/features/agreements/schema";
 import { defaultReminder } from "@/features/agenda/schema";
 import { requireAgendaUser } from "@/lib/agenda";
 
-export const metadata = { title: "Adicionar plantão | Repassafe" };
+export const metadata = { title: "Adicionar plantão" };
 
 export default async function NewAgendaEntryPage({
   searchParams,

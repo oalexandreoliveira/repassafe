@@ -9,7 +9,7 @@ import {
   requireAgendaUser,
 } from "@/lib/agenda";
 
-export const metadata = { title: "Plantão na agenda | Repassafe" };
+export const metadata = { title: "Plantão na agenda" };
 
 export default async function AgendaEntryPage({
   params,

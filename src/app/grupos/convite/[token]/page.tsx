@@ -7,7 +7,7 @@ import { getVerifiedIdentity } from "@/lib/auth/session";
 import { previewGroupInvite } from "@/lib/groups";
 
 export const metadata: Metadata = {
-  title: "Convite para grupo | Repassafe",
+  title: "Convite para grupo",
   robots: { index: false, follow: false },
 };
 

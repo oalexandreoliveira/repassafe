@@ -5,7 +5,7 @@ import styles from "@/components/screens/screens.module.css";
 import { requireDevPages } from "../enabled";
 
 export const metadata: Metadata = {
-  title: "Prévias de tela | Repassafe",
+  title: "Prévias de tela",
   robots: { index: false, follow: false },
 };
 

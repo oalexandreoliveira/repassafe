@@ -9,7 +9,7 @@ import {
   requireAgendaUser,
 } from "@/lib/agenda";
 
-export const metadata = { title: "Pagamento na agenda | Repassafe" };
+export const metadata = { title: "Pagamento na agenda" };
 
 /** Pagamento de um repasse do mural ou acordo registrado, visto pela agenda. */
 export default async function AgendaAppPaymentPage({

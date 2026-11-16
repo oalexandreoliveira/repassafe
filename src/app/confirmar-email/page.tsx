@@ -2,6 +2,8 @@ import { EmailActionForm } from "@/components/email-action-form";
 import { AuthScreen } from "@/components/screens/auth-screen";
 import { ButtonLink } from "@/components/ui/button";
 
+export const metadata = { title: "Confirme seu e-mail" };
+
 export default function ResendEmailPage() {
   return (
     <AuthScreen

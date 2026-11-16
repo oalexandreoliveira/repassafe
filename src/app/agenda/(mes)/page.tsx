@@ -9,7 +9,7 @@ import { businessDate } from "@/features/agreements/schema";
 import { loadAgendaShifts, requireAgendaUser } from "@/lib/agenda";
 import { hasUnreadNotifications } from "@/lib/notifications";
 
-export const metadata = { title: "Agenda | Repassafe" };
+export const metadata = { title: "Agenda" };
 
 /** Agenda pessoal (derivada): plantões e pagamentos do mês. */
 export default async function AgendaPage({

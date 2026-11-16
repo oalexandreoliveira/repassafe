@@ -1,6 +1,14 @@
 import { AuthForm } from "@/components/auth-form";
 import { AuthScreen } from "@/components/screens/auth-screen";
 import { safeReturnPath } from "@/features/groups/invite-path";
+import { publicPageMetadata } from "@/lib/seo";
+
+export const metadata = publicPageMetadata({
+  path: "/entrar",
+  title: "Entrar",
+  description:
+    "Acesse sua conta no Repassafe para publicar, assumir e acompanhar repasses de plantão com colegas de CRM verificado.",
+});
 
 export default async function LoginPage({
   searchParams,

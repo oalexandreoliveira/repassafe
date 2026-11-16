@@ -55,7 +55,7 @@ import {
 } from "../fixtures";
 
 export const metadata: Metadata = {
-  title: "Prévia de tela | Repassafe",
+  title: "Prévia de tela",
   robots: { index: false, follow: false },
 };
 

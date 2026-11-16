@@ -217,6 +217,27 @@ const screens: Record<string, () => React.ReactNode> = {
       startsInFuture={false}
     />
   ),
+  "agenda-repassar": () => (
+    <AgendaEntryScreen
+      entry={agendaEntry}
+      today={agendaToday}
+      startsInFuture
+      canPublish
+    />
+  ),
+  "agenda-repassado": () => (
+    <AgendaEntryScreen
+      entry={agendaEntry}
+      today={agendaToday}
+      startsInFuture
+      handover={{
+        state: "confirmed",
+        href: "/dev/telas/plantao",
+        paymentHref: "/dev/telas/agenda-app-paga",
+        recordKey: "mural:fixture",
+      }}
+    />
+  ),
   "agenda-app-recebe": () => (
     <AgendaAppPaymentScreen
       shift={agendaAppReceive}

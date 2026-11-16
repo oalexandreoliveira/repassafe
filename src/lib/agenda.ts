@@ -1,7 +1,12 @@
 import "server-only";
 import { redirect } from "next/navigation";
 import { getVerifiedIdentity } from "@/lib/auth/session";
-import { monthBounds, type AgendaShift } from "@/features/agenda/model";
+import {
+  applyHandovers,
+  monthBounds,
+  type AgendaShift,
+  type Handover,
+} from "@/features/agenda/model";
 import {
   entryColumns,
   personalShift,
@@ -130,6 +135,7 @@ function muralShift(
     startsAt: snapshot.startsAt,
     endsAt: snapshot.endsAt,
     title: snapshot.sector ? `${snapshot.sector} · ${place}` : place,
+    location: place,
     valueCents: snapshot.valueCents,
     dueDate: row.payment_due_date,
     counterparty: "",
@@ -151,6 +157,7 @@ function registeredShift(row: RegisteredRow, userId: string): AgendaShift {
     startsAt: row.starts_at,
     endsAt: row.ends_at,
     title: `${row.sector} · ${row.location}`,
+    location: row.location,
     valueCents: row.value_cents,
     dueDate: row.due_date,
     counterparty: "",
@@ -215,6 +222,124 @@ async function muralContext(identity: AgendaIdentity, rows: MuralRow[]) {
   };
 }
 
+const openOfferStatuses = [
+  "open_normal",
+  "open_emergency",
+  "selection_in_progress",
+];
+const pendingAgreementStatuses = ["pending_acceptance", "pending_approval"];
+
+/**
+ * Situação dos repasses criados a partir de "Meu plantão": oferta aberta ou
+ * acordo aguardando (em andamento) e repasse confirmado. Oferta cancelada ou
+ * expirada, acordo recusado e repasse cancelado deixam a anotação sem repasse.
+ */
+export async function loadHandovers(
+  identity: Pick<AgendaIdentity, "supabase" | "userId">,
+  entries: AgendaEntryRow[],
+): Promise<{ handovers: Map<string, Handover>; failed: boolean }> {
+  const { supabase, userId } = identity;
+  const handovers = new Map<string, Handover>();
+  const own = entries.filter((entry) => entry.kind === "own");
+  const offerIds = own.flatMap((entry) =>
+    entry.handover_offer_id ? [entry.handover_offer_id] : [],
+  );
+  const agreementIds = own.flatMap((entry) =>
+    entry.handover_agreement_id ? [entry.handover_agreement_id] : [],
+  );
+  if (!offerIds.length && !agreementIds.length)
+    return { handovers, failed: false };
+
+  const none = { data: [], error: null };
+  const [offers, agreements, external] = await Promise.all([
+    offerIds.length
+      ? supabase.from("shift_offers").select("id,status").in("id", offerIds)
+      : none,
+    offerIds.length
+      ? supabase
+          .from("shift_agreements")
+          .select("id,offer_id,substitution_id")
+          .in("offer_id", offerIds)
+          .eq("owner_id", userId)
+      : none,
+    agreementIds.length
+      ? supabase
+          .from("external_agreements")
+          .select("id,status")
+          .in("id", agreementIds)
+      : none,
+  ]);
+  const substitutionIds = (agreements.data ?? []).map(
+    (row) => row.substitution_id as string,
+  );
+  const substitutions = substitutionIds.length
+    ? await supabase
+        .from("substitutions")
+        .select("id,status")
+        .in("id", substitutionIds)
+    : none;
+
+  const offerStatus = new Map(
+    (offers.data ?? []).map((row) => [row.id as string, row.status as string]),
+  );
+  const cancelled = new Set(
+    (substitutions.data ?? [])
+      .filter((row) => row.status === "cancelled")
+      .map((row) => row.id as string),
+  );
+  const agreementByOffer = new Map(
+    (agreements.data ?? [])
+      .filter((row) => !cancelled.has(row.substitution_id as string))
+      .map((row) => [row.offer_id as string, row.id as string]),
+  );
+  const externalStatus = new Map(
+    (external.data ?? []).map((row) => [
+      row.id as string,
+      row.status as string,
+    ]),
+  );
+
+  for (const entry of own) {
+    const offerId = entry.handover_offer_id;
+    const externalId = entry.handover_agreement_id;
+    if (offerId) {
+      const agreementId = agreementByOffer.get(offerId);
+      if (agreementId)
+        handovers.set(entry.id, {
+          state: "confirmed",
+          href: `/plantoes/${offerId}`,
+          paymentHref: appPaymentPath("mural", agreementId),
+          recordKey: `mural:${agreementId}`,
+        });
+      else if (openOfferStatuses.includes(offerStatus.get(offerId) ?? ""))
+        handovers.set(entry.id, {
+          state: "pending",
+          href: `/plantoes/${offerId}`,
+        });
+    } else if (externalId) {
+      const status = externalStatus.get(externalId) ?? "";
+      if (status === "confirmed")
+        handovers.set(entry.id, {
+          state: "confirmed",
+          href: `/acordos/registrados/${externalId}`,
+          paymentHref: appPaymentPath("registered", externalId),
+          recordKey: `registered:${externalId}`,
+        });
+      else if (pendingAgreementStatuses.includes(status))
+        handovers.set(entry.id, {
+          state: "pending",
+          href: `/acordos/registrados/${externalId}`,
+        });
+    }
+  }
+  return {
+    handovers,
+    failed: Boolean(
+      offers.error || agreements.error || external.error || substitutions.error,
+    ),
+  };
+}
+
 /** Lê o mês: anotações pessoais e registros do app em que o usuário é parte. */
 export async function loadAgendaShifts(
   identity: AgendaIdentity,
@@ -252,25 +377,39 @@ export async function loadAgendaShifts(
   const muralRows = ((agreements.data ?? []) as MuralRow[]).filter((row) =>
     inMonth(snapshotOf(row).startsAt, row.payment_due_date),
   );
-  const mural = await muralContext(identity, muralRows);
+  const entries = (personal.data ?? []) as AgendaEntryRow[];
+  const [mural, handover] = await Promise.all([
+    muralContext(identity, muralRows),
+    loadHandovers(identity, entries),
+  ]);
 
-  const shifts: AgendaShift[] = [
-    ...((personal.data ?? []) as AgendaEntryRow[]).map(personalShift),
-    ...muralRows.map(mural.shiftFor),
-    ...((external.data ?? []) as RegisteredRow[])
-      .filter((row) => inMonth(row.starts_at, row.due_date))
-      .map((row) => registeredShift(row, userId)),
-  ];
+  const shifts = applyHandovers(
+    [
+      ...entries.map(personalShift),
+      ...muralRows.map(mural.shiftFor),
+      ...((external.data ?? []) as RegisteredRow[])
+        .filter((row) => inMonth(row.starts_at, row.due_date))
+        .map((row) => registeredShift(row, userId)),
+    ],
+    handover.handovers,
+  );
 
   return {
     shifts,
     failed: Boolean(
-      personal.error || agreements.error || external.error || mural.failed,
+      personal.error ||
+      agreements.error ||
+      external.error ||
+      mural.failed ||
+      handover.failed,
     ),
   };
 }
 
-export async function loadAgendaEntry(identity: AgendaIdentity, id: string) {
+export async function loadAgendaEntry(
+  identity: Pick<AgendaIdentity, "supabase">,
+  id: string,
+) {
   if (!uuidPattern.test(id)) return null;
   const { data, error } = await identity.supabase
     .from("agenda_entries")

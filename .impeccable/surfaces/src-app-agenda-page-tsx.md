@@ -44,7 +44,16 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 - Aviso de dados de pacientes em observações e no nome do responsável.
 - Frase fixa de não intermediação no resumo e no detalhe.
 
+## Etapa 3 (16/11/2026)
+
+- "Adicionar à agenda do celular" e "Repassar este plantão" seguem o padrão
+  de bloco recolhível já usado em "Marcar como recebido": uma ação primária
+  por tela continua sendo a do fluxo principal, e as secundárias não competem.
+- Plantão repassado é identificado por texto ("Repassado a um colega"), não
+  só por cor; o pagamento ao colega continua como cartão próprio no dia do
+  vencimento.
+- O aviso de que o arquivo não se atualiza fica antes do botão de download.
+
 ## Em aberto
 
-- Lembretes, cobrança pelo WhatsApp, `.ics` e "Repassar este plantão"
-  (etapas 2 e 3).
+- Nada da especificação; métricas agregadas do piloto ainda por decidir.

@@ -103,9 +103,19 @@ function Accept({ text, state }: { text: string; state: AgreementFormState }) {
 export function CreateAgreementForm({
   requestId,
   groups,
+  initial,
+  agendaEntryId,
 }: {
   requestId: string;
   groups: { id: string; name: string }[];
+  /** "Repassar este plantão": dados vindos da agenda. */
+  initial?: Partial<
+    Record<
+      "creatorRole" | "location" | "sector" | "startsAt" | "endsAt",
+      string
+    >
+  >;
+  agendaEntryId?: string;
 }) {
   const [state, action, pending] = useActionState(createAgreementAction, {});
   const [local, setLocal] = useState<AgreementFormState>({});
@@ -139,6 +149,9 @@ export function CreateAgreementForm({
       }}
     >
       <input type="hidden" name="requestId" value={requestId} />
+      {agendaEntryId ? (
+        <input type="hidden" name="agendaEntryId" value={agendaEntryId} />
+      ) : null}
       <Feedback state={active} />
       <div hidden={Boolean(review)}>
         <fieldset>
@@ -148,7 +161,7 @@ export function CreateAgreementForm({
             label="Neste plantão, eu vou"
             state={active}
             required
-            defaultValue=""
+            defaultValue={initial?.creatorRole ?? ""}
           >
             <option value="" disabled>
               Selecione seu papel
@@ -194,6 +207,7 @@ export function CreateAgreementForm({
             state={active}
             required
             maxLength={240}
+            defaultValue={initial?.location}
           />
           <Field
             name="sector"
@@ -201,6 +215,7 @@ export function CreateAgreementForm({
             state={active}
             required
             maxLength={120}
+            defaultValue={initial?.sector}
           />
           <div className="form-row">
             <Field
@@ -209,6 +224,7 @@ export function CreateAgreementForm({
               type="datetime-local"
               state={active}
               required
+              defaultValue={initial?.startsAt}
             />
             <Field
               name="endsAt"
@@ -216,6 +232,7 @@ export function CreateAgreementForm({
               type="datetime-local"
               state={active}
               required
+              defaultValue={initial?.endsAt}
             />
           </div>
           <p className="form-help">

@@ -77,6 +77,10 @@ Lembretes de pagamento aparecem na central de notificações e podem ser ajustad
 o WhatsApp do próprio usuário com mensagem para revisão; o Repassafe não envia mensagens a terceiros nem intermedeia
 pagamentos. Texto publicado na versão `2026-11-15` de `src/features/registration/legal.ts`.
 
+Para a próxima versão revisada (funções de 16/11/2026): o usuário pode baixar um arquivo para a agenda do celular, que
+não se atualiza depois, e repassar "Meu plantão" pela publicação ou pelo acordo registrado, com os dados do plantão já
+preenchidos. O repasse segue as regras do fluxo escolhido; a anotação não vira acordo nem prova de compromisso.
+
 ## 5. Grupos
 
 5.1. **Grupo de colegas** é criado por médico com cadastro aprovado e vigente, que se torna seu gestor. **Grupo

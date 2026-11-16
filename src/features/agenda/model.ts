@@ -22,6 +22,8 @@ export type AgendaShift = {
   endsAt: string;
   /** "UTI · Hospital X" */
   title: string;
+  /** Instituição e local, sem o setor. */
+  location?: string;
   valueCents: number | null;
   /** YYYY-MM-DD */
   dueDate: string | null;
@@ -32,7 +34,59 @@ export type AgendaShift = {
   settledCents: number | null;
   /** Pagamento informado pelo pagador, ainda sem confirmação (app). */
   reported: boolean;
+  /** "Meu plantão" repassado a partir da agenda. */
+  handover?: Handover;
+  /** Registro do app exibido dentro da anotação que o originou (só o pagamento aparece à parte). */
+  mergedInto?: string;
 };
+
+/**
+ * Repasse criado a partir de "Meu plantão": em andamento (oferta aberta ou
+ * acordo aguardando) ou confirmado. Encerrado sem colega volta a não ter repasse.
+ */
+export type Handover =
+  | { state: "pending"; href: string }
+  | {
+      state: "confirmed";
+      /** Tela do repasse ou do acordo. */
+      href: string;
+      /** Pagamento ao colega na agenda. */
+      paymentHref: string;
+      /** Chave do registro do app que passa a ser mostrado dentro da anotação. */
+      recordKey: string;
+    };
+
+export const handedOver = (shift: Pick<AgendaShift, "handover">) =>
+  shift.handover?.state === "confirmed";
+
+/**
+ * Liga cada "Meu plantão" ao repasse criado a partir dele. Confirmado o
+ * repasse, o plantão do registro do app passa a ser mostrado dentro da
+ * anotação (sem repetir o plantão); o pagamento ao colega continua à parte.
+ */
+export function applyHandovers(
+  shifts: AgendaShift[],
+  handovers: Map<string, Handover>,
+): AgendaShift[] {
+  const linked = shifts.map((shift) => {
+    const handover =
+      shift.source === "personal" && shift.kind === "own"
+        ? handovers.get(shift.id)
+        : undefined;
+    return handover ? { ...shift, handover } : shift;
+  });
+  const into = new Map(
+    linked.flatMap((shift) =>
+      shift.handover?.state === "confirmed"
+        ? [[shift.handover.recordKey, shift.key] as const]
+        : [],
+    ),
+  );
+  return linked.map((shift) => {
+    const key = into.get(shift.key);
+    return key ? { ...shift, mergedInto: key } : shift;
+  });
+}
 
 export type PaymentDirection = "receive" | "pay";
 export type PaymentState =
@@ -112,7 +166,13 @@ export function shiftPresentation(shift: AgendaShift): Presentation {
 }
 
 /** Papel do usuário no plantão, no vocabulário de cada origem. */
-export function roleText(shift: Pick<AgendaShift, "kind" | "source">) {
+export function roleText(
+  shift: Pick<AgendaShift, "kind" | "source" | "handover">,
+) {
+  if (shift.source === "personal" && shift.kind === "own" && shift.handover)
+    return shift.handover.state === "confirmed"
+      ? "Repassado a um colega"
+      : "Meu plantão · repasse em andamento";
   if (shift.source === "personal")
     return {
       own: "Meu plantão",
@@ -245,7 +305,10 @@ export function monthGrid(
 /** Plantões em que o usuário trabalha (não repassados nem cancelados) com horário sobreposto. */
 export function overlappingKeys(shifts: AgendaShift[]) {
   const working = shifts
-    .filter((shift) => shift.kind !== "passed" && !shift.cancelled)
+    .filter(
+      (shift) =>
+        shift.kind !== "passed" && !shift.cancelled && !handedOver(shift),
+    )
     .sort((a, b) => a.startsAt.localeCompare(b.startsAt));
   const keys = new Set<string>();
   for (let i = 0; i < working.length; i += 1)
@@ -339,7 +402,11 @@ export type AgendaMonth = {
   paymentCount: number;
 };
 
-/** Monta o mês: plantões pelo dia de início, pagamentos pelo vencimento. */
+/**
+ * Monta o mês: plantões pelo dia de início, pagamentos pelo vencimento. O
+ * registro do app ligado a "Meu plantão" repassado não repete o plantão, mas
+ * o pagamento ao colega continua listado.
+ */
 export function buildAgendaMonth(
   shifts: AgendaShift[],
   month: string,
@@ -347,7 +414,9 @@ export function buildAgendaMonth(
   filter: AgendaFilter = "tudo",
 ): AgendaMonth {
   const monthShifts = shifts
-    .filter((shift) => monthOf(dayKey(shift.startsAt)) === month)
+    .filter(
+      (shift) => !shift.mergedInto && monthOf(dayKey(shift.startsAt)) === month,
+    )
     .sort((a, b) => a.startsAt.localeCompare(b.startsAt));
   const payments: AgendaPayment[] = shifts
     .filter(

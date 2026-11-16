@@ -56,6 +56,15 @@ nome e sob contrato `[PENDENTE: LGPD-04 — DPAs assinados]`.
 4.5. **Agenda e WhatsApp.** O botão de cobrança da agenda monta a mensagem no aparelho do usuário e abre o WhatsApp
 dele; o Repassafe não envia o conteúdo nem guarda telefone. Os lembretes são avisos internos, sem valor, nomes ou local.
 
+4.6. **Agenda do celular e repasse a partir da agenda** (funções de 16/11/2026, a incluir na próxima versão revisada).
+O arquivo para a agenda do celular é gerado a pedido do usuário e entregue só a ele; leva local, setor e horários e,
+apenas se ele marcar, valor e nome de quem paga ou recebe. Se a agenda do aparelho sincroniza com outro serviço, o
+conteúdo passa a seguir as regras desse serviço. Ao repassar um plantão a partir da agenda, data, horário, local e setor
+são copiados para o fluxo escolhido (publicação ou acordo registrado), que o usuário revisa e envia; a anotação continua
+privada e guarda apenas a ligação com o repasse para mostrar a sua situação. Avaliação: não há novo destinatário nem
+nova finalidade além das já informadas (organização pessoal e repasses), por isso a versão publicada `2026-11-15` não
+foi alterada; as telas informam esses pontos no momento do uso.
+
 ## 5. Transferência internacional
 
 Nossos fornecedores podem processar dados fora do Brasil (região atual: `[PENDENTE: D-5 — confirmar, hoje us-east-2]`).

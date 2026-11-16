@@ -49,9 +49,10 @@ Tab "Acordos" (raiz) ─► lista de acordos (NÃO desenhada — derivar) ─►
 Tab "Perfil" (raiz) ─► (NÃO desenhada — derivar)
 Tab "Agenda" (raiz, derivada em 15/11/2026) ─► mês com calendário, resumo de pagamentos e lista por dia
         ├─ FAB "Adicionar plantão" ─► Adicionar plantão (uma ou várias datas) ─► volta à Agenda com toast
-        ├─ anotação pessoal ─► Detalhe da anotação ─► Editar · Marcar como recebido/pago · Excluir
+        ├─ anotação pessoal ─► Detalhe da anotação ─► Editar · Marcar como recebido/pago · Agenda do celular (.ics) · Excluir
+        │       └─ "Meu plantão" futuro ─► Repassar este plantão ─► Publicar plantão ou Registrar acordo, já preenchidos
         ├─ plantão de repasse ou acordo do app ─► telas existentes de Repasses (sem edição)
-        └─ pagamento de repasse ou acordo do app ─► Pagamento na agenda (lembrete pessoal, cobrança pelo WhatsApp, link para o acordo)
+        └─ pagamento de repasse ou acordo do app ─► Pagamento na agenda (lembrete pessoal, cobrança pelo WhatsApp, agenda do celular, link para o acordo)
 ```
 
 ## Ciclo de vida do plantão (para mapear ao domínio existente)

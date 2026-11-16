@@ -1,7 +1,9 @@
 import { MobileNavigation } from "@/components/mobile-navigation";
+import { LandingFaq } from "@/components/landing-faq";
 import { LandingSignupLink } from "@/components/landing-signup-link";
 import { RepassePreview } from "@/components/repasse-preview";
 import { Logo } from "@/components/ui/logo";
+import { handoverGuide } from "@/features/marketing/handover-guide";
 import { repasseSteps } from "@/features/marketing/repasse-steps";
 import {
   homeDescription,
@@ -70,6 +72,7 @@ export default function Home() {
             <a href="#como-funciona">Como funciona</a>
             <a href="#seguranca">Segurança</a>
             <a href="#acordo">Rastreabilidade</a>
+            <a href="#perguntas">Perguntas</a>
             <Link href="/entrar">Entrar</Link>
           </div>
           <LandingSignupLink className={styles.navCta} />
@@ -215,6 +218,8 @@ export default function Home() {
         </div>
       </section>
 
+      <LandingFaq />
+
       <section className={styles.finalWrap}>
         <div className={styles.finalCta}>
           <h2>Repasse seu plantão com clareza e segurança.</h2>
@@ -248,7 +253,13 @@ export default function Home() {
           <div className={styles.footerColumn}>
             <span>ACESSO</span>
             <Link href="/cadastro">Criar conta</Link>
+            <Link href="/lista-de-espera">Lista de espera</Link>
             <a href="#acordo">Rastreabilidade</a>
+          </div>
+          <div className={styles.footerColumn}>
+            <span>CONTEÚDO</span>
+            <Link href={handoverGuide.path}>Guia de repasse de plantão</Link>
+            <a href="#perguntas">Perguntas frequentes</a>
           </div>
         </div>
         <div className={styles.footerBottom}>

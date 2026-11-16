@@ -50,6 +50,12 @@ export function MobileNavigation() {
         <a href="#acordo" onClick={close}>
           Rastreabilidade
         </a>
+        <a href="#perguntas" onClick={close}>
+          Perguntas frequentes
+        </a>
+        <Link href="/repasse-de-plantao" onClick={close}>
+          Guia de repasse
+        </Link>
         <Link href="/entrar" onClick={close}>
           Entrar
         </Link>

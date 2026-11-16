@@ -468,7 +468,7 @@
 }
 .footerGrid {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
+  grid-template-columns: 2fr repeat(3, 1fr);
   gap: 48px;
 }
 .footerBrand p {
@@ -559,6 +559,12 @@
   }
   .safetyCopy {
     max-width: 650px;
+  }
+  .footerGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .footerBrand {
+    grid-column: 1 / -1;
   }
 }
 @media (max-width: 640px) {

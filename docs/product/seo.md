@@ -55,19 +55,31 @@ Decisões:
 
 ## Para o responsável
 
-1. Google Search Console: adicionar a propriedade de domínio
-   `repassafe.com.br` (verificação por registro TXT no DNS), enviar
-   `https://www.repassafe.com.br/sitemap.xml` e pedir indexação da página
-   inicial.
+1. Google Search Console: propriedade de domínio `repassafe.com.br`
+   verificada por TXT no DNS (Registro.br) e sitemap enviado em 16/11/2026.
+   Manter o TXT publicado.
 2. Bing Webmaster Tools: importar a propriedade do Search Console.
 3. Perfis públicos do Repassafe (Instagram e outros) podem entrar em `sameAs`
    da `Organization` quando o endereço oficial for confirmado.
 
+## Etapa 2 — conteúdo
+
+- Perguntas frequentes na página inicial (`src/features/marketing/faq.ts`),
+  com o mesmo texto no JSON-LD `FAQPage`. Usar só fatos confirmados em
+  `PRODUCT.md` e as frases fixas de `design/DESIGN.md` §8.
+- Guia `/repasse-de-plantao` ("Como repassar um plantão médico com
+  segurança"), com `Article` e `BreadcrumbList`. Fontes conferidas nos
+  documentos oficiais em 16/11/2026: Código de Ética Médica (Resolução CFM
+  nº 2.217/2018, art. 9º e parágrafo único) e Parecer CRM-PR nº 2.882/2022.
+  Ao mudar o texto, atualizar `dateModified` em
+  `src/features/marketing/handover-guide.ts` (alimenta o sitemap e a página).
+- Links internos: menu ("Perguntas"), menu do celular, rodapé (coluna
+  Conteúdo e Lista de espera) e link do FAQ para o guia.
+
 ## Próximas etapas
 
-- Conteúdo: seção de perguntas frequentes na página inicial e páginas sobre
-  como repassar um plantão com segurança, responsabilidades do titular e do
-  substituto e registro do acordo, com fontes do CFM e dos CRMs.
+- Novos guias a partir das consultas do Search Console (por exemplo,
+  responsabilidades do substituto, plantão em grupo de WhatsApp).
 - Página local para o piloto (São Luís), quando a divulgação for aberta.
 - Medir no Search Console consultas, cliques e páginas indexadas e revisar os
   títulos com base nesses dados.

@@ -27,6 +27,11 @@ próprio está ativo no projeto publicado: Resend (`smtp.resend.com`), remetente
 `Repassafe <acesso@auth.repassafe.com.br>`, conferido no painel em 16/11/2026.
 Os avisos de segurança do Auth (senha, e-mail ou MFA alterados) estão
 desligados. A Política de privacidade cita esse uso desde a versão 2026-11-16.
+Os modelos dos e-mails de acesso (confirmação, convite, link de acesso, troca
+de e-mail, recuperação de senha e reautenticação) estão em português, com o
+mesmo texto de `supabase/templates/` e do `config.toml`. O painel não lê esses
+arquivos: ao mudar o texto, atualizar os dois e conferir no painel em
+Authentication > Emails > Templates. Os links usam `{{ .ConfirmationURL }}`.
 
 ## Acesso administrativo independente
 

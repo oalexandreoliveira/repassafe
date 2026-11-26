@@ -63,6 +63,14 @@ e trilha de auditoria.
 - Ofertas normais ou emergenciais podem receber candidaturas, seleção,
   confirmação, aprovação institucional configurável, registro de acordo,
   conclusão, cancelamento e ocorrência.
+- O acordo combinado fora do app só é registrado com o aceite das duas partes
+  e uma data-limite de pagamento, que vale mesmo se o hospital atrasar. Quem
+  paga informa o pagamento; só quem recebe confirma o recebimento.
+- A agenda pessoal reúne plantões, valores, prazos e situação dos pagamentos.
+  Repasses e acordos confirmados entram sozinhos e sem edição; os demais
+  plantões são anotações visíveis só ao usuário, sem aceite de outra parte. O
+  lembrete de cobrança fica na central do app, e a mensagem de cobrança abre
+  no WhatsApp do próprio usuário, sem envio automático.
 - A área administrativa apresenta eventos agregados do piloto por grupo e
   período, com exportação CSV consolidada; não expõe registros individuais.
 - Transições críticas são verificadas no servidor e no banco, com auditoria e

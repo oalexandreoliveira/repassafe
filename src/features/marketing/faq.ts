@@ -10,6 +10,11 @@ export const faqItems = [
       "É uma plataforma para médicos repassarem e assumirem plantões com colegas de CRM verificado. Quem não pode cumprir o plantão publica a oferta, os interessados se candidatam, as duas partes confirmam as condições e o acordo fica registrado.",
   },
   {
+    question: "Já uso um app de agenda de plantões. Preciso do Repassafe?",
+    answer:
+      "A agenda organiza o seu mês, e o Repassafe também tem uma, com plantões, valores, prazos de pagamento e lembrete para cobrar. O que ele acrescenta é o repasse: uma anotação guarda só a sua versão; no acordo registrado, você e o colega aceitam as mesmas condições, com data-limite de pagamento, e o registro não pode ser editado. Repasses confirmados entram na agenda sozinhos.",
+  },
+  {
     question: "Quem pode usar?",
     answer:
       "Médicos com cadastro aprovado e CRM verificado pela equipe do Repassafe. Responsáveis por grupos institucionais também podem participar para decidir sobre repasses, mesmo sem atuar como médicos. O Repassafe está em piloto privado: você pode criar a conta ou entrar na lista de espera.",

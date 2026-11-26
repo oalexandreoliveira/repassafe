@@ -75,6 +75,10 @@ Decisões:
   `src/features/marketing/handover-guide.ts` (alimenta o sitemap e a página).
 - Links internos: menu ("Perguntas"), menu do celular, rodapé (coluna
   Conteúdo e Lista de espera) e link do FAQ para o guia.
+- 25/11/2026: pergunta "Já uso um app de agenda de plantões. Preciso do
+  Repassafe?", em resposta à objeção de usuários de um app de agenda. Não
+  citar aplicativos no FAQ. Registro em
+  `docs/reviews/publicacao-faq-agenda-2026-11-25.md`.
 
 ## Próximas etapas
 
